@@ -3,8 +3,8 @@ export default {
   content: [
     './index.html',
     './src/**/*.{js,ts,jsx,tsx}',
-    // Include drizzle-cube source files to scan for Tailwind classes
-    '../../../src/client/**/*.{js,ts,jsx,tsx}',
+    // Include drizzle-cube module files to scan for Tailwind classes
+    './node_modules/drizzle-cube/dist/client/**/*.{js,jsx}',
   ],
   theme: {
     extend: {},

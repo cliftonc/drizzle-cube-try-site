@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"npm:dev:worker\" \"npm:dev:client\"",
     "dev:server": "tsx watch src/index.ts",
-    "dev:worker": "wrangler dev --test-scheduled --port 3001 --live-reload",
+    "dev:worker": "wrangler dev --test-scheduled --port 3459 --live-reload",
     "dev:client": "cd client && npm run dev",
     "dev:full": "concurrently \"npm:dev:worker\" \"npm:dev:client\"",
     "build": "npm run build:client && npm run build:worker",
@@ -33,11 +33,12 @@
   "dependencies": {
     "@hono/node-server": "^1.8.0",
     "@neondatabase/serverless": "^1.0.1",
-    "drizzle-cube":"0.1.16",
-    "dotenv": "^17.2.1",    
+    "dotenv": "^17.2.1",
+    "drizzle-cube": "^0.1.17",
     "drizzle-orm": "^0.44.4",
     "hono": "^4.0.0",
-    "postgres": "^3.4.0"
+    "postgres": "^3.4.0",
+    "react": "^18.0.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250816.0",
