@@ -1,4 +1,4 @@
-# Drizzle-Cube Hono Example with React Dashboard
+# Drizzle-Cube: try.drizzle-cube.dev
 
 A complete full-stack analytics application with [Hono](https://hono.dev/) backend and React frontend using [drizzle-cube](../../README.md). This demonstrates how to create a production-ready semantic layer with type-safe analytics queries and interactive dashboards.
 
