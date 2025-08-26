@@ -43,6 +43,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250816.0",
     "@types/node": "^20.0.0",
+    "@types/react": "^19.1.11",
     "concurrently": "^8.2.0",
     "drizzle-kit": "^0.31.4",
     "tsx": "^4.20.4",
