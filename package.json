@@ -4,6 +4,7 @@
   "description": "Source code for https://try.drizzle-cube.dev",
   "type": "module",
   "scripts": {
+    "preinstall": "node -e \"if (process.platform === 'linux' && process.arch === 'x64') { console.log('Linux x64 detected - ensuring Rollup binary compatibility'); }\"",
     "dev": "concurrently \"npm:dev:worker\" \"npm:dev:client\"",
     "dev:server": "tsx watch src/index.ts",
     "dev:worker": "wrangler dev --test-scheduled --port 3459 --live-reload",
@@ -54,6 +55,9 @@
     "typescript": "^5.0.0",
     "vite": "^5.0.0",
     "wrangler": "^4.32.0"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.24.0"
   },
   "keywords": [
     "analytics",
