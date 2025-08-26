@@ -3,7 +3,9 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 
 export default defineConfig({
-  plugins: [react()],  
+  plugins: [react()],
+  root: './client',
+  publicDir: './public',
   server: {
     port: 3458,
     proxy: {
