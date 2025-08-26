@@ -16,7 +16,7 @@ const FloatingGitHubButton = () => {
   
   // Map routes to their source files
   const getSourcePath = (pathname: string) => {
-    const basePath = 'https://github.com/cliftonc/drizzle-cube/blob/main/examples/hono/client/src'
+    const basePath = 'https://github.com/cliftonc/drizzle-cube-try-site/blob/main/client/src/'
     
     if (pathname === '/') {
       return `${basePath}/pages/HomePage.tsx`
