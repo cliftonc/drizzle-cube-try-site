@@ -141,7 +141,7 @@ export default function HomePage() {
             <div className="space-y-3 text-sm text-gray-600">
               <div className="flex items-start">
                 <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold mr-3 mt-0.5 shrink-0">1</div>
-                <span><strong>Use your existing schema</strong> - Already have Drizzle ORM? You're 80% done</span>
+                <span><strong>Use your existing schema</strong> - Already have Drizzle ORM? You're 80% done, if not easily <a className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600" href="https://orm.drizzle.team/docs/drizzle-kit-pull">create one</a></span>
               </div>
               <div className="flex items-start">
                 <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold mr-3 mt-0.5 shrink-0">2</div>
