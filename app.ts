@@ -14,12 +14,11 @@ import { createCubeApp } from 'drizzle-cube/adapters/hono'
 import type { SecurityContext, DrizzleDatabase } from 'drizzle-cube/server'
 import { schema } from './schema'
 import { allCubes } from './cubes'
-import type { Schema } from './schema'
 import analyticsApp from './src/analytics-routes'
 import aiApp from './src/ai-routes'
 
 interface Variables {
-  db: DrizzleDatabase<Schema>
+  db: DrizzleDatabase
 }
 
 // Environment detection - handle both Node.js and Cloudflare Workers
@@ -212,7 +211,7 @@ app.get('/api/docs', (c) => {
 // Mount the cube API routes
 const cubeApp = createCubeApp({
   cubes: allCubes,
-  drizzle: db,
+  drizzle: db as DrizzleDatabase,
   schema,
   extractSecurityContext,
   engineType: 'postgres',
@@ -229,14 +228,14 @@ app.route('/', cubeApp)
 
 // Mount analytics pages API with database access
 app.use('/api/analytics-pages/*', async (c, next) => {
-  c.set('db', db)
+  c.set('db', db as DrizzleDatabase)
   await next()
 })
 app.route('/api/analytics-pages', analyticsApp)
 
 // Mount AI proxy routes with database access
 app.use('/api/ai/*', async (c, next) => {
-  c.set('db', db)
+  c.set('db', db as DrizzleDatabase)
   await next()
 })
 app.route('/api/ai', aiApp)

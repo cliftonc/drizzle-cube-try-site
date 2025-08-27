@@ -7,11 +7,10 @@ import { Hono } from 'hono'
 import { eq, and, asc } from 'drizzle-orm'
 import type { DrizzleDatabase } from 'drizzle-cube/server'
 import { analyticsPages } from '../schema'
-import type { Schema } from '../schema'
 import { productivityDashboardConfig } from './dashboard-config'
 
 interface Variables {
-  db: DrizzleDatabase<Schema>
+  db: DrizzleDatabase
   organisationId: number
 }
 

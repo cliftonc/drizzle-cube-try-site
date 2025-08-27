@@ -9,7 +9,6 @@ import { eq } from 'drizzle-orm'
 import type { DrizzleDatabase } from 'drizzle-cube/server'
 import { SemanticLayerCompiler } from 'drizzle-cube/server'
 import { settings, schema } from '../schema'
-import type { Schema } from '../schema'
 import { allCubes } from '../cubes'
 
 interface GeminiMessageRequest {
@@ -175,10 +174,10 @@ function buildSystemPrompt(cubeSchema: string, userPrompt: string): string {
 }
 
 // Get cube schema for the AI prompt from the actual semantic layer
-function formatCubeSchemaForAI(db: DrizzleDatabase<Schema>): string {
+function formatCubeSchemaForAI(db: DrizzleDatabase): string {
   try {
     // Create semantic layer to get real metadata
-    const semanticLayer = new SemanticLayerCompiler<Schema>({
+    const semanticLayer = new SemanticLayerCompiler({
       drizzle: db,
       schema,
       engineType: 'postgres'
@@ -266,7 +265,7 @@ function getEnvVar(c: any, key: string, fallback: string = ''): string {
 const GEMINI_CALLS_KEY = 'gemini-ai-calls'
 
 interface Variables {
-  db: DrizzleDatabase<Schema>
+  db: DrizzleDatabase
 }
 
 // Extended interface to support both Node.js and Worker environments

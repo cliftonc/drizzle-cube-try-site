@@ -14,7 +14,6 @@ import { createCubeApp } from 'drizzle-cube/adapters/hono'
 import type { SecurityContext, DrizzleDatabase } from 'drizzle-cube/server'
 import { schema } from '../schema.js'
 import { allCubes } from '../cubes.js'
-import type { Schema } from '../schema.js'
 import analyticsApp from './analytics-routes'
 import aiApp from './ai-routes'
 import { executeSeed } from './seed-utils.js'
@@ -51,7 +50,7 @@ interface CloudflareEnv {
 }
 
 interface Variables {
-  db: DrizzleDatabase<Schema>
+  db: DrizzleDatabase
 }
 
 // Security context extractor - same as main app
@@ -96,7 +95,7 @@ app.use('*', cors({
 app.use('*', async (c, next) => {
   // Create database connection based on URL type
   const db = createDatabase(c.env.DATABASE_URL)
-  c.set('db', db)
+  c.set('db', db as DrizzleDatabase)
   
   await next()
 })
@@ -111,7 +110,7 @@ app.get('/health', (c) => {
 })
 
 // Create cube app using the new API
-const createCubeApiApp = (db: DrizzleDatabase<Schema>) => {
+const createCubeApiApp = (db: DrizzleDatabase) => {
   return createCubeApp({
     cubes: allCubes,
     drizzle: db,
