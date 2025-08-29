@@ -433,9 +433,38 @@ export const productivityDashboardConfig = {
         chartConfig: {},
         displayConfig: {},
         w: 12,
-        h: 10,
+        h: 6,
         x: 0,
         y: 52
+      },
+      
+      // Bonus Row - Thank You Message
+      {
+        id: 'thanks-for-scrolling',
+        title: '🎉 Congratulations, Scroll Champion!',
+        query: JSON.stringify({}, null, 2),
+        chartType: 'markdown' as const,
+        chartConfig: {},
+        displayConfig: {
+          content: `## Thanks for scrolling this far! 🎊
+
+Did you know that Drizzle Cube can actually do way more than just track how many lines of code you've written while questioning your life choices?
+
+### Here's what this magical cube can do:
+
+- **📊 Turn your data into pretty charts** - Because pie charts make everything look more important
+- **🔍 Query anything** - Your database, your soul, your will to live on Monday mornings  
+- **⚡ Super-fast dashboards** - Watch your KPIs update faster than your coffee gets cold
+- **🎨 Drag & drop chart building** - So easy, even that one coworker who still prints emails can use it
+- **📱 Mobile responsive** - View your existential data crisis from anywhere!
+- **🔒 Enterprise security** - Your productivity shame is safe with us
+
+*P.S. If you made it this far, you definitely deserve a coffee break. Or maybe it's time to actually use some of this data to make decisions? Nah, let's add another chart instead.* ☕`
+        },
+        w: 12,
+        h: 8,
+        x: 0,
+        y: 62
       }
     ]
   }
