@@ -31,7 +31,8 @@ export const productivityDashboardConfig = {
           yAxis: ['Productivity.totalLinesOfCode']
         },
         displayConfig: {
-          suffix: ' lines'
+          suffix: ' lines',
+          target: '10000'
         },
         w: 4,
         h: 4,
@@ -49,12 +50,13 @@ export const productivityDashboardConfig = {
             dateRange: 'last year'
           }]
         }, null, 2),
-        chartType: 'kpiNumber' as const,
+        chartType: 'kpiDelta' as const,
         chartConfig: {
           yAxis: ['Productivity.totalDeployments']
         },
         displayConfig: {
-          suffix: ' deployments'
+          suffix: ' deployments',
+          target: '50'
         },
         w: 4,
         h: 4,
@@ -83,7 +85,8 @@ export const productivityDashboardConfig = {
         },
         displayConfig: {
           decimals: 1,
-          suffix: '/10'
+          suffix: '/10',
+          target: '8.0'
         },
         w: 4,
         h: 4,
@@ -182,7 +185,8 @@ export const productivityDashboardConfig = {
         },
         displayConfig: {
           showLegend: false,
-          stackedBarChart: false
+          stackedBarChart: false,
+          target: '80,85,90,95,100,95,90,85,80,75,80,85'
         },
         w: 8,
         h: 6,
@@ -403,7 +407,8 @@ export const productivityDashboardConfig = {
         },
         displayConfig: {
           showLegend: true,
-          stackedBarChart: false
+          stackedBarChart: false,
+          target: '80,90,100,110,120,130,120,110,100,90,85,90'
         },
         w: 6,
         h: 6,
