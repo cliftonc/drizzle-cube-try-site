@@ -12,7 +12,7 @@
     "dev:full": "concurrently \"npm:dev:worker\" \"npm:dev:client\"",
     "build": "npm run build:client && npm run build:worker",
     "build:client": "tsc --project tsconfig.client.json && vite build",
-    "build:worker": "tsc --project tsconfig.worker.json --noCheck",
+    "build:worker": "tsc --project tsconfig.worker.json",
     "build:full": "npm run build",
     "start": "node dist/index.js",
     "deploy": "npm run build && wrangler deploy",
