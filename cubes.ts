@@ -6,12 +6,13 @@
 import { eq, sql } from 'drizzle-orm'
 import { defineCube } from 'drizzle-cube/server'
 import type { QueryContext, BaseQueryDefinition, Cube } from 'drizzle-cube/server'
-import { employees, departments, productivity } from './schema'
+import { employees, departments, productivity, timeEntries } from './schema'
 
 // Forward declarations for circular dependency resolution
 let employeesCube: Cube
 let departmentsCube: Cube
 let productivityCube: Cube
+let timeEntriesCube: Cube
 
 /**
  * Employees cube - employee analytics (single table)
@@ -39,6 +40,13 @@ employeesCube = defineCube('Employees', {
       relationship: 'hasMany',
       on: [
         { source: employees.id, target: productivity.employeeId }
+      ]
+    },
+    TimeEntries: {
+      targetCube: () => timeEntriesCube,
+      relationship: 'hasMany',
+      on: [
+        { source: employees.id, target: timeEntries.employeeId }
       ]
     }
   },
@@ -134,6 +142,13 @@ departmentsCube = defineCube('Departments', {
       relationship: 'hasMany',
       on: [
         { source: departments.id, target: employees.departmentId }
+      ]
+    },
+    TimeEntries: {
+      targetCube: () => timeEntriesCube,
+      relationship: 'hasMany',
+      on: [
+        { source: departments.id, target: timeEntries.departmentId }
       ]
     }
   },
@@ -342,9 +357,207 @@ productivityCube = defineCube('Productivity', {
 }) as Cube
 
 /**
+ * Time Entries cube - time tracking analytics with allocation types
+ */
+timeEntriesCube = defineCube('TimeEntries', {
+  title: 'Time Entries Analytics', 
+  description: 'Employee time tracking with allocation types, departments, and billable hours',
+  
+  sql: (ctx: QueryContext): BaseQueryDefinition => ({
+    from: timeEntries,    
+    where: eq(timeEntries.organisationId, ctx.securityContext.organisationId as number)
+  }),
+
+  joins: {
+    Employees: {
+      targetCube: () => employeesCube,
+      relationship: 'belongsTo',
+      on: [
+        { source: timeEntries.employeeId, target: employees.id }
+      ]
+    },
+    Departments: {
+      targetCube: () => departmentsCube,
+      relationship: 'belongsTo', 
+      on: [
+        { source: timeEntries.departmentId, target: departments.id }
+      ]
+    }
+  },
+
+  dimensions: {
+    id: {
+      name: 'id',
+      title: 'Time Entry ID',
+      type: 'number',
+      sql: timeEntries.id,
+      primaryKey: true
+    },
+    employeeId: {
+      name: 'employeeId',
+      title: 'Employee ID',
+      type: 'number',
+      sql: timeEntries.employeeId
+    },
+    departmentId: {
+      name: 'departmentId', 
+      title: 'Department ID',
+      type: 'number',
+      sql: timeEntries.departmentId
+    },
+    allocationType: {
+      name: 'allocationType',
+      title: 'Allocation Type',
+      type: 'string',
+      sql: timeEntries.allocationType
+    },
+    description: {
+      name: 'description',
+      title: 'Task Description',
+      type: 'string',
+      sql: timeEntries.description
+    },
+    date: {
+      name: 'date',
+      title: 'Date',
+      type: 'time',
+      sql: timeEntries.date
+    },
+    createdAt: {
+      name: 'createdAt',
+      title: 'Created At',
+      type: 'time',
+      sql: timeEntries.createdAt
+    }
+  },
+
+  measures: {
+    // Basic count measures
+    count: {
+      name: 'count',
+      title: 'Total Time Entries',
+      type: 'count',
+      sql: timeEntries.id,
+      description: 'Total number of time entries'
+    },
+    
+    // Hours-based measures
+    totalHours: {
+      name: 'totalHours',
+      title: 'Total Hours',
+      type: 'sum',
+      sql: timeEntries.hours,
+      description: 'Sum of all logged hours'
+    },
+    avgHours: {
+      name: 'avgHours',
+      title: 'Average Hours per Entry',
+      type: 'avg',
+      sql: timeEntries.hours,
+      description: 'Average hours per time entry'
+    },
+    minHours: {
+      name: 'minHours',
+      title: 'Minimum Hours',
+      type: 'min',
+      sql: timeEntries.hours
+    },
+    maxHours: {
+      name: 'maxHours',
+      title: 'Maximum Hours',
+      type: 'max',
+      sql: timeEntries.hours
+    },
+    
+    // Billable hours measures
+    totalBillableHours: {
+      name: 'totalBillableHours',
+      title: 'Total Billable Hours',
+      type: 'sum',
+      sql: timeEntries.billableHours,
+      description: 'Sum of all billable hours'
+    },
+    avgBillableHours: {
+      name: 'avgBillableHours',
+      title: 'Average Billable Hours',
+      type: 'avg',
+      sql: timeEntries.billableHours
+    },
+    
+    // Allocation-specific measures with filters
+    developmentHours: {
+      name: 'developmentHours',
+      title: 'Development Hours',
+      type: 'sum',
+      sql: timeEntries.hours,
+      filters: [
+        () => eq(timeEntries.allocationType, 'development')
+      ],
+      description: 'Total hours spent on development tasks'
+    },
+    meetingHours: {
+      name: 'meetingHours',
+      title: 'Meeting Hours',
+      type: 'sum',
+      sql: timeEntries.hours,
+      filters: [
+        () => eq(timeEntries.allocationType, 'meetings')
+      ],
+      description: 'Total hours spent in meetings'
+    },
+    maintenanceHours: {
+      name: 'maintenanceHours',
+      title: 'Maintenance Hours',
+      type: 'sum',
+      sql: timeEntries.hours,
+      filters: [
+        () => eq(timeEntries.allocationType, 'maintenance')
+      ]
+    },
+    
+    // Distinct count measures
+    distinctEmployees: {
+      name: 'distinctEmployees',
+      title: 'Unique Employees',
+      type: 'countDistinct',
+      sql: timeEntries.employeeId,
+      description: 'Number of unique employees with time entries'
+    },
+    distinctDepartments: {
+      name: 'distinctDepartments',
+      title: 'Unique Departments',
+      type: 'countDistinct', 
+      sql: timeEntries.departmentId
+    },
+    distinctAllocations: {
+      name: 'distinctAllocations',
+      title: 'Unique Allocation Types',
+      type: 'countDistinct',
+      sql: timeEntries.allocationType
+    },
+    
+    // Complex calculated measures
+    utilizationRate: {
+      name: 'utilizationRate',
+      title: 'Utilization Rate (%)',
+      type: 'avg',
+      sql: sql`(${timeEntries.billableHours} / NULLIF(${timeEntries.hours}, 0) * 100)`,
+      description: 'Percentage of billable vs total hours'
+    },
+    avgDailyHours: {
+      name: 'avgDailyHours',  
+      title: 'Average Daily Hours',
+      type: 'avg',
+      sql: timeEntries.hours,
+      description: 'Average hours logged per day'
+    }
+  }
+}) as Cube
+
+/**
  * Export cubes for use in other modules
  */
-export { employeesCube, departmentsCube, productivityCube }
+export { employeesCube, departmentsCube, productivityCube, timeEntriesCube }
 
 /**
  * All cubes for registration
@@ -352,5 +565,6 @@ export { employeesCube, departmentsCube, productivityCube }
 export const allCubes = [
   employeesCube,
   departmentsCube,
-  productivityCube
+  productivityCube,
+  timeEntriesCube
 ]
