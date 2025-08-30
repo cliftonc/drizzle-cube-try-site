@@ -68,7 +68,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <FloatingGitHubButton />
-      <nav className="bg-white shadow-xs border-b relative z-10">
+      <nav className="bg-white shadow-xs border-b relative z-[10000]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             {/* Desktop layout */}
