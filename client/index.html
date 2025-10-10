@@ -43,9 +43,31 @@
     <meta name="theme-color" content="#3B82F6" />
     <link rel="canonical" href="https://try.drizzle-cube.dev/" />
     
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism.min.css" rel="stylesheet" />
+    <!-- Prism.js themes - light and dark -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism.min.css" rel="stylesheet" id="prism-light-theme" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" id="prism-dark-theme" disabled />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-core.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+    <!-- Initialize theme based on localStorage or system preference -->
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+        const lightTheme = document.getElementById('prism-light-theme');
+        const darkTheme = document.getElementById('prism-dark-theme');
+
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+          lightTheme.disabled = true;
+          darkTheme.disabled = false;
+        } else {
+          lightTheme.disabled = false;
+          darkTheme.disabled = true;
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
