@@ -58,13 +58,21 @@
         const lightTheme = document.getElementById('prism-light-theme');
         const darkTheme = document.getElementById('prism-dark-theme');
 
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark');
-          lightTheme.disabled = true;
-          darkTheme.disabled = false;
-        } else {
+        // Set data-theme attribute
+        document.documentElement.setAttribute('data-theme', theme);
+
+        // Add theme class for backwards compatibility
+        if (theme === 'dark' || theme === 'neon' || theme === 'cyberpunk') {
+          document.documentElement.classList.add(theme);
+        }
+
+        // Toggle Prism.js themes (use dark theme for dark, neon, and cyberpunk)
+        if (theme === 'light') {
           lightTheme.disabled = false;
           darkTheme.disabled = true;
+        } else {
+          lightTheme.disabled = true;
+          darkTheme.disabled = false;
         }
       })();
     </script>

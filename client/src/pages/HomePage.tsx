@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
-import { 
-  ChartBarIcon, 
-  MagnifyingGlassIcon, 
-  BookOpenIcon, 
+import {
+  ChartBarIcon,
+  MagnifyingGlassIcon,
+  BookOpenIcon,
   CodeBracketIcon,
   SparklesIcon
 } from '@heroicons/react/24/outline'
@@ -19,6 +19,7 @@ export default function HomePage() {
       }
     }, 0)
   }, [])
+
   return (
     <>
       {/* Override Prism.js background styling */}

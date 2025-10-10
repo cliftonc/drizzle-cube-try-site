@@ -58,6 +58,14 @@ export default function Layout({ children }: LayoutProps) {
   const location = useLocation()
   const isHomePage = location.pathname === '/'
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [showThemeHint, setShowThemeHint] = useState(() => {
+    // Check localStorage to see if hint was previously dismissed
+    if (typeof window !== 'undefined') {
+      const dismissed = localStorage.getItem('themeHintDismissed')
+      return dismissed !== 'true'
+    }
+    return true
+  })
 
   const isActive = (path: string) => {
     if (path === '/') {
@@ -147,7 +155,32 @@ export default function Layout({ children }: LayoutProps) {
                 <GitHubIcon className="w-4 h-4 mr-1.5" />
                 GitHub
               </a>
-              <ThemeToggle />
+              <div className="relative">
+                <ThemeToggle />
+                {/* Theme hint - only shown on home page */}
+                {isHomePage && showThemeHint && (
+                  <div className="absolute top-14 -right-4 z-50">
+                    {/* Hint box with shadow */}
+                    <div className="bg-dc-primary text-dc-primary-content px-3 py-2 rounded-lg shadow-xl w-48 relative">
+                      {/* Pointer arrow - attached to box */}
+                      <div className="absolute -top-2 right-6 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-8 border-b-dc-primary"></div>
+                      <button
+                        onClick={() => {
+                          setShowThemeHint(false)
+                          localStorage.setItem('themeHintDismissed', 'true')
+                        }}
+                        className="absolute -top-2 -right-2 w-6 h-6 bg-dc-surface text-dc-text rounded-full hover:bg-dc-surface-hover transition-colors flex items-center justify-center text-lg font-bold shadow-md"
+                        aria-label="Close hint"
+                      >
+                        ×
+                      </button>
+                      <p className="text-xs font-semibold pr-4 leading-snug">
+                        See how you can customize it for your platform...
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Mobile menu button */}
