@@ -1,0 +1,418 @@
+/**
+ * drizzle-cube Theme Variables for Try Site
+ *
+ * Semantic CSS custom properties for three-theme support (light, dark, neon).
+ * These variables are used throughout the application for consistent theming.
+ *
+ * Usage:
+ * - These variables are automatically available to all components
+ * - Use [data-theme] attributes or CSS classes to switch themes
+ */
+
+@import "tailwindcss";
+
+/* ============================================================================
+   Light Theme (Default)
+   ============================================================================ */
+:root {
+  /* Surface Colors - Backgrounds for cards, modals, panels */
+  --dc-surface: #ffffff;
+  --dc-surface-secondary: #f9fafb;
+  --dc-surface-tertiary: #f3f4f6;
+  --dc-surface-hover: #f3f4f6;
+
+  /* Text Colors - Content text in various emphasis levels */
+  --dc-text: #111827;
+  --dc-text-secondary: #374151;
+  --dc-text-muted: #6b7280;
+  --dc-text-disabled: #9ca3af;
+
+  /* Border Colors - Dividers, outlines, borders */
+  --dc-border: #e5e7eb;
+  --dc-border-secondary: #d1d5db;
+  --dc-border-hover: #d1d5db;
+
+  /* Primary Colors - Main interactive elements */
+  --dc-primary: #3b82f6;
+  --dc-primary-hover: #2563eb;
+  --dc-primary-content: #ffffff;
+
+  /* Semantic State Colors */
+  --dc-success: #10b981;
+  --dc-success-bg: #d1fae5;
+  --dc-success-border: #6ee7b7;
+
+  --dc-warning: #f59e0b;
+  --dc-warning-bg: #fef3c7;
+  --dc-warning-border: #fcd34d;
+
+  --dc-error: #ef4444;
+  --dc-error-bg: #fee2e2;
+  --dc-error-border: #fca5a5;
+
+  --dc-info: #3b82f6;
+  --dc-info-bg: #dbeafe;
+  --dc-info-border: #93c5fd;
+
+  /* Danger Colors - Destructive actions */
+  --dc-danger: #dc2626;
+  --dc-danger-hover: #b91c1c;
+  --dc-danger-bg: #fee2e2;
+
+  /* Field Type Colors - For semantic field type badges */
+  --dc-dimension-bg: #dcfce7;
+  --dc-dimension-text: #166534;
+  --dc-dimension-border: #bbf7d0;
+
+  --dc-time-dimension-bg: #dbeafe;
+  --dc-time-dimension-text: #1e40af;
+  --dc-time-dimension-border: #93c5fd;
+
+  --dc-measure-bg: #fef3c7;
+  --dc-measure-text: #92400e;
+  --dc-measure-border: #fde68a;
+
+  /* Overlay Colors - Modal backdrops, overlays */
+  --dc-overlay: rgba(0, 0, 0, 0.75);
+  --dc-overlay-light: rgba(0, 0, 0, 0.5);
+
+  /* Shadow Colors - Elevation, depth */
+  --dc-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --dc-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --dc-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --dc-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --dc-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --dc-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+  /* Card/Component Colors - For feature cards, panels */
+  --dc-card-bg: #ffffff;
+  --dc-card-bg-hover: #f9fafb;
+  --dc-card-border: #e5e7eb;
+  --dc-card-border-hover: #d1d5db;
+
+  /* Semantic Accent Colors - Theme-aware highlights */
+  --dc-accent: #3b82f6;
+  --dc-accent-hover: #2563eb;
+  --dc-accent-bg: #eff6ff;
+  --dc-accent-border: #93c5fd;
+
+  /* Muted/Subtle Colors - For secondary elements */
+  --dc-muted: #6b7280;
+  --dc-muted-bg: #f3f4f6;
+  --dc-muted-border: #e5e7eb;
+}
+
+/* ============================================================================
+   Dark Theme
+   ============================================================================ */
+[data-theme="dark"],
+.dark,
+html.dark {
+  /* Surface Colors */
+  --dc-surface: #1e293b;
+  --dc-surface-secondary: #334155;
+  --dc-surface-tertiary: #475569;
+  --dc-surface-hover: #475569;
+
+  /* Text Colors */
+  --dc-text: #f1f5f9;
+  --dc-text-secondary: #e2e8f0;
+  --dc-text-muted: #cbd5e1;
+  --dc-text-disabled: #94a3b8;
+
+  /* Border Colors */
+  --dc-border: #475569;
+  --dc-border-secondary: #64748b;
+  --dc-border-hover: #64748b;
+
+  /* Primary Colors */
+  --dc-primary: #60a5fa;
+  --dc-primary-hover: #3b82f6;
+  --dc-primary-content: #0c4a6e;
+
+  /* Semantic State Colors */
+  --dc-success: #34d399;
+  --dc-success-bg: #064e3b;
+  --dc-success-border: #059669;
+
+  --dc-warning: #fbbf24;
+  --dc-warning-bg: #78350f;
+  --dc-warning-border: #d97706;
+
+  --dc-error: #f87171;
+  --dc-error-bg: #7f1d1d;
+  --dc-error-border: #dc2626;
+
+  --dc-info: #60a5fa;
+  --dc-info-bg: #1e3a8a;
+  --dc-info-border: #2563eb;
+
+  /* Danger Colors */
+  --dc-danger: #ef4444;
+  --dc-danger-hover: #dc2626;
+  --dc-danger-bg: #7f1d1d;
+
+  /* Field Type Colors - Dark mode versions */
+  --dc-dimension-bg: rgba(34, 197, 94, 0.3);
+  --dc-dimension-text: #86efac;
+  --dc-dimension-border: #16a34a;
+
+  --dc-time-dimension-bg: rgba(59, 130, 246, 0.3);
+  --dc-time-dimension-text: #93c5fd;
+  --dc-time-dimension-border: #2563eb;
+
+  --dc-measure-bg: rgba(245, 158, 11, 0.3);
+  --dc-measure-text: #fcd34d;
+  --dc-measure-border: #d97706;
+
+  /* Overlay Colors */
+  --dc-overlay: rgba(0, 0, 0, 0.85);
+  --dc-overlay-light: rgba(0, 0, 0, 0.6);
+
+  /* Shadow Colors - More subtle in dark mode */
+  --dc-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --dc-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+  --dc-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --dc-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  --dc-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.4);
+  --dc-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.5);
+
+  /* Card/Component Colors - Dark mode versions */
+  --dc-card-bg: #1e293b;
+  --dc-card-bg-hover: #334155;
+  --dc-card-border: #475569;
+  --dc-card-border-hover: #64748b;
+
+  /* Semantic Accent Colors - Dark mode versions */
+  --dc-accent: #60a5fa;
+  --dc-accent-hover: #3b82f6;
+  --dc-accent-bg: #1e3a8a;
+  --dc-accent-border: #2563eb;
+
+  /* Muted/Subtle Colors - Dark mode versions */
+  --dc-muted: #94a3b8;
+  --dc-muted-bg: #334155;
+  --dc-muted-border: #475569;
+}
+
+/* ============================================================================
+   Neon Theme - Bold, modern with fluorescent colors
+   ============================================================================ */
+[data-theme="neon"],
+html.neon {
+  /* Surface Colors - Deep dark backgrounds with purple tint */
+  --dc-surface: #0a0118;
+  --dc-surface-secondary: #1a0f2e;
+  --dc-surface-tertiary: #2a1f3e;
+  --dc-surface-hover: #3a2f4e;
+
+  /* Text Colors - Bright white with neon highlights */
+  --dc-text: #ffffff;
+  --dc-text-secondary: #e0e0ff;
+  --dc-text-muted: #b0b0d0;
+  --dc-text-disabled: #808090;
+
+  /* Border Colors - Electric cyan and magenta */
+  --dc-border: #ff00ff;
+  --dc-border-secondary: #00ffff;
+  --dc-border-hover: #00ff00;
+
+  /* Primary Colors - Electric cyan */
+  --dc-primary: #00ffff;
+  --dc-primary-hover: #00cccc;
+  --dc-primary-content: #000000;
+
+  /* Semantic State Colors - Bright neon versions */
+  --dc-success: #00ff00;
+  --dc-success-bg: rgba(0, 255, 0, 0.15);
+  --dc-success-border: #00ff00;
+
+  --dc-warning: #ffff00;
+  --dc-warning-bg: rgba(255, 255, 0, 0.15);
+  --dc-warning-border: #ffff00;
+
+  --dc-error: #ff0066;
+  --dc-error-bg: rgba(255, 0, 102, 0.15);
+  --dc-error-border: #ff0066;
+
+  --dc-info: #00ffff;
+  --dc-info-bg: rgba(0, 255, 255, 0.15);
+  --dc-info-border: #00ffff;
+
+  /* Danger Colors - Hot pink */
+  --dc-danger: #ff1493;
+  --dc-danger-hover: #cc1077;
+  --dc-danger-bg: rgba(255, 20, 147, 0.15);
+
+  /* Field Type Colors - Neon versions */
+  --dc-dimension-bg: rgba(0, 255, 0, 0.2);
+  --dc-dimension-text: #00ff00;
+  --dc-dimension-border: #00ff00;
+
+  --dc-time-dimension-bg: rgba(0, 255, 255, 0.2);
+  --dc-time-dimension-text: #00ffff;
+  --dc-time-dimension-border: #00ffff;
+
+  --dc-measure-bg: rgba(255, 0, 255, 0.2);
+  --dc-measure-text: #ff00ff;
+  --dc-measure-border: #ff00ff;
+
+  /* Overlay Colors - Deep purple overlay */
+  --dc-overlay: rgba(10, 1, 24, 0.95);
+  --dc-overlay-light: rgba(10, 1, 24, 0.75);
+
+  /* Shadow Colors - Neon glow effects */
+  --dc-shadow-sm: 0 0 4px rgba(255, 0, 255, 0.3);
+  --dc-shadow: 0 0 8px rgba(255, 0, 255, 0.4), 0 0 12px rgba(0, 255, 255, 0.2);
+  --dc-shadow-md: 0 0 12px rgba(255, 0, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.3);
+  --dc-shadow-lg: 0 0 20px rgba(255, 0, 255, 0.6), 0 0 30px rgba(0, 255, 255, 0.4);
+  --dc-shadow-xl: 0 0 30px rgba(255, 0, 255, 0.7), 0 0 50px rgba(0, 255, 255, 0.5);
+  --dc-shadow-2xl: 0 0 50px rgba(255, 0, 255, 0.8), 0 0 80px rgba(0, 255, 255, 0.6);
+
+  /* Card/Component Colors - Neon versions with glow */
+  --dc-card-bg: #1a0f2e;
+  --dc-card-bg-hover: #2a1f3e;
+  --dc-card-border: #ff00ff;
+  --dc-card-border-hover: #00ffff;
+
+  /* Semantic Accent Colors - Bright neon cyan */
+  --dc-accent: #00ffff;
+  --dc-accent-hover: #00cccc;
+  --dc-accent-bg: rgba(0, 255, 255, 0.15);
+  --dc-accent-border: #00ffff;
+
+  /* Muted/Subtle Colors - Neon versions */
+  --dc-muted: #b0b0d0;
+  --dc-muted-bg: #2a1f3e;
+  --dc-muted-border: #ff00ff;
+}
+
+/* ============================================================================
+   Cyberpunk Theme - Bright yellow with bold black/white contrast
+   ============================================================================ */
+[data-theme="cyberpunk"],
+html.cyberpunk {
+  /* Surface Colors - Light content, darker headers */
+  --dc-surface: #fff176;
+  --dc-surface-secondary: #fdd835;
+  --dc-surface-tertiary: #ffeb3b;
+  --dc-surface-hover: #ffeb3b;
+
+  /* Text Colors - Bold black for maximum contrast */
+  --dc-text: #000000;
+  --dc-text-secondary: #1a1a1a;
+  --dc-text-muted: #333333;
+  --dc-text-disabled: #666666;
+
+  /* Border Colors - Bolder black borders (3px) */
+  --dc-border: #000000;
+  --dc-border-secondary: #1a1a1a;
+  --dc-border-hover: #000000;
+
+  /* Primary Colors - Black buttons with white text */
+  --dc-primary: #000000;
+  --dc-primary-hover: #1a1a1a;
+  --dc-primary-content: #ffffff;
+
+  /* Semantic State Colors - Bold, high-contrast versions */
+  --dc-success: #00ff00;
+  --dc-success-bg: #ccff99;
+  --dc-success-border: #00cc00;
+
+  --dc-warning: #ff6600;
+  --dc-warning-bg: #ffcc99;
+  --dc-warning-border: #ff5500;
+
+  --dc-error: #ff0000;
+  --dc-error-bg: #ffcccc;
+  --dc-error-border: #cc0000;
+
+  --dc-info: #f57f17;
+  --dc-info-bg: #fff9c4;
+  --dc-info-border: #f9a825;
+
+  /* Danger Colors - Bold red */
+  --dc-danger: #ff0000;
+  --dc-danger-hover: #cc0000;
+  --dc-danger-bg: #ffcccc;
+
+  /* Field Type Colors - Cyberpunk versions with bold colors */
+  --dc-dimension-bg: #00ff00;
+  --dc-dimension-text: #000000;
+  --dc-dimension-border: #000000;
+
+  --dc-time-dimension-bg: #00ffff;
+  --dc-time-dimension-text: #000000;
+  --dc-time-dimension-border: #000000;
+
+  --dc-measure-bg: #ff00ff;
+  --dc-measure-text: #000000;
+  --dc-measure-border: #000000;
+
+  /* Overlay Colors - Black overlay */
+  --dc-overlay: rgba(0, 0, 0, 0.9);
+  --dc-overlay-light: rgba(0, 0, 0, 0.7);
+
+  /* Shadow Colors - Bold cartoon-style shadows (offset bottom-right) */
+  --dc-shadow-sm: 3px 3px 0 rgb(0 0 0);
+  --dc-shadow: 4px 4px 0 rgb(0 0 0);
+  --dc-shadow-md: 6px 6px 0 rgb(0 0 0);
+  --dc-shadow-lg: 8px 8px 0 rgb(0 0 0);
+  --dc-shadow-xl: 10px 10px 0 rgb(0 0 0);
+  --dc-shadow-2xl: 12px 12px 0 rgb(0 0 0);
+
+  /* Card/Component Colors - Light yellow for content */
+  --dc-card-bg: #fff176;
+  --dc-card-bg-hover: #ffeb3b;
+  --dc-card-border: #000000;
+  --dc-card-border-hover: #000000;
+
+  /* Semantic Accent Colors - Black accent */
+  --dc-accent: #000000;
+  --dc-accent-hover: #1a1a1a;
+  --dc-accent-bg: #fff176;
+  --dc-accent-border: #000000;
+
+  /* Muted/Subtle Colors - Dark on yellow */
+  --dc-muted: #333333;
+  --dc-muted-bg: #fdd835;
+  --dc-muted-border: #000000;
+}
+
+/* ============================================================================
+   Tailwind Utilities for Theme Variables
+   ============================================================================
+   These utility class definitions allow using theme variables with Tailwind
+*/
+@layer utilities {
+  /* Background utilities */
+  .bg-dc-surface { background-color: var(--dc-surface); }
+  .bg-dc-surface-secondary { background-color: var(--dc-surface-secondary); }
+  .bg-dc-surface-tertiary { background-color: var(--dc-surface-tertiary); }
+
+  /* Text utilities */
+  .text-dc-text { color: var(--dc-text); }
+  .text-dc-text-secondary { color: var(--dc-text-secondary); }
+  .text-dc-text-muted { color: var(--dc-text-muted); }
+
+  /* Border utilities */
+  .border-dc-border { border-color: var(--dc-border); }
+  .border-dc-border-secondary { border-color: var(--dc-border-secondary); }
+
+  /* Hover utilities */
+  .hover\:bg-dc-surface-hover:hover { background-color: var(--dc-surface-hover); }
+  .hover\:border-dc-border-hover:hover { border-color: var(--dc-border-hover); }
+
+  /* Field Type utilities */
+  .bg-dc-dimension { background-color: var(--dc-dimension-bg); }
+  .text-dc-dimension { color: var(--dc-dimension-text); }
+  .border-dc-dimension { border-color: var(--dc-dimension-border); }
+
+  .bg-dc-time-dimension { background-color: var(--dc-time-dimension-bg); }
+  .text-dc-time-dimension { color: var(--dc-time-dimension-text); }
+  .border-dc-time-dimension { border-color: var(--dc-time-dimension-border); }
+
+  .bg-dc-measure { background-color: var(--dc-measure-bg); }
+  .text-dc-measure { color: var(--dc-measure-text); }
+  .border-dc-measure { border-color: var(--dc-measure-border); }
+}
