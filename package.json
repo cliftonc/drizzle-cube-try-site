@@ -37,7 +37,7 @@
     "@neondatabase/serverless": "^1.0.1",
     "@tanstack/react-query": "^5.0.0",
     "dotenv": "^17.2.1",
-    "drizzle-cube": "^0.1.38",
+    "drizzle-cube": "^0.1.39",
     "drizzle-orm": "^0.44.4",
     "hono": "^4.9.4",
     "postgres": "^3.4.0",
