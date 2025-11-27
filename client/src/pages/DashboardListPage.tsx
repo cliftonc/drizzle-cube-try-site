@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { DashboardEditModal } from 'drizzle-cube/client'
-import { 
-  useAnalyticsPages, 
-  useCreateExamplePage, 
+import {
+  useAnalyticsPages,
+  useCreateExamplePage,
   useDeleteAnalyticsPage,
   useCreateAnalyticsPage
 } from '../hooks/useAnalyticsPages'
+import PageHead from '../components/PageHead'
 
 export default function DashboardListPage() {
   const { data: pages = [], isLoading, error } = useAnalyticsPages()
@@ -78,6 +79,10 @@ export default function DashboardListPage() {
 
   return (
     <div>
+      <PageHead
+        title="Analytics Dashboards - Drizzle Cube"
+        description="Manage your analytics dashboards and visualizations"
+      />
       <div className="mb-6">
         <div>
           <h1 className="text-xl sm:text-2xl font-semibold text-dc-text">Analytics Dashboards</h1>

@@ -1,14 +1,19 @@
 /**
  * Query Builder Page
- * 
+ *
  * Demonstrates the QueryBuilder component in the Hono example application.
  */
 
 import { QueryBuilder } from 'drizzle-cube/client'
+import PageHead from '../components/PageHead'
 
 export default function QueryBuilderPage() {
   return (
     <div className="-m-6 min-h-screen flex flex-col">
+      <PageHead
+        title="Query Builder - Drizzle Cube"
+        description="Build and test queries against your cube schema with AI assistance"
+      />
       {/* Header */}
       <div className="shrink-0 border-b border-dc-border px-4 sm:px-6 py-4">
         <h1 className="text-xl sm:text-2xl font-bold text-dc-text">Query Builder</h1>

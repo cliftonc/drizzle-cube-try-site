@@ -7,6 +7,7 @@ import {
   CodeBracketIcon,
   SparklesIcon
 } from '@heroicons/react/24/outline'
+import PageHead from '../components/PageHead'
 
 export default function HomePage() {
   // Apply Prism.js syntax highlighting after component mounts
@@ -22,6 +23,7 @@ export default function HomePage() {
 
   return (
     <>
+      <PageHead />
       {/* Override Prism.js background styling */}
       <style>{`
         .language-ts, .language-json, pre[class*="language-"] {

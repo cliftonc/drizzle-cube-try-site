@@ -4,6 +4,7 @@ import { AnalyticsDashboard, DashboardEditModal } from 'drizzle-cube/client'
 import { useAnalyticsPage, useUpdateAnalyticsPage, useResetAnalyticsPage } from '../hooks/useAnalyticsPages'
 import type { DashboardConfig } from '../types'
 import { ArrowPathIcon, PencilIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
+import PageHead from '../components/PageHead'
 
 export default function DashboardViewPage() {
   const { id } = useParams<{ id: string }>()
@@ -129,6 +130,10 @@ export default function DashboardViewPage() {
 
   return (
     <div>
+      <PageHead
+        title={`${page.name} - Drizzle Cube`}
+        description={page.description || 'View analytics dashboard'}
+      />
       <div className="mb-6">
         <div>
           <nav className="flex" aria-label="Breadcrumb">
