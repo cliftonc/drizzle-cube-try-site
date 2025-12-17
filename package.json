@@ -41,7 +41,7 @@
     "drizzle-orm": "^0.45.0",
     "hono": "^4.0.0",
     "postgres": "^3.4.0",
-    "react-grid-layout": "^1.4.0",
+    "react-grid-layout": "^2.0.0",
     "react-helmet-async": "^2.0.5",
     "react-is": "^18.0.0",
     "react-resizable": "^3.0.0",
