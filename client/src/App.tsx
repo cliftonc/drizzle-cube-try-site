@@ -10,7 +10,7 @@ import QueryBuilderPage from './pages/QueryBuilderPage'
 function App() {
   return (
     <HelmetProvider>
-      <CubeProvider apiOptions={{ apiUrl: '/cubejs-api/v1' }}>
+      <CubeProvider apiOptions={{ apiUrl: '/cubejs-api/v1' }} features={{ showSchemaDiagram: true }}>
         <Layout>
           <Routes>
             <Route path="/" element={<HomePage />} />
