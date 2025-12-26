@@ -29,7 +29,7 @@ export default function QueryBuilderPage() {
                 Demo Note
               </p>
               <p className="text-sm text-dc-text-secondary mt-1">
-                This page demonstrates the <a href="https://github.com/cliftonc/drizzle-cube/blob/main/src/client/components/QueryBuilder/index.tsx" target="_blank" rel="noopener noreferrer" className="underline hover:text-dc-info"><code className="px-1 py-0.5 bg-dc-info-bg rounded text-xs font-mono">QueryBuilder</code></a> React component from drizzle-cube/client that you can embed in your own application.
+                This page demonstrates the <a href="https://www.drizzle-cube.dev/client/query-builder/" target="_blank" rel="noopener noreferrer" className="underline hover:text-dc-info"><code className="px-1 py-0.5 bg-dc-info-bg rounded text-xs font-mono">QueryBuilder</code></a> React component from drizzle-cube/client that you can embed in your own application.
               </p>
             </div>
           </div>

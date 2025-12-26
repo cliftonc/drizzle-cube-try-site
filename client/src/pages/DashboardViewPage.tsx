@@ -226,7 +226,7 @@ export default function DashboardViewPage() {
                   Demo Note
                 </p>
                 <p className="text-sm text-dc-text-secondary mt-1">
-                  This dashboard uses the <a href="https://github.com/cliftonc/drizzle-cube/blob/main/src/client/components/AnalyticsDashboard.tsx" target="_blank" rel="noopener noreferrer" className="underline hover:text-dc-info"><code className="px-1 py-0.5 bg-dc-info-bg rounded text-xs font-mono">AnalyticsDashboard</code></a> component from drizzle-cube/client. It includes drag-and-drop, auto-save, and real-time updates. These dashboards are limited to 20 portlets, in your implementation this limit does not need to apply.
+                  This dashboard uses the <a href="https://www.drizzle-cube.dev/client/dashboards/" target="_blank" rel="noopener noreferrer" className="underline hover:text-dc-info"><code className="px-1 py-0.5 bg-dc-info-bg rounded text-xs font-mono">AnalyticsDashboard</code></a> component from drizzle-cube/client. It includes drag-and-drop, auto-save, and real-time updates. These dashboards are limited to 20 portlets, in your implementation this limit does not need to apply.
                 </p>
               </div>
             </div>
