@@ -150,6 +150,13 @@ departmentsCube = defineCube('Departments', {
       on: [
         { source: departments.id, target: timeEntries.departmentId }
       ]
+    },
+    Productivity: {
+      targetCube: () => productivityCube,
+      relationship: 'hasMany',
+      on: [
+        { source: departments.id, target: productivity.departmentId }
+      ]
     }
   },
   

@@ -27,8 +27,10 @@ const FloatingGitHubButton = () => {
       return `${basePath}/pages/DashboardListPage.tsx`
     } else if (pathname === '/query-builder') {
       return `${basePath}/pages/QueryBuilderPage.tsx`
+    } else if (pathname === '/analysis-builder') {
+      return `${basePath}/pages/AnalysisBuilderPage.tsx`
     }
-    
+
     return `${basePath}/App.tsx`
   }
 
@@ -119,6 +121,16 @@ export default function Layout({ children }: LayoutProps) {
                   }`}
                 >
                   Query Builder
+                </Link>
+                <Link
+                  to="/analysis-builder"
+                  className={`inline-flex items-center px-1 pt-1 text-sm font-medium border-b-2 transition-colors ${
+                    isActive('/analysis-builder')
+                      ? 'border-dc-primary text-dc-text'
+                      : 'border-transparent text-dc-text-muted hover:text-dc-text-secondary hover:border-dc-border'
+                  }`}
+                >
+                  Analysis Builder
                 </Link>
               </div>
             </div>
@@ -239,7 +251,18 @@ export default function Layout({ children }: LayoutProps) {
               >
                 Query Builder
               </Link>
-              
+              <Link
+                to="/analysis-builder"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                  isActive('/analysis-builder')
+                    ? 'text-dc-primary bg-dc-primary/10 border-l-4 border-dc-primary'
+                    : 'text-dc-text-muted hover:text-dc-text hover:bg-dc-surface-hover'
+                }`}
+              >
+                Analysis Builder
+              </Link>
+
               {/* Mobile external links */}
               <div className="border-t border-dc-border pt-4 pb-3">
                 <div className="px-3 pb-2">

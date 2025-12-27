@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage'
 import DashboardListPage from './pages/DashboardListPage'
 import DashboardViewPage from './pages/DashboardViewPage'
 import QueryBuilderPage from './pages/QueryBuilderPage'
+import AnalysisBuilderPage from './pages/AnalysisBuilderPage'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/dashboards" element={<DashboardListPage />} />
             <Route path="/dashboards/:id" element={<DashboardViewPage />} />
             <Route path="/query-builder" element={<QueryBuilderPage />} />
+            <Route path="/analysis-builder" element={<AnalysisBuilderPage />} />
           </Routes>
         </Layout>
       </CubeProvider>
