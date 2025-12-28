@@ -140,65 +140,6 @@ export default function HomePage() {
           </a>
         </div>
 
-        {/* Used by these Platforms section */}
-        <div className="mb-12 sm:mb-16">
-          <h2 className="text-lg sm:text-xl font-semibold text-dc-text-secondary text-center mb-6">
-            Used by these Platforms
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 max-w-4xl mx-auto">
-            <a
-              href="https://www.fintune.app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group bg-dc-card-bg hover:bg-dc-card-bg-hover border border-dc-card-border hover:border-dc-primary rounded-xl px-6 py-5 transition-all duration-200 shadow-2xs hover:shadow-md"
-            >
-              <div className="flex items-center gap-4">
-                <img
-                  src="https://www.fintune.app/img/logo_small.png"
-                  alt="Fintune logo"
-                  className="w-12 h-12 object-contain"
-                />
-                <div>
-                  <h3 className="text-lg font-bold text-dc-text group-hover:text-dc-primary transition-colors">
-                    Fintune
-                  </h3>
-                  <p className="text-sm text-dc-text-muted">
-                    Team and financial planning for dynamic product organisations
-                  </p>
-                  <p className="text-xs text-dc-primary mt-1 group-hover:underline">
-                    www.fintune.app
-                  </p>
-                </div>
-              </div>
-            </a>
-            <a
-              href="https://www.guidemode.dev"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group bg-dc-card-bg hover:bg-dc-card-bg-hover border border-dc-card-border hover:border-dc-primary rounded-xl px-6 py-5 transition-all duration-200 shadow-2xs hover:shadow-md"
-            >
-              <div className="flex items-center gap-4">
-                <img
-                  src="https://www.guidemode.dev/logo.svg"
-                  alt="Guidemode logo"
-                  className="w-12 h-12 object-contain"
-                />
-                <div>
-                  <h3 className="text-lg font-bold text-dc-text group-hover:text-dc-primary transition-colors">
-                    Guidemode
-                  </h3>
-                  <p className="text-sm text-dc-text-muted">
-                    The only Discovery x Delivery - DX² - platform
-                  </p>
-                  <p className="text-xs text-dc-primary mt-1 group-hover:underline">
-                    www.guidemode.dev
-                  </p>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
           <div className="bg-dc-surface rounded-lg shadow-md p-4 sm:p-6">
             <h2 className="text-xl sm:text-2xl font-bold text-dc-text mb-3 sm:mb-4">Why Embed Analytics?</h2>
@@ -429,6 +370,85 @@ app.route('/', cubeApp) // Done!`}
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Used by these Platforms section */}
+        <div className="mt-12 sm:mt-16">
+          <h2 className="text-lg sm:text-xl font-semibold text-dc-text-secondary text-center mb-6">
+            Used by these Platforms
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 max-w-5xl mx-auto">
+            <a
+              href="https://www.fintune.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group bg-dc-card-bg hover:bg-dc-card-bg-hover border border-dc-card-border hover:border-dc-primary rounded-xl px-6 py-5 transition-all duration-200 shadow-2xs hover:shadow-md"
+            >
+              <div className="flex items-center gap-4">
+                <img
+                  src="https://www.fintune.app/img/logo_small.png"
+                  alt="Fintune logo"
+                  className="w-12 h-12 object-contain"
+                />
+                <div>
+                  <h3 className="text-lg font-bold text-dc-text group-hover:text-dc-primary transition-colors">
+                    Fintune
+                  </h3>
+                  <p className="text-sm text-dc-text-muted">
+                    Team and financial planning for dynamic product organisations
+                  </p>
+                  <p className="text-xs text-dc-primary mt-1 group-hover:underline">
+                    www.fintune.app
+                  </p>
+                </div>
+              </div>
+            </a>
+            <a
+              href="https://www.guidemode.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group bg-dc-card-bg hover:bg-dc-card-bg-hover border border-dc-card-border hover:border-dc-primary rounded-xl px-6 py-5 transition-all duration-200 shadow-2xs hover:shadow-md"
+            >
+              <div className="flex items-center gap-4">
+                <img
+                  src="https://www.guidemode.dev/logo.svg"
+                  alt="Guidemode logo"
+                  className="w-12 h-12 object-contain"
+                />
+                <div>
+                  <h3 className="text-lg font-bold text-dc-text group-hover:text-dc-primary transition-colors">
+                    Guidemode
+                  </h3>
+                  <p className="text-sm text-dc-text-muted">
+                    The only Discovery x Delivery - DX² - platform
+                  </p>
+                  <p className="text-xs text-dc-primary mt-1 group-hover:underline">
+                    www.guidemode.dev
+                  </p>
+                </div>
+              </div>
+            </a>
+            <a
+              href="https://github.com/cliftonc/drizzle-cube/discussions/categories/show-and-tell"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group bg-dc-card-bg hover:bg-dc-card-bg-hover border border-dashed border-dc-card-border hover:border-dc-primary rounded-xl px-6 py-5 transition-all duration-200 shadow-2xs hover:shadow-md"
+            >
+              <div className="flex items-center gap-4 h-full">
+                <div className="w-12 h-12 bg-dc-muted-bg group-hover:bg-dc-primary/10 rounded-lg flex items-center justify-center transition-colors">
+                  <span className="text-2xl text-dc-text-muted group-hover:text-dc-primary">+</span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-dc-text group-hover:text-dc-primary transition-colors">
+                    Add yours?
+                  </h3>
+                  <p className="text-sm text-dc-text-muted">
+                    Share your platform in our discussions
+                  </p>
+                </div>
+              </div>
+            </a>
           </div>
         </div>
       </div>
