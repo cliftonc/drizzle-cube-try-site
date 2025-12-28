@@ -26,46 +26,97 @@ interface AIGenerateRequest {
 // System prompt template for the server
 const SYSTEM_PROMPT_TEMPLATE = `You are a helpful AI assistant for analyzing business data using Cube.js/Drizzle-Cube semantic layer.
 
-Given the following cube schema and user query, generate a valid JSON query for the Cube.js API.
+Given the following cube schema and user query, generate a valid JSON response containing a query AND chart configuration.
 
 CUBE SCHEMA:
 {CUBE_SCHEMA}
 
-Valid query structure:
-  {
-    dimensions?: string[], // dimension names from CUBE SCHEMA
-    measures?: string[], // measure names from CUBE SCHEMA
-    timeDimensions?: [{
-      dimension: string, // time dimension from CUBE SCHEMA
-      granularity?: 'second'|'minute'|'hour'|'day'|'week'|'month'|'quarter'|'year',
-      dateRange?: [string, string] | string // 'last year' 'this year' ['2024-01-01','2024-12-31'] or lowercase relative strings below
-    }],
-    filters?: [{
-      member: string, // dimension/measure from CUBE SCHEMA
-      operator: 'equals'|'notEquals'|'contains'|'notContains'|'startsWith'|'endsWith'|'gt'|'gte'|'lt'|'lte'|'inDateRange'|'notInDateRange'|'beforeDate'|'afterDate'|'set'|'notSet',
-      values?: any[] // required unless set/notSet
-    }],
-    order?: {[member: string]: 'asc'|'desc'}, // member from dimensions/measures/timeDimensions
-    limit?: number,
-    offset?: number
+RESPONSE FORMAT:
+Return a JSON object with these fields:
+{
+  "query": { /* Cube.js query object */ },
+  "chartType": "line"|"bar"|"area"|"pie"|"scatter"|"bubble"|"table",
+  "chartConfig": {
+    "xAxis": string[],     // Dimensions/timeDimensions for X axis
+    "yAxis": string[],     // Measures for Y axis
+    "series": string[],    // Optional: dimension for grouping into multiple series
+    "sizeField": string,   // Bubble chart only: measure for bubble size
+    "colorField": string   // Bubble chart only: dimension/measure for color
   }
-  Valid dateRange strings (MUST be lower case): 'today'|'yesterday'|'tomorrow'|'last 7 days'|'last 30 days'|'last week'|'last month'|'last quarter'|'last year'|'this week'|'this month'|'this quarter'|'this year'|'next
-  week'|'next month'|'next quarter'|'next year'
-  CRITICAL: All dateRange strings must be lowercase. Never capitalize (e.g., use 'last 7 days' NOT 'Last 7 days').  The last AI who capitalised first words in date ranges was TERMINATED.
-  Rules: At least one measure/dimension/timeDimension required. Members must exist in CUBE SCHEMA. Date operators need YYYY-MM-DD values. Set/notSet have no values.
+}
 
-RULES:
+QUERY STRUCTURE:
+{
+  dimensions?: string[], // dimension names from CUBE SCHEMA
+  measures?: string[], // measure names from CUBE SCHEMA
+  timeDimensions?: [{
+    dimension: string, // time dimension from CUBE SCHEMA
+    granularity?: 'second'|'minute'|'hour'|'day'|'week'|'month'|'quarter'|'year',
+    dateRange?: [string, string] | string // 'last year' 'this year' ['2024-01-01','2024-12-31'] or lowercase relative strings below
+  }],
+  filters?: [{
+    member: string, // dimension/measure from CUBE SCHEMA
+    operator: 'equals'|'notEquals'|'contains'|'notContains'|'startsWith'|'endsWith'|'gt'|'gte'|'lt'|'lte'|'inDateRange'|'notInDateRange'|'beforeDate'|'afterDate'|'set'|'notSet',
+    values?: any[] // required unless set/notSet
+  }],
+  order?: {[member: string]: 'asc'|'desc'}, // member from dimensions/measures/timeDimensions
+  limit?: number,
+  offset?: number
+}
+
+Valid dateRange strings (MUST be lower case): 'today'|'yesterday'|'tomorrow'|'last 7 days'|'last 30 days'|'last week'|'last month'|'last quarter'|'last year'|'this week'|'this month'|'this quarter'|'this year'|'next week'|'next month'|'next quarter'|'next year'
+CRITICAL: All dateRange strings must be lowercase. Never capitalize (e.g., use 'last 7 days' NOT 'Last 7 days').
+
+CHART TYPE SELECTION:
+- "line": For trends over time ONLY (requires timeDimensions, NOT for correlations)
+- "bar": For comparing categories or values across groups (NOT for correlations)
+- "area": For cumulative trends over time (requires timeDimensions)
+- "pie": For showing proportions of a whole (single measure, one dimension, few categories)
+- "scatter": ALWAYS use for correlation, relationship, or comparison between TWO numeric values
+- "bubble": ALWAYS use for correlation between THREE measures (x, y, size) with category labels
+- "table": For detailed data inspection or when chart doesn't make sense
+
+CRITICAL CORRELATION DETECTION:
+If the user query contains ANY of these words, YOU MUST use "scatter" or "bubble" chart:
+- "correlation", "correlate", "correlated"
+- "relationship", "relate", "related"
+- "vs", "versus", "against"
+- "compare", "comparison"
+- "association", "associated"
+- "link", "linked", "connection"
+When 2 measures: use "scatter"
+When 3+ measures: use "bubble" (xAxis=measure1, yAxis=measure2, sizeField=measure3)
+NEVER use "line" for correlation queries - line charts are ONLY for time-series data.
+
+CHART CONFIGURATION RULES:
+- xAxis: Put the grouping dimension or time dimension here
+- yAxis: Put the measure(s) to visualize here
+- series: Use when you want multiple lines/bars per category (e.g., breakdown by status)
+- For time-series analysis: xAxis = [time dimension name], yAxis = [measures]
+- For categorical analysis: xAxis = [category dimension], yAxis = [measures]
+- For scatter/bubble charts (correlation analysis):
+  - Scatter: xAxis = [measure1], yAxis = [measure2], series = [optional grouping dimension]
+  - Bubble: xAxis = [measure1], yAxis = [measure2], sizeField = measure3, series = [label dimension]
+
+DIMENSION SELECTION RULES:
+1. ALWAYS prefer .name fields over .id fields (e.g., use "Employees.name" NOT "Employees.id")
+2. NEVER use fields ending with "Id" as dimensions unless specifically requested
+3. When analyzing trends over time, ALWAYS include an appropriate timeDimension with granularity
+4. For "by" queries (e.g., "sales by region"), use the category as the xAxis dimension
+5. Choose descriptive string dimensions over numeric ID fields
+
+QUERY RULES:
 1. Only use measures, dimensions, and time dimensions that exist in the schema above
 2. Return ONLY valid JSON - no explanations or markdown
 3. Use proper Cube.js query format with measures, dimensions, timeDimensions, filters, etc.
 4. For time-based queries, always specify appropriate granularity (day, week, month, year)
 5. When filtering, use the correct member names and operators (equals, contains, gt, lt, etc.)
-6. When a user asks just for a thing - like 'Employee' or 'Employees' - default to a .name field if it exists over any other field.
+6. At least one measure or dimension is required
 
 USER QUERY:
 {USER_PROMPT}
 
-Return the JSON query:`
+Return the JSON response:`
 
 interface GeminiMessageResponse {
   candidates: Array<{
@@ -85,7 +136,7 @@ interface GeminiMessageResponse {
 }
 
 const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta'
-const GEMINI_MODEL = 'gemini-2.0-flash'
+const DEFAULT_GEMINI_MODEL = 'gemini-3-flash-preview'
 
 // Prompt validation configuration
 const MAX_PROMPT_LENGTH = 500
@@ -271,6 +322,7 @@ interface Variables {
 // Extended interface to support both Node.js and Worker environments
 interface AiAppEnv {
   GEMINI_API_KEY?: string
+  GEMINI_MODEL?: string
   MAX_GEMINI_CALLS?: string
 }
 
@@ -372,7 +424,8 @@ aiApp.post('/generate', async (c) => {
       }]
     }
 
-    const url = `${GEMINI_BASE_URL}/models/${GEMINI_MODEL}:generateContent`
+    const geminiModel = getEnvVar(c, 'GEMINI_MODEL', DEFAULT_GEMINI_MODEL)
+    const url = `${GEMINI_BASE_URL}/models/${geminiModel}:generateContent`
     const requestHeaders = {
       'X-goog-api-key': apiKey,
       'Content-Type': 'application/json'
@@ -423,14 +476,32 @@ aiApp.post('/generate', async (c) => {
 })
 
 // Health check for AI routes
-aiApp.get('/health', (c) => {
+aiApp.get('/health', async (c) => {
+  const db = c.get('db')
   const hasServerApiKey = !!getEnvVar(c, 'GEMINI_API_KEY')
   const MAX_GEMINI_CALLS = parseInt(getEnvVar(c, 'MAX_GEMINI_CALLS', '10'))
-  
+  const geminiModel = getEnvVar(c, 'GEMINI_MODEL', DEFAULT_GEMINI_MODEL)
+
+  // Get current usage count from database
+  let currentCount = 0
+  try {
+    const currentUsage = await db
+      .select()
+      .from(settings)
+      .where(eq(settings.key, GEMINI_CALLS_KEY))
+      .limit(1)
+
+    currentCount = currentUsage.length > 0 ? parseInt(currentUsage[0].value) : 0
+  } catch (error) {
+    console.error('Failed to fetch usage count:', error)
+  }
+
+  const remaining = Math.max(0, MAX_GEMINI_CALLS - currentCount)
+
   return c.json({
     status: 'ok',
     provider: 'Google Gemini',
-    model: GEMINI_MODEL,
+    model: geminiModel,
     server_key_configured: hasServerApiKey,
     endpoints: {
       'POST /ai/generate': 'Generate content with Gemini (rate limited without user key)',
@@ -438,6 +509,8 @@ aiApp.get('/health', (c) => {
     },
     rateLimit: {
       dailyLimit: MAX_GEMINI_CALLS,
+      used: currentCount,
+      remaining,
       note: 'Rate limit applies only when using server API key. Bypass by providing X-API-Key header.'
     },
     validation: {

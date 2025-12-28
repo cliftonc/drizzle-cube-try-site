@@ -11,7 +11,10 @@ import AnalysisBuilderPage from './pages/AnalysisBuilderPage'
 function App() {
   return (
     <HelmetProvider>
-      <CubeProvider apiOptions={{ apiUrl: '/cubejs-api/v1' }} features={{ showSchemaDiagram: true }}>
+      <CubeProvider
+        apiOptions={{ apiUrl: '/cubejs-api/v1' }}
+        features={{ showSchemaDiagram: true, useAnalysisBuilder: true, enableAI: true, aiEndpoint: '/api/ai/generate' }}
+      >
         <Layout>
           <Routes>
             <Route path="/" element={<HomePage />} />
