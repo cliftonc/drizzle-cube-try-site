@@ -43,9 +43,16 @@ export default function HomePage() {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <div className="text-center mb-12 sm:mb-16">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-dc-primary to-dc-accent bg-clip-text text-transparent mb-4 sm:mb-6">
-            Drizzle Cube
-          </h1>
+          <div className="flex items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <img
+              src="/drizzle-cube.png"
+              alt="Drizzle Cube logo"
+              className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20"
+            />
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-dc-text">
+              Drizzle Cube
+            </h1>
+          </div>
           <p className="text-lg sm:text-xl lg:text-2xl text-dc-text-secondary mb-3 sm:mb-4 font-medium px-2">
             Embeddable Analytics Solution for Platform Builders
           </p>
@@ -58,8 +65,12 @@ export default function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16">
           <Link
             to="/dashboards"
-            className="group bg-dc-card-bg hover:bg-dc-card-bg-hover border border-dc-card-border hover:border-dc-card-border-hover rounded-xl p-4 sm:p-6 transition-all duration-200 shadow-2xs hover:shadow-md touch-manipulation"
+            className="group bg-dc-card-bg hover:bg-dc-card-bg-hover border border-dc-card-border hover:border-dc-card-border-hover rounded-xl p-4 sm:p-6 transition-all duration-200 shadow-2xs hover:shadow-md touch-manipulation relative"
           >
+            <div className="absolute -top-2 -right-2 bg-dc-ai-gradient text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center space-x-1 shadow-md z-10">
+              <SparklesIcon className="w-3 h-3" />
+              <span>AI Enabled</span>
+            </div>
             <div className="flex flex-col items-center text-center">
               <div className="w-12 h-12 bg-dc-primary/10 group-hover:bg-dc-primary/15 rounded-lg flex items-center justify-center mb-3 sm:mb-4 transition-colors">
                 <ChartBarIcon className="w-6 h-6 text-dc-primary group-hover:text-dc-primary" />
@@ -73,7 +84,7 @@ export default function HomePage() {
             to="/analysis-builder"
             className="group bg-dc-card-bg hover:bg-dc-card-bg-hover border border-dc-card-border hover:border-dc-card-border-hover rounded-xl p-4 sm:p-6 transition-all duration-200 shadow-2xs hover:shadow-md touch-manipulation relative"
           >
-            <div className="absolute -top-2 -right-2 bg-gradient-to-r from-dc-accent to-dc-accent-hover text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center space-x-1 shadow-md z-10">
+            <div className="absolute -top-2 -right-2 bg-dc-ai-gradient text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center space-x-1 shadow-md z-10">
               <SparklesIcon className="w-3 h-3" />
               <span>AI Enabled</span>
             </div>

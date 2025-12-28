@@ -100,6 +100,13 @@
   --dc-muted: #6b7280;
   --dc-muted-bg: #f3f4f6;
   --dc-muted-border: #e5e7eb;
+
+  /* AI Colors - For AI-enabled features */
+  --dc-ai: #8b5cf6;
+  --dc-ai-hover: #7c3aed;
+
+  /* Page Background Gradient */
+  --dc-page-gradient: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 50%, #f0f9ff 100%);
 }
 
 /* ============================================================================
@@ -193,6 +200,13 @@ html.dark {
   --dc-muted: #94a3b8;
   --dc-muted-bg: #334155;
   --dc-muted-border: #475569;
+
+  /* AI Colors - Dark mode versions */
+  --dc-ai: #a78bfa;
+  --dc-ai-hover: #8b5cf6;
+
+  /* Page Background Gradient */
+  --dc-page-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0c1929 100%);
 }
 
 /* ============================================================================
@@ -285,6 +299,13 @@ html.neon {
   --dc-muted: #b0b0d0;
   --dc-muted-bg: #2a1f3e;
   --dc-muted-border: #ff00ff;
+
+  /* AI Colors - Neon versions */
+  --dc-ai: #ff00ff;
+  --dc-ai-hover: #cc00cc;
+
+  /* Page Background Gradient */
+  --dc-page-gradient: linear-gradient(135deg, #0a0118 0%, #1a0a2e 25%, #0a1a2e 50%, #1a0a2e 75%, #0a0118 100%);
 }
 
 /* ============================================================================
@@ -377,6 +398,13 @@ html.cyberpunk {
   --dc-muted: #333333;
   --dc-muted-bg: #fdd835;
   --dc-muted-border: #000000;
+
+  /* AI Colors - Cyberpunk versions */
+  --dc-ai: #ff00ff;
+  --dc-ai-hover: #cc00cc;
+
+  /* Page Background Gradient */
+  --dc-page-gradient: linear-gradient(135deg, #fff176 0%, #ffeb3b 25%, #fdd835 50%, #ffeb3b 75%, #fff176 100%);
 }
 
 /* ============================================================================
@@ -415,4 +443,11 @@ html.cyberpunk {
   .bg-dc-measure { background-color: var(--dc-measure-bg); }
   .text-dc-measure { color: var(--dc-measure-text); }
   .border-dc-measure { border-color: var(--dc-measure-border); }
+
+  /* AI utilities */
+  .bg-dc-ai { background-color: var(--dc-ai); }
+  .bg-dc-ai-gradient { background: linear-gradient(to right, var(--dc-ai), var(--dc-ai-hover)); }
+
+  /* Page gradient */
+  .bg-dc-page-gradient { background: var(--dc-page-gradient); }
 }

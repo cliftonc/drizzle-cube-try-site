@@ -75,7 +75,7 @@ export default function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-dc-surface-secondary transition-colors">
+    <div className="min-h-screen bg-dc-page-gradient transition-colors">
       <FloatingGitHubButton />
       <nav className="bg-dc-surface shadow-2xs border-b border-dc-border relative z-10 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
