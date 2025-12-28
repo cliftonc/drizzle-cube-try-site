@@ -53,9 +53,21 @@ export default function HomePage() {
               Drizzle Cube
             </h1>
           </div>
-          <p className="text-lg sm:text-xl lg:text-2xl text-dc-text-secondary mb-3 sm:mb-4 font-medium px-2">
-            Embeddable Analytics Solution for Platform Builders
-          </p>
+          <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <p className="text-lg sm:text-xl lg:text-2xl text-dc-text-secondary font-medium">
+              Embeddable Analytics Solution for Platform Builders
+            </p>
+            {/* MIT Licensed badge */}
+            <a
+              href="https://github.com/cliftonc/drizzle-cube/blob/main/LICENSE"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-dc-surface border border-dc-border text-dc-text-muted hover:text-dc-text hover:border-dc-border-secondary px-2 py-1 sm:px-3 sm:py-1.5 rounded-md shadow-sm shrink-0 transition-colors"
+            >
+              <div className="text-[6px] sm:text-[8px] uppercase tracking-wider opacity-75">Open Source</div>
+              <div className="text-xs sm:text-sm font-semibold tracking-tight">MIT Licensed</div>
+            </a>
+          </div>
           <p className="text-base sm:text-lg text-dc-text-muted max-w-3xl mx-auto leading-relaxed px-2">
             Deliver scalable, type-safe dashboarding capabilities to your platform users.
             Embed rich analytics directly into your existing application with zero infrastructure overhead.
