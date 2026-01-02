@@ -119,6 +119,21 @@ employeesCube = defineCube('Employees', {
       type: 'avg',
       sql: employees.salary,
       format: 'currency'
+    },
+    // Statistical measures
+    medianSalary: {
+      name: 'medianSalary',
+      title: 'Median Salary',
+      type: 'median',
+      sql: employees.salary,
+      description: 'Median salary (50th percentile)'
+    },
+    stddevSalary: {
+      name: 'stddevSalary',
+      title: 'Salary Std Dev',
+      type: 'stddev',
+      sql: employees.salary,
+      description: 'Standard deviation of salaries'
     }
   }
 }) as Cube
@@ -277,9 +292,23 @@ productivityCube = defineCube('Productivity', {
       title: 'Department ID',
       type: 'number',
       sql: productivity.departmentId
+    },
+    linesOfCode: {
+      name: 'linesOfCode',
+      title: 'Lines of Code',
+      type: 'number',
+      sql: productivity.linesOfCode,
+      description: 'Raw lines of code for this record'
+    },
+    pullRequests: {
+      name: 'pullRequests',
+      title: 'Pull Requests',
+      type: 'number',
+      sql: productivity.pullRequests,
+      description: 'Raw PR count for this record'
     }
   },
-  
+
   measures: {
     count: {
       name: 'count',
@@ -359,6 +388,108 @@ productivityCube = defineCube('Productivity', {
       type: 'avg',
       sql: sql`(${productivity.linesOfCode} + ${productivity.pullRequests} * 50 + ${productivity.liveDeployments} * 100)`,
       description: 'Composite productivity score based on code output, reviews, and deployments'
+    },
+
+    // Statistical measures - Code Output Distribution
+    stddevLinesOfCode: {
+      name: 'stddevLinesOfCode',
+      title: 'Lines of Code Std Dev',
+      type: 'stddev',
+      sql: productivity.linesOfCode,
+      description: 'Variation in daily code output'
+    },
+    medianLinesOfCode: {
+      name: 'medianLinesOfCode',
+      title: 'Median Lines of Code',
+      type: 'median',
+      sql: productivity.linesOfCode,
+      description: 'Median daily code output'
+    },
+    p95LinesOfCode: {
+      name: 'p95LinesOfCode',
+      title: '95th Percentile Lines',
+      type: 'p95',
+      sql: productivity.linesOfCode,
+      description: 'High performer code output threshold'
+    },
+    // Statistical measures - Happiness Distribution
+    stddevHappinessIndex: {
+      name: 'stddevHappinessIndex',
+      title: 'Happiness Std Dev',
+      type: 'stddev',
+      sql: productivity.happinessIndex,
+      description: 'Variation in team happiness'
+    },
+    medianHappinessIndex: {
+      name: 'medianHappinessIndex',
+      title: 'Median Happiness',
+      type: 'median',
+      sql: productivity.happinessIndex,
+      description: 'Median happiness score'
+    },
+    // Statistical measures - Pull Requests
+    medianPullRequests: {
+      name: 'medianPullRequests',
+      title: 'Median Pull Requests',
+      type: 'median',
+      sql: productivity.pullRequests,
+      description: 'Median daily pull requests'
+    },
+    p95PullRequests: {
+      name: 'p95PullRequests',
+      title: '95th Percentile PRs',
+      type: 'p95',
+      sql: productivity.pullRequests,
+      description: 'High performer PR threshold'
+    },
+
+    // Window Function Measures
+    previousDayCode: {
+      name: 'previousDayCode',
+      title: 'Previous Day Code',
+      type: 'lag',
+      sql: productivity.linesOfCode,
+      description: 'Lines of code from the previous day',
+      windowConfig: {
+        orderBy: [{ field: 'date', direction: 'asc' }],
+        offset: 1,
+        defaultValue: 0
+      }
+    },
+    productivityRank: {
+      name: 'productivityRank',
+      title: 'Productivity Rank',
+      type: 'rank',
+      sql: productivity.linesOfCode,
+      description: 'Rank by lines of code (1 = most productive day)',
+      windowConfig: {
+        orderBy: [{ field: 'linesOfCode', direction: 'desc' }]
+      }
+    },
+    dayNumber: {
+      name: 'dayNumber',
+      title: 'Day #',
+      type: 'rowNumber',
+      sql: productivity.id,
+      description: 'Sequential day number ordered by date',
+      windowConfig: {
+        orderBy: [{ field: 'date', direction: 'asc' }]
+      }
+    },
+    movingAvg7Day: {
+      name: 'movingAvg7Day',
+      title: '7-Day Moving Avg',
+      type: 'movingAvg',
+      sql: productivity.linesOfCode,
+      description: '7-day moving average of lines of code',
+      windowConfig: {
+        orderBy: [{ field: 'date', direction: 'asc' }],
+        frame: {
+          type: 'rows',
+          start: 6,
+          end: 'current'
+        }
+      }
     }
   }
 }) as Cube

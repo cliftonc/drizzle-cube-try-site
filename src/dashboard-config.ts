@@ -424,7 +424,7 @@ export const productivityDashboardConfig = {
           dimensions: ['Employees.name', 'Departments.name'],
           cubes: ['Productivity', 'Employees', 'Departments'],
           measures: [
-            'Productivity.recordCount', 
+            'Productivity.recordCount',
             'Productivity.avgHappinessIndex',
             'Productivity.workingDaysCount',
             'Productivity.daysOffCount'
@@ -442,7 +442,96 @@ export const productivityDashboardConfig = {
         x: 0,
         y: 52
       },
-      
+
+      // ============================================
+      // STATISTICAL & WINDOW FUNCTIONS SECTION
+      // ============================================
+
+      // Statistical: Salary Distribution by Department
+      {
+        id: 'salary-stats-by-dept',
+        title: 'Statistical: Salary Distribution by Department (Median vs Avg)',
+        query: JSON.stringify({
+          measures: ['Employees.medianSalary', 'Employees.avgSalary', 'Employees.stddevSalary'],
+          dimensions: ['Departments.name'],
+          cubes: ['Employees', 'Departments']
+        }, null, 2),
+        chartType: 'bar' as const,
+        chartConfig: {
+          xAxis: ['Departments.name'],
+          yAxis: ['Employees.medianSalary', 'Employees.avgSalary'],
+          series: []
+        },
+        displayConfig: { showLegend: true },
+        w: 6, h: 7, x: 0, y: 58
+      },
+
+      // Statistical: Bubble - Correlation with Stddev
+      {
+        id: 'productivity-scatter',
+        title: 'Statistical: Productivity vs Happiness (Bubble = Consistency)',
+        query: JSON.stringify({
+          measures: ['Productivity.avgLinesOfCode', 'Productivity.avgHappinessIndex', 'Productivity.stddevLinesOfCode', 'Productivity.recordCount'],
+          dimensions: ['Employees.name'],
+          cubes: ['Productivity', 'Employees'],
+          filters: [{ member: 'Productivity.isDayOff', operator: 'equals', values: [false] }]
+        }, null, 2),
+        chartType: 'bubble' as const,
+        chartConfig: {
+          xAxis: 'Productivity.avgHappinessIndex',
+          yAxis: 'Productivity.avgLinesOfCode',
+          sizeField: 'Productivity.stddevLinesOfCode',
+          series: 'Employees.name'
+        },
+        displayConfig: { showLegend: false },
+        w: 6, h: 7, x: 6, y: 58
+      },
+
+      // Statistical: Area - Percentile Bands Over Time (Engineering only)
+      {
+        id: 'percentile-thresholds-area',
+        title: 'Statistical: Code Output Percentiles Over Time (Median / Avg / P95)',
+        query: JSON.stringify({
+          measures: ['Productivity.medianLinesOfCode', 'Productivity.p95LinesOfCode', 'Productivity.avgLinesOfCode'],
+          dimensions: ['Departments.name'],
+          cubes: ['Productivity', 'Employees', 'Departments'],
+          timeDimensions: [{ dimension: 'Productivity.date', granularity: 'week', dateRange: 'last 6 months' }],
+          filters: [
+            { member: 'Productivity.isDayOff', operator: 'equals', values: [false] },
+            { member: 'Departments.name', operator: 'equals', values: ['Engineering'] }
+          ]
+        }, null, 2),
+        chartType: 'area' as const,
+        chartConfig: {
+          xAxis: ['Productivity.date'],
+          yAxis: ['Productivity.medianLinesOfCode', 'Productivity.avgLinesOfCode', 'Productivity.p95LinesOfCode'],
+          series: []
+        },
+        displayConfig: { showLegend: true },
+        w: 12, h: 6, x: 0, y: 65
+      },
+
+      // Window Function: Moving Average Line Chart
+      {
+        id: 'moving-average-trend',
+        title: 'Window Function: Daily Output with 7-Day Moving Average',
+        query: JSON.stringify({
+          measures: ['Productivity.movingAvg7Day'],
+          dimensions: ['Productivity.date', 'Productivity.linesOfCode'],
+          filters: [{ member: 'Productivity.isDayOff', operator: 'equals', values: [false] }],
+          order: { 'Productivity.date': 'asc' },
+          limit: 90
+        }, null, 2),
+        chartType: 'line' as const,
+        chartConfig: {
+          xAxis: ['Productivity.date'],
+          yAxis: ['Productivity.linesOfCode', 'Productivity.movingAvg7Day'],
+          series: []
+        },
+        displayConfig: { showLegend: true },
+        w: 12, h: 6, x: 0, y: 71
+      },
+
       // Bonus Row - Thank You Message
       {
         id: 'thanks-for-scrolling',
@@ -458,7 +547,7 @@ Did you know that Drizzle Cube can actually do way more than just track how many
 ### Here's what this magical cube can do:
 
 - **📊 Turn your data into pretty charts** - Because pie charts make everything look more important
-- **🔍 Query anything** - Your database, your soul, your will to live on Monday mornings  
+- **🔍 Query anything** - Your database, your soul, your will to live on Monday mornings
 - **⚡ Super-fast dashboards** - Watch your KPIs update faster than your coffee gets cold
 - **🎨 Drag & drop chart building** - So easy, even that one coworker who still prints emails can use it
 - **📱 Mobile responsive** - View your existential data crisis from anywhere!
@@ -469,7 +558,7 @@ Did you know that Drizzle Cube can actually do way more than just track how many
         w: 12,
         h: 8,
         x: 0,
-        y: 62
+        y: 77
       }
     ]
   }
