@@ -1,11 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import type { 
-  AnalyticsPage, 
-  CreateAnalyticsPageRequest, 
-  UpdateAnalyticsPageRequest 
+import type {
+  AnalyticsPage,
+  CreateAnalyticsPageRequest,
+  UpdateAnalyticsPageRequest
 } from '../types'
 
 const API_BASE = '/api/analytics-pages'
+
+// API response wrapper type
+interface ApiResponse<T> {
+  data: T
+}
 
 // Fetch all analytics pages
 export function useAnalyticsPages() {
@@ -16,7 +21,7 @@ export function useAnalyticsPages() {
       if (!response.ok) {
         throw new Error('Failed to fetch analytics pages')
       }
-      const data = await response.json()
+      const data: ApiResponse<AnalyticsPage[]> = await response.json()
       return data.data
     }
   })
@@ -31,7 +36,7 @@ export function useAnalyticsPage(id: number | string) {
       if (!response.ok) {
         throw new Error('Failed to fetch analytics page')
       }
-      const data = await response.json()
+      const data: ApiResponse<AnalyticsPage> = await response.json()
       return data.data
     },
     enabled: !!id
@@ -55,8 +60,8 @@ export function useCreateAnalyticsPage() {
       if (!response.ok) {
         throw new Error('Failed to create analytics page')
       }
-      
-      const data = await response.json()
+
+      const data: ApiResponse<AnalyticsPage> = await response.json()
       return data.data
     },
     onSuccess: () => {
@@ -78,8 +83,8 @@ export function useCreateExamplePage() {
       if (!response.ok) {
         throw new Error('Failed to create example page')
       }
-      
-      const data = await response.json()
+
+      const data: ApiResponse<AnalyticsPage> = await response.json()
       return data.data
     },
     onSuccess: () => {
@@ -108,8 +113,8 @@ export function useUpdateAnalyticsPage() {
       if (!response.ok) {
         throw new Error('Failed to update analytics page')
       }
-      
-      const data = await response.json()
+
+      const data: ApiResponse<AnalyticsPage> = await response.json()
       return data.data
     },
     onSuccess: (_, variables) => {
@@ -132,8 +137,8 @@ export function useResetAnalyticsPage() {
       if (!response.ok) {
         throw new Error('Failed to reset analytics page')
       }
-      
-      const data = await response.json()
+
+      const data: ApiResponse<AnalyticsPage> = await response.json()
       return data.data
     },
     onSuccess: (_, id) => {
