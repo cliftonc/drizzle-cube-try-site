@@ -22,10 +22,10 @@ export default function AnalysisBuilderPage() {
         </p>
         <div className="mt-4 px-4 py-3 bg-dc-info-bg border border-dc-info-border rounded-lg shadow-md">
           <div className="flex items-start">
-            <span className="text-2xl mr-3">🧪</span>
+            <span className="text-2xl mr-3">📊</span>
             <div>
               <p className="text-sm font-semibold text-dc-info">
-                Experimental Component
+                Analysis Builder Component
               </p>
               <p className="text-sm text-dc-text-secondary mt-1">
                 This page demonstrates the{' '}
@@ -39,7 +39,7 @@ export default function AnalysisBuilderPage() {
                     AnalysisBuilder
                   </code>
                 </a>{' '}
-                component - a redesigned query builder inspired by modern analytics tools.
+                component - a query builder inspired by modern analytics tools like Mixpanel and Amplitude.
               </p>
             </div>
           </div>

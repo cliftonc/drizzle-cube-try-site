@@ -8,6 +8,18 @@ export const productivityDashboardConfig = {
   description: 'Comprehensive productivity analytics including code output, deployments, happiness tracking, and team performance insights',
   order: 0,
   config: {
+    filters: [
+      {
+        id: 'date-range',
+        label: 'Date Range',
+        isUniversalTime: true,
+        filter: {
+          member: 'Productivity.date',
+          operator: 'inDateRange' as const,
+          values: ['last year']
+        }
+      }
+    ],
     portlets: [
       // Top Row - KPI Numbers
       {
@@ -17,8 +29,7 @@ export const productivityDashboardConfig = {
           measures: ['Productivity.totalLinesOfCode'],
           timeDimensions: [{
             dimension: 'Productivity.date',
-            granularity: 'month',
-            dateRange: 'last year'
+            granularity: 'month'
           }],
           filters: [{
             member: 'Productivity.isDayOff',
@@ -34,6 +45,7 @@ export const productivityDashboardConfig = {
           suffix: ' lines',
           target: '10000'
         },
+        dashboardFilterMapping: ['date-range'],
         w: 4,
         h: 4,
         x: 0,
@@ -46,8 +58,7 @@ export const productivityDashboardConfig = {
           measures: ['Productivity.totalDeployments'],
           timeDimensions: [{
             dimension: 'Productivity.date',
-            granularity: 'month',
-            dateRange: 'last year'
+            granularity: 'month'
           }]
         }, null, 2),
         chartType: 'kpiDelta' as const,
@@ -58,6 +69,7 @@ export const productivityDashboardConfig = {
           suffix: ' deployments',
           target: '50'
         },
+        dashboardFilterMapping: ['date-range'],
         w: 4,
         h: 4,
         x: 4,
@@ -70,8 +82,7 @@ export const productivityDashboardConfig = {
           measures: ['Productivity.avgHappinessIndex'],
           timeDimensions: [{
             dimension: 'Productivity.date',
-            granularity: 'month',
-            dateRange: 'last year'
+            granularity: 'month'
           }],
           filters: [{
             member: 'Productivity.isDayOff',
@@ -88,6 +99,7 @@ export const productivityDashboardConfig = {
           suffix: '/10',
           target: '8.0'
         },
+        dashboardFilterMapping: ['date-range'],
         w: 4,
         h: 4,
         x: 8,
@@ -97,13 +109,12 @@ export const productivityDashboardConfig = {
       // Second Row - Activity Grid
       {
         id: 'code-activity-grid',
-        title: 'Daily Code Output Activity (Last Year)',
+        title: 'Daily Code Output Activity',
         query: JSON.stringify({
           measures: ['Productivity.totalLinesOfCode'],
           timeDimensions: [{
             dimension: 'Productivity.date',
-            granularity: 'day',
-            dateRange: 'last year'
+            granularity: 'day'
           }],
           filters: [{
             member: 'Productivity.isDayOff',
@@ -120,6 +131,7 @@ export const productivityDashboardConfig = {
           showLabels: true,
           showTooltip: true
         },
+        dashboardFilterMapping: ['date-range'],
         w: 12,
         h: 4,
         x: 0,
@@ -154,6 +166,7 @@ export const productivityDashboardConfig = {
           showLegend: true,
           stackedBarChart: false
         },
+        dashboardFilterMapping: ['date-range'],
         w: 12,
         h: 8,
         x: 0,
@@ -163,13 +176,12 @@ export const productivityDashboardConfig = {
       // Fourth Row - Executive Overview
       {
         id: 'productivity-trends',
-        title: 'Team Productivity Trends (Last 12 Months)',
+        title: 'Team Productivity Trends',
         query: JSON.stringify({
           measures: ['Productivity.avgLinesOfCode'],
           timeDimensions: [{
             dimension: 'Productivity.date',
-            granularity: 'week',
-            dateRange: 'last 12 months'
+            granularity: 'week'
           }],
           filters: [{
             member: 'Productivity.isDayOff',
@@ -188,6 +200,7 @@ export const productivityDashboardConfig = {
           stackedBarChart: false,
           target: '80,85,90,95,100,95,90,85,80,75,80,85'
         },
+        dashboardFilterMapping: ['date-range'],
         w: 8,
         h: 6,
         x: 0,
@@ -305,14 +318,13 @@ export const productivityDashboardConfig = {
       // Seventh Row - Individual Performance
       {
         id: 'top-performers',
-        title: 'Top Performers (This Year)',
+        title: 'Top Performers',
         query: JSON.stringify({
           measures: ['Productivity.recordCount', 'Productivity.avgHappinessIndex'],
           dimensions: ['Employees.name', 'Departments.name'],
           cubes: ['Productivity', 'Employees', 'Departments'],
           timeDimensions: [{
-            dimension: 'Productivity.date',
-            dateRange: 'this year'
+            dimension: 'Productivity.date'
           }],
           order: {
             'Productivity.avgHappinessIndex': 'desc'
@@ -322,6 +334,7 @@ export const productivityDashboardConfig = {
         chartType: 'table' as const,
         chartConfig: {},
         displayConfig: {},
+        dashboardFilterMapping: ['date-range'],
         w: 6,
         h: 8,
         x: 0,
@@ -377,6 +390,7 @@ export const productivityDashboardConfig = {
           showLegend: false,
           stackedBarChart: false
         },
+        dashboardFilterMapping: ['date-range'],
         w: 6,
         h: 6,
         x: 0,
@@ -410,6 +424,7 @@ export const productivityDashboardConfig = {
           stackedBarChart: false,
           target: '80,90,100,110,120,130,120,110,100,90,85,90'
         },
+        dashboardFilterMapping: ['date-range'],
         w: 6,
         h: 6,
         x: 6,
@@ -495,7 +510,7 @@ export const productivityDashboardConfig = {
           measures: ['Productivity.medianLinesOfCode', 'Productivity.p95LinesOfCode', 'Productivity.avgLinesOfCode'],
           dimensions: ['Departments.name'],
           cubes: ['Productivity', 'Employees', 'Departments'],
-          timeDimensions: [{ dimension: 'Productivity.date', granularity: 'week', dateRange: 'last 6 months' }],
+          timeDimensions: [{ dimension: 'Productivity.date', granularity: 'week' }],
           filters: [
             { member: 'Productivity.isDayOff', operator: 'equals', values: [false] },
             { member: 'Departments.name', operator: 'equals', values: ['Engineering'] }
@@ -508,6 +523,7 @@ export const productivityDashboardConfig = {
           series: []
         },
         displayConfig: { showLegend: true },
+        dashboardFilterMapping: ['date-range'],
         w: 12, h: 6, x: 0, y: 65
       },
 
@@ -519,8 +535,7 @@ export const productivityDashboardConfig = {
           measures: ['Productivity.totalLinesOfCode', 'Productivity.movingAvg7Period'],
           timeDimensions: [{
             dimension: 'Productivity.date',
-            granularity: 'week',
-            dateRange: 'last 6 months'
+            granularity: 'week'
           }],
           filters: [{ member: 'Productivity.isDayOff', operator: 'equals', values: [false] }]
         }, null, 2),
@@ -531,6 +546,7 @@ export const productivityDashboardConfig = {
           series: []
         },
         displayConfig: { showLegend: true },
+        dashboardFilterMapping: ['date-range'],
         w: 12, h: 6, x: 0, y: 71
       },
 
@@ -542,8 +558,7 @@ export const productivityDashboardConfig = {
           measures: ['Productivity.totalLinesOfCode', 'Productivity.linesOfCodeChange', 'Productivity.linesPercentChange'],
           timeDimensions: [{
             dimension: 'Productivity.date',
-            granularity: 'week',
-            dateRange: 'last 6 months'
+            granularity: 'week'
           }],
           filters: [{ member: 'Productivity.isDayOff', operator: 'equals', values: [false] }]
         }, null, 2),
@@ -554,6 +569,7 @@ export const productivityDashboardConfig = {
           series: []
         },
         displayConfig: { showLegend: true },
+        dashboardFilterMapping: ['date-range'],
         w: 6, h: 6, x: 0, y: 77
       },
 
@@ -565,8 +581,7 @@ export const productivityDashboardConfig = {
           measures: ['Productivity.totalLinesOfCode', 'Productivity.runningTotalLines'],
           timeDimensions: [{
             dimension: 'Productivity.date',
-            granularity: 'week',
-            dateRange: 'last 6 months'
+            granularity: 'week'
           }],
           filters: [{ member: 'Productivity.isDayOff', operator: 'equals', values: [false] }]
         }, null, 2),
@@ -577,6 +592,7 @@ export const productivityDashboardConfig = {
           series: []
         },
         displayConfig: { showLegend: true },
+        dashboardFilterMapping: ['date-range'],
         w: 6, h: 6, x: 6, y: 77
       },
 

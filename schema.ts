@@ -66,20 +66,24 @@ export const analyticsPages = pgTable('analytics_pages', {
       id: string
       title: string
       query: string
-      chartType: 'line' | 'bar' | 'pie' | 'table' | 'area' | 'treemap'
-      chartConfig: {
-        x?: string
-        y?: string[]
-        series?: string
-      }
-      displayConfig?: {
-        showLegend?: boolean
-        stacked?: boolean
-      }
+      chartType: string
+      chartConfig?: Record<string, unknown>
+      displayConfig?: Record<string, unknown>
+      dashboardFilterMapping?: string[]
       w: number
       h: number
       x: number
       y: number
+    }>
+    filters?: Array<{
+      id: string
+      label: string
+      isUniversalTime?: boolean
+      filter: {
+        member: string
+        operator: string
+        values: unknown[]
+      }
     }>
   }>(),
   order: integer('order').default(0),
