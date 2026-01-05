@@ -31,10 +31,11 @@ MAX_GEMINI_CALLS = 100
 # database_name = "drizzle-cube-db"
 # database_id = ""
 
-# KV binding (if needed for caching)
-# [[kv_namespaces]]
-# binding = "CACHE"
-# id = ""
+# KV binding for query result caching (60 minute TTL)
+[[kv_namespaces]]
+binding = "CACHE"
+id = "b2e0cf55238a402c8f7ee6771266b491"
+preview_id = "56468f9fa7df4f3d98496cd2fc0e48ca"
 
 # R2 binding (if needed for file storage)
 # [[r2_buckets]]

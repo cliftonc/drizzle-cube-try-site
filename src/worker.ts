@@ -11,7 +11,8 @@ import { drizzle as drizzleNeon } from 'drizzle-orm/neon-http'
 import postgres from 'postgres'
 import { neon, neonConfig } from '@neondatabase/serverless'
 import { createCubeApp } from 'drizzle-cube/adapters/hono'
-import type { SecurityContext, DrizzleDatabase } from 'drizzle-cube/server'
+import type { SecurityContext, DrizzleDatabase, CacheConfig } from 'drizzle-cube/server'
+import { CloudflareKVProvider } from './cache/cloudflare-kv-provider'
 import { schema } from '../schema.js'
 import { allCubes } from '../cubes.js'
 import analyticsApp from './analytics-routes'
@@ -47,6 +48,7 @@ interface CloudflareEnv {
   DATABASE_URL: string
   NODE_ENV?: string
   GEMINI_API_KEY?: string
+  CACHE?: KVNamespace  // KV binding for query result caching
 }
 
 interface Variables {
@@ -110,13 +112,27 @@ app.get('/health', (c) => {
 })
 
 // Create cube app using the new API
-const createCubeApiApp = (db: DrizzleDatabase) => {
+const createCubeApiApp = (db: DrizzleDatabase, cacheKV?: KVNamespace) => {
+  // Configure cache if KV binding is available
+  const cacheConfig: CacheConfig | undefined = cacheKV ? {
+    provider: new CloudflareKVProvider(cacheKV, {
+      defaultTtlMs: 3600000  // 60 minutes aggressive caching
+    }),
+    defaultTtlMs: 3600000,
+    keyPrefix: 'drizzle-cube:',
+    includeSecurityContext: true,
+    onError: (error, operation) => {
+      console.error(`[Cache Error] ${operation}: ${error.message}`)
+    }
+  } : undefined
+
   return createCubeApp({
     cubes: allCubes,
     drizzle: db,
     schema,
     extractSecurityContext: getSecurityContext,
     engineType: 'postgres',
+    cache: cacheConfig,
     cors: {
       origin: ['http://localhost:3000', 'http://localhost:5173'],
       allowMethods: ['GET', 'POST', 'OPTIONS'],
@@ -131,9 +147,10 @@ const cubeApiApp = new Hono<{ Variables: Variables; Bindings: CloudflareEnv }>()
 
 cubeApiApp.use('*', async (c) => {
   const db = c.get('db')
-  
-  // Create and use cube app for this request
-  const cubeApp = createCubeApiApp(db)
+  const cacheKV = c.env.CACHE  // Get KV binding from environment
+
+  // Create and use cube app for this request (with caching if KV available)
+  const cubeApp = createCubeApiApp(db, cacheKV)
 
   // Forward the request to the cube app
   const response = await cubeApp.fetch(c.req.raw)
