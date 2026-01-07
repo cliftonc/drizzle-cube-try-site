@@ -293,6 +293,12 @@ productivityCube = defineCube('Productivity', {
       type: 'number',
       sql: productivity.departmentId
     },
+    employeeId: {
+      name: 'employeeId',
+      title: 'Employee ID',
+      type: 'number',
+      sql: productivity.employeeId
+    },
     linesOfCode: {
       name: 'linesOfCode',
       title: 'Lines of Code',

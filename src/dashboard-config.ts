@@ -138,7 +138,50 @@ export const productivityDashboardConfig = {
         y: 4
       },
 
-      // Third Row - Bubble Chart (moved from top)
+      // Third Row - Employee Productivity Funnel
+      {
+        id: 'employee-productivity-funnel',
+        title: 'Employee Productivity Funnel',
+        query: JSON.stringify({
+          queries: [
+            {
+              measures: ['Employees.count'],
+              dimensions: ['Employees.id']
+            },
+            {
+              measures: ['Productivity.recordCount'],
+              dimensions: ['Productivity.employeeId']
+            },
+            {
+              measures: ['Productivity.recordCount'],
+              dimensions: ['Productivity.employeeId'],
+              filters: [{
+                member: 'Productivity.avgHappinessIndex',
+                operator: 'gte',
+                values: [7]
+              }]
+            }
+          ],
+          mergeStrategy: 'funnel',
+          funnelBindingKey: {
+            dimension: 'Employees.id'
+          },
+          queryLabels: ['All Employees', 'With Activity', 'High Happiness']
+        }, null, 2),
+        chartType: 'funnel' as const,
+        chartConfig: {},
+        displayConfig: {
+          funnelOrientation: 'horizontal',
+          funnelStepLabels: ['All Employees', 'With Activity', 'High Happiness (≥7)'],
+          hideSummaryFooter: false
+        },
+        w: 12,
+        h: 6,
+        x: 0,
+        y: 8
+      },
+
+      // Fifth Row - Bubble Chart (moved from top)
       {
         id: 'productivity-bubble',
         title: 'Productivity Metrics Correlation',
@@ -170,10 +213,10 @@ export const productivityDashboardConfig = {
         w: 12,
         h: 8,
         x: 0,
-        y: 10
+        y: 16
       },
       
-      // Fourth Row - Executive Overview
+      // Sixth Row - Executive Overview
       {
         id: 'productivity-trends',
         title: 'Team Productivity Trends',
@@ -204,7 +247,7 @@ export const productivityDashboardConfig = {
         w: 8,
         h: 6,
         x: 0,
-        y: 18
+        y: 24
       },
       {
         id: 'happiness-by-level',
@@ -231,10 +274,10 @@ export const productivityDashboardConfig = {
         w: 4,
         h: 6,
         x: 8,
-        y: 18
+        y: 24
       },
       
-      // Fifth Row - Department Comparison
+      // Seventh Row - Department Comparison
       {
         id: 'department-productivity',
         title: 'Productivity by Department',
@@ -256,7 +299,7 @@ export const productivityDashboardConfig = {
         w: 6,
         h: 6,
         x: 0,
-        y: 24
+        y: 30
       },
       {
         id: 'happiness-by-department',
@@ -279,10 +322,10 @@ export const productivityDashboardConfig = {
         w: 6,
         h: 6,
         x: 6,
-        y: 24
+        y: 30
       },
       
-      // Sixth Row - Treemap Visualization
+      // Eighth Row - Treemap Visualization
       {
         id: 'happiness-treemap',
         title: 'Employee Happiness by Department (Treemap)',
@@ -312,10 +355,10 @@ export const productivityDashboardConfig = {
         w: 12,
         h: 8,
         x: 0,
-        y: 30
+        y: 36
       },
       
-      // Seventh Row - Individual Performance
+      // Ninth Row - Individual Performance
       {
         id: 'top-performers',
         title: 'Top Performers',
@@ -338,7 +381,7 @@ export const productivityDashboardConfig = {
         w: 6,
         h: 8,
         x: 0,
-        y: 38
+        y: 44
       },
       {
         id: 'work-life-balance',
@@ -361,10 +404,10 @@ export const productivityDashboardConfig = {
         w: 6,
         h: 8,
         x: 6,
-        y: 38
+        y: 44
       },
       
-      // Eighth Row - Detailed Analytics
+      // Tenth Row - Detailed Analytics
       {
         id: 'code-output-trends',
         title: 'Code Output Trends by Month',
@@ -394,7 +437,7 @@ export const productivityDashboardConfig = {
         w: 6,
         h: 6,
         x: 0,
-        y: 46
+        y: 52
       },
       {
         id: 'deployment-frequency',
@@ -428,10 +471,10 @@ export const productivityDashboardConfig = {
         w: 6,
         h: 6,
         x: 6,
-        y: 46
+        y: 52
       },
       
-      // Ninth Row - Summary Table
+      // Eleventh Row - Summary Table
       {
         id: 'productivity-summary',
         title: 'Comprehensive Productivity Summary',
@@ -455,7 +498,7 @@ export const productivityDashboardConfig = {
         w: 12,
         h: 6,
         x: 0,
-        y: 52
+        y: 58
       },
 
       // ============================================
@@ -478,7 +521,7 @@ export const productivityDashboardConfig = {
           series: []
         },
         displayConfig: { showLegend: true },
-        w: 6, h: 7, x: 0, y: 58
+        w: 6, h: 7, x: 0, y: 64
       },
 
       // Statistical: Bubble - Correlation with Stddev
@@ -499,7 +542,7 @@ export const productivityDashboardConfig = {
           series: 'Employees.name'
         },
         displayConfig: { showLegend: false },
-        w: 6, h: 7, x: 6, y: 58
+        w: 6, h: 7, x: 6, y: 64
       },
 
       // Statistical: Area - Percentile Bands Over Time (Engineering only)
@@ -524,7 +567,7 @@ export const productivityDashboardConfig = {
         },
         displayConfig: { showLegend: true },
         dashboardFilterMapping: ['date-range'],
-        w: 12, h: 6, x: 0, y: 65
+        w: 12, h: 6, x: 0, y: 71
       },
 
       // Window Function: Moving Average Line Chart
@@ -547,7 +590,7 @@ export const productivityDashboardConfig = {
         },
         displayConfig: { showLegend: true },
         dashboardFilterMapping: ['date-range'],
-        w: 12, h: 6, x: 0, y: 71
+        w: 12, h: 6, x: 0, y: 77
       },
 
       // Window Function: Period-over-Period Change
@@ -570,7 +613,7 @@ export const productivityDashboardConfig = {
         },
         displayConfig: { showLegend: true },
         dashboardFilterMapping: ['date-range'],
-        w: 6, h: 6, x: 0, y: 77
+        w: 6, h: 6, x: 0, y: 83
       },
 
       // Window Function: Cumulative Running Total
@@ -593,7 +636,7 @@ export const productivityDashboardConfig = {
         },
         displayConfig: { showLegend: true },
         dashboardFilterMapping: ['date-range'],
-        w: 6, h: 6, x: 6, y: 77
+        w: 6, h: 6, x: 6, y: 83
       },
 
       // Bonus Row - Thank You Message
@@ -622,7 +665,7 @@ Did you know that Drizzle Cube can actually do way more than just track how many
         w: 12,
         h: 8,
         x: 0,
-        y: 83
+        y: 89
       }
     ]
   }
