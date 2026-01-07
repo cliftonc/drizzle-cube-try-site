@@ -117,9 +117,13 @@ export function useUpdateAnalyticsPage() {
       const data: ApiResponse<AnalyticsPage> = await response.json()
       return data.data
     },
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['analytics-pages'] })
-      queryClient.invalidateQueries({ queryKey: ['analytics-pages', variables.id] })
+    onSuccess: (updatedPage, variables) => {
+      // Update the cache directly with the mutation result instead of refetching
+      // This prevents a race condition where refetch returns stale data
+      queryClient.setQueryData(['analytics-pages', variables.id], updatedPage)
+      queryClient.setQueryData(['analytics-pages', String(variables.id)], updatedPage)
+      // Invalidate the list to update any list views
+      queryClient.invalidateQueries({ queryKey: ['analytics-pages'], exact: true })
     }
   })
 }
