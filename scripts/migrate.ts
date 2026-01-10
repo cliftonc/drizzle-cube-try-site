@@ -2,6 +2,7 @@
  * Database migration script
  */
 
+import 'dotenv/config'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import { drizzle as drizzleNeon } from 'drizzle-orm/neon-http'
 import { migrate } from 'drizzle-orm/postgres-js/migrator'

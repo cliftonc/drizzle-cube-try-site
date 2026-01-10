@@ -2,6 +2,7 @@
  * Database seeding script with sample data
  */
 
+import 'dotenv/config'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import { drizzle as drizzleNeon } from 'drizzle-orm/neon-http'
 import postgres from 'postgres'
