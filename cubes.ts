@@ -6,13 +6,14 @@
 import { eq, sql } from 'drizzle-orm'
 import { defineCube } from 'drizzle-cube/server'
 import type { QueryContext, BaseQueryDefinition, Cube } from 'drizzle-cube/server'
-import { employees, departments, productivity, timeEntries } from './schema'
+import { employees, departments, productivity, timeEntries, prEvents } from './schema'
 
 // Forward declarations for circular dependency resolution
 let employeesCube: Cube
 let departmentsCube: Cube
 let productivityCube: Cube
 let timeEntriesCube: Cube
+let prEventsCube: Cube
 
 /**
  * Employees cube - employee analytics (single table)
@@ -48,9 +49,16 @@ employeesCube = defineCube('Employees', {
       on: [
         { source: employees.id, target: timeEntries.employeeId }
       ]
+    },
+    PREvents: {
+      targetCube: () => prEventsCube,
+      relationship: 'hasMany',
+      on: [
+        { source: employees.id, target: prEvents.employeeId }
+      ]
     }
   },
-  
+
   dimensions: {
     id: {
       name: 'id',
@@ -744,9 +752,101 @@ timeEntriesCube = defineCube('TimeEntries', {
 }) as Cube
 
 /**
+ * PR Events cube - PR lifecycle events for funnel analysis
+ */
+prEventsCube = defineCube('PREvents', {
+  title: 'PR Events',
+  description: 'Pull request lifecycle events for funnel analysis',
+
+  sql: (ctx: QueryContext): BaseQueryDefinition => ({
+    from: prEvents,
+    where: eq(prEvents.organisationId, ctx.securityContext.organisationId as number)
+  }),
+
+  joins: {
+    Employees: {
+      targetCube: () => employeesCube,
+      relationship: 'belongsTo',
+      on: [
+        { source: prEvents.employeeId, target: employees.id }
+      ]
+    }
+  },
+
+  dimensions: {
+    id: {
+      name: 'id',
+      title: 'Event ID',
+      type: 'number',
+      sql: prEvents.id,
+      primaryKey: true
+    },
+    prNumber: {
+      name: 'prNumber',
+      title: 'PR Number',
+      type: 'number',
+      sql: prEvents.prNumber
+    },
+    eventType: {
+      name: 'eventType',
+      title: 'Event Type',
+      type: 'string',
+      sql: prEvents.eventType
+    },
+    employeeId: {
+      name: 'employeeId',
+      title: 'Employee ID',
+      type: 'number',
+      sql: prEvents.employeeId
+    },
+    timestamp: {
+      name: 'timestamp',
+      title: 'Event Timestamp',
+      type: 'time',
+      sql: prEvents.timestamp
+    },
+    createdAt: {
+      name: 'createdAt',
+      title: 'Created At',
+      type: 'time',
+      sql: prEvents.createdAt
+    }
+  },
+
+  measures: {
+    count: {
+      name: 'count',
+      title: 'Event Count',
+      type: 'count',
+      sql: prEvents.id
+    },
+    uniquePRs: {
+      name: 'uniquePRs',
+      title: 'Unique PRs',
+      type: 'countDistinct',
+      sql: prEvents.prNumber
+    },
+    uniqueActors: {
+      name: 'uniqueActors',
+      title: 'Unique Actors',
+      type: 'countDistinct',
+      sql: prEvents.employeeId
+    }
+  },
+
+  // Event stream marker for funnel queries
+  meta: {
+    eventStream: {
+      bindingKey: 'PREvents.prNumber',
+      timeDimension: 'PREvents.timestamp'
+    }
+  }
+}) as Cube
+
+/**
  * Export cubes for use in other modules
  */
-export { employeesCube, departmentsCube, productivityCube, timeEntriesCube }
+export { employeesCube, departmentsCube, productivityCube, timeEntriesCube, prEventsCube }
 
 /**
  * All cubes for registration
@@ -755,5 +855,6 @@ export const allCubes = [
   employeesCube,
   departmentsCube,
   productivityCube,
-  timeEntriesCube
+  timeEntriesCube,
+  prEventsCube
 ]

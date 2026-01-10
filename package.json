@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "preinstall": "node -e \"if (process.platform === 'linux' && process.arch === 'x64') { console.log('Linux x64 detected - ensuring Rollup binary compatibility'); }\"",
-    "dev": "concurrently \"npm:dev:worker\" \"npm:dev:client\"",
+    "dev": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
     "dev:server": "tsx watch src/index.ts",
     "dev:worker": "wrangler dev --test-scheduled --port 3459 --live-reload",
     "dev:client": "vite",
-    "dev:full": "concurrently \"npm:dev:worker\" \"npm:dev:client\"",
+    "dev:full": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
     "build": "npm run build:client && npm run build:worker",
     "build:client": "tsc --project tsconfig.client.json && vite build",
     "build:worker": "tsc --project tsconfig.worker.json",

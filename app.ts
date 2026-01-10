@@ -208,6 +208,10 @@ app.get('/api/docs', (c) => {
   })
 })
 
+// Debug: Check if meta field is present on PREvents cube
+const prEventsCube = allCubes.find(c => c.name === 'PREvents')
+console.log('PREvents cube meta:', prEventsCube?.meta)
+
 // Mount the cube API routes
 const cubeApp = createCubeApp({
   cubes: allCubes,

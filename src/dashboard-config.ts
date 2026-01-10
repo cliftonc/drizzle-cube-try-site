@@ -138,41 +138,59 @@ export const productivityDashboardConfig = {
         y: 4
       },
 
-      // Third Row - Employee Productivity Funnel
+      // Third Row - PR Lifecycle Funnel (using new AnalysisConfig format)
       {
-        id: 'employee-productivity-funnel',
-        title: 'Employee Productivity Funnel',
-        query: JSON.stringify({
-          queries: [
-            {
-              measures: ['Employees.count'],
-              dimensions: ['Employees.id']
-            },
-            {
-              measures: ['Productivity.recordCount'],
-              dimensions: ['Productivity.employeeId']
-            },
-            {
-              measures: ['Productivity.recordCount'],
-              dimensions: ['Productivity.employeeId'],
-              filters: [{
-                member: 'Productivity.avgHappinessIndex',
-                operator: 'gte',
-                values: [7]
-              }]
+        id: 'pr-lifecycle-funnel',
+        title: 'PR Lifecycle Funnel',
+        // New canonical format
+        analysisConfig: {
+          version: 1,
+          analysisType: 'funnel',
+          activeView: 'chart',
+          charts: {
+            funnel: {
+              chartType: 'funnel',
+              chartConfig: {},
+              displayConfig: {
+                funnelOrientation: 'horizontal',
+                showLegend: true,
+                showTooltip: true
+              }
             }
-          ],
-          mergeStrategy: 'funnel',
-          funnelBindingKey: {
-            dimension: 'Employees.id'
           },
-          queryLabels: ['All Employees', 'With Activity', 'High Happiness']
+          query: {
+            funnel: {
+              bindingKey: 'PREvents.prNumber',
+              timeDimension: 'PREvents.timestamp',
+              steps: [
+                { name: 'Created', filter: { member: 'PREvents.eventType', operator: 'equals', values: ['created'] } },
+                { name: 'Review Requested', filter: { member: 'PREvents.eventType', operator: 'equals', values: ['review_requested'] } },
+                { name: 'Approved', filter: { member: 'PREvents.eventType', operator: 'equals', values: ['approved'] } },
+                { name: 'Merged', filter: { member: 'PREvents.eventType', operator: 'equals', values: ['merged'] } }
+              ],
+              includeTimeMetrics: true
+            }
+          }
+        },
+        // Legacy fields (required for backward compatibility during migration)
+        query: JSON.stringify({
+          funnel: {
+            bindingKey: 'PREvents.prNumber',
+            timeDimension: 'PREvents.timestamp',
+            steps: [
+              { name: 'Created', filter: { member: 'PREvents.eventType', operator: 'equals', values: ['created'] } },
+              { name: 'Review Requested', filter: { member: 'PREvents.eventType', operator: 'equals', values: ['review_requested'] } },
+              { name: 'Approved', filter: { member: 'PREvents.eventType', operator: 'equals', values: ['approved'] } },
+              { name: 'Merged', filter: { member: 'PREvents.eventType', operator: 'equals', values: ['merged'] } }
+            ],
+            includeTimeMetrics: true
+          }
         }, null, 2),
+        analysisType: 'funnel' as const,
         chartType: 'funnel' as const,
         chartConfig: {},
         displayConfig: {
           funnelOrientation: 'horizontal',
-          funnelStepLabels: ['All Employees', 'With Activity', 'High Happiness (≥7)'],
           hideSummaryFooter: false
         },
         w: 12,
