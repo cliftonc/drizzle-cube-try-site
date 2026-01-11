@@ -1,0 +1,1 @@
+CREATE INDEX "idx_pr_events_start_step_optimized" ON "pr_events" USING btree ("organisation_id","event_type","timestamp","pr_number");

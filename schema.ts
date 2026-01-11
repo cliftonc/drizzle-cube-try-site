@@ -3,7 +3,7 @@
  * This demonstrates a typical business analytics schema with employees and departments
  */
 
-import { pgTable, integer, text, real, boolean, timestamp, jsonb } from 'drizzle-orm/pg-core'
+import { pgTable, integer, text, real, boolean, timestamp, jsonb, index } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 
 // Employee table
@@ -16,7 +16,10 @@ export const employees = pgTable('employees', {
   organisationId: integer('organisation_id').notNull(),
   salary: real('salary'),
   createdAt: timestamp('created_at').defaultNow()
-})
+}, (table) => [
+  index('idx_employees_org').on(table.organisationId),
+  index('idx_employees_org_created').on(table.organisationId, table.createdAt)
+])
 
 // Department table
 export const departments = pgTable('departments', {
@@ -24,7 +27,9 @@ export const departments = pgTable('departments', {
   name: text('name').notNull(),
   organisationId: integer('organisation_id').notNull(),
   budget: real('budget')
-})
+}, (table) => [
+  index('idx_departments_org').on(table.organisationId)
+])
 
 // Productivity metrics table - daily productivity data per employee
 export const productivity = pgTable('productivity', {
@@ -39,7 +44,11 @@ export const productivity = pgTable('productivity', {
   happinessIndex: integer('happiness_index'), // 1-10 scale
   organisationId: integer('organisation_id').notNull(),
   createdAt: timestamp('created_at').defaultNow()
-})
+}, (table) => [
+  index('idx_productivity_org').on(table.organisationId),
+  index('idx_productivity_org_date').on(table.organisationId, table.date),
+  index('idx_productivity_org_created').on(table.organisationId, table.createdAt)
+])
 
 // Time Entries table - for tracking employee time allocation with fan-out scenarios
 export const timeEntries = pgTable('time_entries', {
@@ -53,7 +62,11 @@ export const timeEntries = pgTable('time_entries', {
   billableHours: real('billable_hours').default(0),
   organisationId: integer('organisation_id').notNull(),
   createdAt: timestamp('created_at').defaultNow()
-})
+}, (table) => [
+  index('idx_time_entries_org').on(table.organisationId),
+  index('idx_time_entries_org_date').on(table.organisationId, table.date),
+  index('idx_time_entries_org_created').on(table.organisationId, table.createdAt)
+])
 
 // PR Events table - tracks PR lifecycle events for funnel analysis
 // Event types: created, review_requested, reviewed, changes_requested, approved, merged, closed
@@ -65,7 +78,21 @@ export const prEvents = pgTable('pr_events', {
   organisationId: integer('organisation_id').notNull(),
   timestamp: timestamp('timestamp').notNull(),
   createdAt: timestamp('created_at').defaultNow()
-})
+}, (table) => [
+  // Basic org filter
+  index('idx_pr_events_org').on(table.organisationId),
+  // Flow analysis: lookup events for a PR in timestamp order
+  index('idx_pr_events_flow_lookup').on(table.organisationId, table.prNumber, table.timestamp),
+  // Start step filtering: find events by type
+  index('idx_pr_events_start_step').on(table.organisationId, table.eventType),
+  // Optimized start step: covers all columns needed for flow start queries
+  index('idx_pr_events_start_step_optimized').on(table.organisationId, table.eventType, table.timestamp, table.prNumber),
+  // Funnel analysis: events by type with creation time
+  index('idx_pr_events_funnel_start').on(table.organisationId, table.eventType, table.createdAt),
+  // Time-based queries
+  index('idx_pr_events_org_timestamp').on(table.organisationId, table.timestamp),
+  index('idx_pr_events_org_created').on(table.organisationId, table.createdAt)
+])
 
 // Analytics Pages table - for storing dashboard configurations
 export const analyticsPages = pgTable('analytics_pages', {
@@ -102,7 +129,10 @@ export const analyticsPages = pgTable('analytics_pages', {
   isActive: boolean('is_active').default(true),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow()
-})
+}, (table) => [
+  index('idx_analytics_pages_org').on(table.organisationId),
+  index('idx_analytics_pages_org_active').on(table.organisationId, table.isActive)
+])
 
 // Settings table - for storing application configuration and counters
 export const settings = pgTable('settings', {
@@ -111,7 +141,9 @@ export const settings = pgTable('settings', {
   organisationId: integer('organisation_id').notNull(),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow()
-})
+}, (table) => [
+  index('idx_settings_org').on(table.organisationId)
+])
 
 // Define relations for better type inference
 export const employeesRelations = relations(employees, ({ one, many }) => ({

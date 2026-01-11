@@ -43,6 +43,20 @@
       "when": 1768025130473,
       "tag": "0005_noisy_invisible_woman",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1768127857335,
+      "tag": "0006_cold_human_robot",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1768127946023,
+      "tag": "0007_tidy_wrecker",
+      "breakpoints": true
     }
   ]
 }
