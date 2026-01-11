@@ -132,10 +132,12 @@ app.get('/', (c) => {
       'POST /cubejs-api/v1/load': 'Execute analytics queries',
       'GET /cubejs-api/v1/load?query=...': 'Execute queries via URL',
       'POST /cubejs-api/v1/sql': 'Generate SQL without execution',
+      'POST /cubejs-api/v1/explain': 'Get query execution plan (EXPLAIN)',
       'GET /api/analytics-pages': 'List all dashboards',
       'POST /api/analytics-pages': 'Create new dashboard',
       'POST /api/analytics-pages/create-example': 'Create example dashboard',
       'POST /api/ai/generate': 'Generate content with Gemini AI (proxy)',
+      'POST /api/ai/explain/analyze': 'Analyze EXPLAIN plan with AI recommendations',
       'GET /api/ai/health': 'AI service health check'
     },
     frontend: {
@@ -174,7 +176,9 @@ app.get('/api/docs', (c) => {
       'POST /cubejs-api/v1/load': 'Execute analytics queries',
       'GET /cubejs-api/v1/load': 'Execute queries via query string',
       'POST /cubejs-api/v1/sql': 'Generate SQL without execution',
-      'GET /cubejs-api/v1/sql': 'Generate SQL via query string'
+      'GET /cubejs-api/v1/sql': 'Generate SQL via query string',
+      'POST /cubejs-api/v1/explain': 'Get query execution plan (EXPLAIN ANALYZE)',
+      'POST /api/ai/explain/analyze': 'Analyze EXPLAIN plan with AI recommendations'
     },
     cubes: metadata.map(cube => ({
       name: cube.name,

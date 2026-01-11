@@ -657,6 +657,109 @@ export const productivityDashboardConfig = {
         w: 6, h: 6, x: 6, y: 83
       },
 
+      // Flow Analysis Row - Sankey and Sunburst
+      {
+        id: 'pr-event-flow-sankey',
+        title: 'PR Event Flow Analysis (Sankey)',
+        query: JSON.stringify({}, null, 2),
+        analysisConfig: {
+          version: 1,
+          analysisType: 'flow' as const,
+          activeView: 'chart' as const,
+          charts: {
+            flow: {
+              chartType: 'sankey' as const,
+              chartConfig: {},
+              displayConfig: {
+                showGrid: false,
+                showLegend: true,
+                showTooltip: true
+              }
+            }
+          },
+          query: {
+            flow: {
+              bindingKey: 'PREvents.prNumber',
+              stepsAfter: 3,
+              stepsBefore: 3,
+              joinStrategy: 'auto',
+              startingStep: {
+                name: 'Starting Step',
+                filter: {
+                  member: 'PREvents.eventType',
+                  values: ['created'],
+                  operator: 'equals'
+                }
+              },
+              timeDimension: 'PREvents.timestamp',
+              eventDimension: 'PREvents.eventType'
+            }
+          }
+        },
+        chartType: 'sankey' as const,
+        chartConfig: {},
+        displayConfig: {
+          showLegend: true
+        },
+        w: 6,
+        h: 6,
+        x: 0,
+        y: 89
+      },
+      {
+        id: 'pr-event-flow-sunburst',
+        title: 'PR Event Flow Analysis (Sunburst)',
+        query: JSON.stringify({}, null, 2),
+        analysisConfig: {
+          version: 1,
+          analysisType: 'flow' as const,
+          activeView: 'chart' as const,
+          charts: {
+            flow: {
+              chartType: 'sunburst' as const,
+              chartConfig: {
+                xAxis: [],
+                yAxis: []
+              },
+              displayConfig: {
+                showGrid: false,
+                showLegend: true,
+                showTooltip: true
+              }
+            }
+          },
+          query: {
+            flow: {
+              bindingKey: 'PREvents.prNumber',
+              stepsAfter: 3,
+              stepsBefore: 3,
+              startingStep: {
+                name: 'Starting Step',
+                filter: {
+                  member: 'PREvents.eventType',
+                  values: ['created'],
+                  operator: 'equals'
+                }
+              },
+              timeDimension: 'PREvents.timestamp',
+              eventDimension: 'PREvents.eventType'
+            }
+          }
+        },
+        chartType: 'sunburst' as const,
+        chartConfig: {
+          xAxis: [],
+          yAxis: []
+        },
+        displayConfig: {
+          showLegend: true
+        },
+        w: 6,
+        h: 6,
+        x: 6,
+        y: 89
+      },
+
       // Bonus Row - Thank You Message
       {
         id: 'thanks-for-scrolling',
@@ -683,7 +786,7 @@ Did you know that Drizzle Cube can actually do way more than just track how many
         w: 12,
         h: 8,
         x: 0,
-        y: 89
+        y: 95
       }
     ]
   }
