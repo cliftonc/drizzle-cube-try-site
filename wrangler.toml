@@ -37,6 +37,12 @@ binding = "CACHE"
 id = "b2e0cf55238a402c8f7ee6771266b491"
 preview_id = "56468f9fa7df4f3d98496cd2fc0e48ca"
 
+# Hyperdrive binding for PostgreSQL connection pooling
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = "fe703f3df596407c906632d5c7b2e5ba"
+localConnectionString = "postgresql://drizzle_user:drizzle_pass123@localhost:54921/drizzle_cube_db"
+
 # R2 binding (if needed for file storage)
 # [[r2_buckets]]
 # binding = "BUCKET"

@@ -40,6 +40,21 @@ function createDatabase(databaseUrl: string) {
   }
 }
 
+// Create database connection with Hyperdrive support (production)
+function createDatabaseWithHyperdrive(
+  hyperdrive: Hyperdrive | undefined,
+  databaseUrl: string
+) {
+  // Priority 1: Use Hyperdrive if available (production with connection pooling)
+  if (hyperdrive) {
+    console.log('⚡ Connecting via Hyperdrive (connection pooling enabled)')
+    const client = postgres(hyperdrive.connectionString)
+    return drizzle(client, { schema })
+  }
+  // Priority 2: Fall back to existing logic (Neon serverless or local PostgreSQL)
+  return createDatabase(databaseUrl)
+}
+
 // Define environment interface for Cloudflare Workers
 interface CloudflareEnv {
   ASSETS: {
@@ -49,6 +64,7 @@ interface CloudflareEnv {
   NODE_ENV?: string
   GEMINI_API_KEY?: string
   CACHE?: KVNamespace  // KV binding for query result caching
+  HYPERDRIVE?: Hyperdrive  // Hyperdrive binding for PostgreSQL connection pooling
 }
 
 interface Variables {
@@ -95,10 +111,10 @@ app.use('*', cors({
 
 // Initialize database and semantic layer per request
 app.use('*', async (c, next) => {
-  // Create database connection based on URL type
-  const db = createDatabase(c.env.DATABASE_URL)
+  // Create database connection with Hyperdrive support (production) or fallback
+  const db = createDatabaseWithHyperdrive(c.env.HYPERDRIVE, c.env.DATABASE_URL)
   c.set('db', db as DrizzleDatabase)
-  
+
   await next()
 })
 
@@ -225,10 +241,10 @@ app.get('*', async (c) => {
 // Scheduled event handler for cron triggers
 async function scheduled(_event: any, env: CloudflareEnv, _ctx: any): Promise<void> {
   console.log('🕒 Scheduled event triggered at:', new Date().toISOString())
-  
+
   try {
-    // Create database connection based on URL type
-    const db = createDatabase(env.DATABASE_URL)
+    // Create database connection with Hyperdrive support (production) or fallback
+    const db = createDatabaseWithHyperdrive(env.HYPERDRIVE, env.DATABASE_URL)
     
     console.log('🌱 Starting scheduled database seeding...')
     const result = await executeSeed(db)
