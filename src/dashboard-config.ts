@@ -760,6 +760,31 @@ export const productivityDashboardConfig = {
         y: 89
       },
 
+      // Heatmap - Happiness by Team and Region
+      {
+        id: 'happiness-by-team-region',
+        title: 'Team Happiness by Region',
+        query: JSON.stringify({
+          measures: ['Productivity.avgHappinessIndex'],
+          dimensions: ['Teams.name', 'Employees.region'],
+          cubes: ['Productivity', 'Teams', 'Employees']
+        }, null, 2),
+        chartType: 'heatmap' as const,
+        chartConfig: {
+          xAxis: ['Teams.name'],
+          yAxis: ['Employees.region'],
+          valueField: 'Productivity.avgHappinessIndex'
+        },
+        displayConfig: {
+          showValues: true,
+          showLegend: true
+        },
+        w: 12,
+        h: 6,
+        x: 0,
+        y: 95
+      },
+
       // Bonus Row - Thank You Message
       {
         id: 'thanks-for-scrolling',
@@ -786,7 +811,7 @@ Did you know that Drizzle Cube can actually do way more than just track how many
         w: 12,
         h: 8,
         x: 0,
-        y: 95
+        y: 101
       }
     ]
   }
