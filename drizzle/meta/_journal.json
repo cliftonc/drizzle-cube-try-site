@@ -57,6 +57,13 @@
       "when": 1768127946023,
       "tag": "0007_tidy_wrecker",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1768291923916,
+      "tag": "0008_cheerful_expediter",
+      "breakpoints": true
     }
   ]
 }
