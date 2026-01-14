@@ -76,7 +76,6 @@ async function getSecurityContext(c: any): Promise<SecurityContext> {
   const authHeader = c.req.header('Authorization')
   
   if (!authHeader) {
-    console.log('⚠️  No authorization header - using default demo user (organisation: 1)')
     return {
       organisationId: 1,
       userId: 1,

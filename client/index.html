@@ -43,20 +43,11 @@
     <meta name="theme-color" content="#3B82F6" />
     <!-- Canonical URL is managed dynamically by PageHead component -->
     
-    <!-- Prism.js themes - light and dark -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism.min.css" rel="stylesheet" id="prism-light-theme" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" id="prism-dark-theme" disabled />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/plugins/autoloader/prism-autoloader.min.js"></script>
-
     <!-- Initialize theme based on localStorage or system preference -->
     <script>
       (function() {
         const theme = localStorage.getItem('theme') ||
           (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-
-        const lightTheme = document.getElementById('prism-light-theme');
-        const darkTheme = document.getElementById('prism-dark-theme');
 
         // Set data-theme attribute
         document.documentElement.setAttribute('data-theme', theme);
@@ -64,15 +55,6 @@
         // Add theme class for backwards compatibility
         if (theme === 'dark' || theme === 'neon' || theme === 'cyberpunk') {
           document.documentElement.classList.add(theme);
-        }
-
-        // Toggle Prism.js themes (use dark theme for dark, neon, and cyberpunk)
-        if (theme === 'light') {
-          lightTheme.disabled = false;
-          darkTheme.disabled = true;
-        } else {
-          lightTheme.disabled = true;
-          darkTheme.disabled = false;
         }
       })();
     </script>

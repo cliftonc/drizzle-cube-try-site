@@ -9,16 +9,61 @@ import {
 } from '@heroicons/react/24/outline'
 import PageHead from '../components/PageHead'
 
+// Dynamically load Prism.js only on HomePage
+function loadPrism(): Promise<void> {
+  return new Promise((resolve) => {
+    // Check if already loaded
+    if ((window as any).Prism) {
+      resolve()
+      return
+    }
+
+    // Determine theme for Prism
+    const theme = localStorage.getItem('theme') ||
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+    const isDark = theme !== 'light'
+
+    // Load CSS themes
+    const lightTheme = document.createElement('link')
+    lightTheme.id = 'prism-light-theme'
+    lightTheme.rel = 'stylesheet'
+    lightTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism.min.css'
+    lightTheme.disabled = isDark
+    document.head.appendChild(lightTheme)
+
+    const darkTheme = document.createElement('link')
+    darkTheme.id = 'prism-dark-theme'
+    darkTheme.rel = 'stylesheet'
+    darkTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css'
+    darkTheme.disabled = !isDark
+    document.head.appendChild(darkTheme)
+
+    // Load Prism core
+    const coreScript = document.createElement('script')
+    coreScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-core.min.js'
+    coreScript.onload = () => {
+      // Load autoloader after core is ready
+      const autoloaderScript = document.createElement('script')
+      autoloaderScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/plugins/autoloader/prism-autoloader.min.js'
+      autoloaderScript.onload = () => resolve()
+      document.head.appendChild(autoloaderScript)
+    }
+    document.head.appendChild(coreScript)
+  })
+}
+
 export default function HomePage() {
-  // Apply Prism.js syntax highlighting after component mounts
+  // Load and apply Prism.js syntax highlighting
   useEffect(() => {
-    setTimeout(() => {
-      try {
-        ;(window as any).Prism.highlightAll()
-      } catch (error) {
-        // Silently fail if Prism is not available or encounters an error
-      }
-    }, 0)
+    loadPrism().then(() => {
+      setTimeout(() => {
+        try {
+          ;(window as any).Prism.highlightAll()
+        } catch (error) {
+          // Silently fail if Prism encounters an error
+        }
+      }, 0)
+    })
   }, [])
 
   return (

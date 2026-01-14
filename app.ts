@@ -76,7 +76,6 @@ async function extractSecurityContext(c: any): Promise<SecurityContext> {
   
   // For development/demo purposes, allow requests without auth
   if (!authHeader) {
-    console.log('⚠️  No authorization header - using default demo user (organisation: 1)')
     return {
       organisationId: 1, // Default demo organisation
       userId: 1,         // Default demo user
