@@ -43,10 +43,10 @@ binding = "HYPERDRIVE"
 id = "fe703f3df596407c906632d5c7b2e5ba"
 localConnectionString = "postgresql://drizzle_user:drizzle_pass123@localhost:54921/drizzle_cube_db"
 
-# R2 binding (if needed for file storage)
-# [[r2_buckets]]
-# binding = "BUCKET"
-# bucket_name = "drizzle-cube-assets"
+# R2 binding for dashboard thumbnail storage
+[[r2_buckets]]
+binding = "THUMBNAILS"
+bucket_name = "drizzle-cube-thumbnails"
 
 # Cron triggers for scheduled tasks
 [triggers]

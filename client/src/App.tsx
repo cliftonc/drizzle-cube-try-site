@@ -13,7 +13,17 @@ function App() {
     <HelmetProvider>
       <CubeProvider
         apiOptions={{ apiUrl: '/cubejs-api/v1' }}
-        features={{ showSchemaDiagram: true, useAnalysisBuilder: true, enableAI: true, aiEndpoint: '/api/ai/generate' }}
+        features={{
+          showSchemaDiagram: true,
+          useAnalysisBuilder: true,
+          enableAI: true,
+          aiEndpoint: '/api/ai/generate',
+          thumbnail: {
+            enabled: true,
+            // Using defaults (1600x1200) for crisp thumbnails
+            format: 'png'
+          }
+        }}
       >
         <Layout>
           <Routes>

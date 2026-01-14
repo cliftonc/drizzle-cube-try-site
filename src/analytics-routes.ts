@@ -12,6 +12,7 @@ import { productivityDashboardConfig } from './dashboard-config'
 interface Variables {
   db: DrizzleDatabase
   organisationId: number
+  r2?: R2Bucket
 }
 
 const analyticsApp = new Hono<{ Variables: Variables }>()
@@ -279,6 +280,108 @@ analyticsApp.post('/:id/reset', async (c) => {
   } catch (error) {
     console.error('Error resetting analytics page:', error)
     return c.json({ error: 'Failed to reset analytics page' }, 500)
+  }
+})
+
+// Save thumbnail for analytics page
+// - In production (Cloudflare Workers): uploads to R2 and stores CDN URL
+// - In development (local Node.js): stores base64 directly in config
+analyticsApp.post('/:id/thumbnail', async (c) => {
+  const db = c.get('db')
+  const organisationId = c.get('organisationId')
+  const r2 = c.get('r2')
+  const id = parseInt(c.req.param('id'))
+
+  if (isNaN(id)) {
+    return c.json({ error: 'Invalid page ID' }, 400)
+  }
+
+  try {
+    const body = await c.req.json()
+    const { thumbnailData } = body
+
+    if (!thumbnailData || typeof thumbnailData !== 'string') {
+      return c.json({ error: 'thumbnailData (base64 string) is required' }, 400)
+    }
+
+    // Get current page to verify it exists
+    const existingPage = await db
+      .select()
+      .from(analyticsPages)
+      .where(
+        and(
+          eq(analyticsPages.id, id),
+          eq(analyticsPages.organisationId, organisationId),
+          eq(analyticsPages.isActive, true)
+        )
+      )
+      .limit(1)
+
+    if (existingPage.length === 0) {
+      return c.json({ error: 'Analytics page not found' }, 404)
+    }
+
+    let thumbnailUrl: string
+    let updatedConfig: typeof existingPage[0]['config']
+
+    // Check if R2 is available (Cloudflare Workers production environment)
+    if (r2) {
+      // Production: Upload to R2 and store CDN URL
+      const base64Data = thumbnailData.replace(/^data:image\/\w+;base64,/, '')
+      const binaryString = atob(base64Data)
+      const bytes = new Uint8Array(binaryString.length)
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i)
+      }
+
+      // Upload to R2 with timestamp in filename for cache busting
+      const timestamp = Date.now()
+      const key = `dashboards/${organisationId}/${id}-${timestamp}.png`
+      await r2.put(key, bytes, {
+        httpMetadata: {
+          contentType: 'image/png'
+        }
+      })
+
+      // Build CDN URL (custom domain configured in Cloudflare)
+      thumbnailUrl = `https://thumbnails.try.drizzle-cube.dev/${key}`
+
+      updatedConfig = {
+        ...existingPage[0].config,
+        thumbnailUrl,
+        thumbnailData: undefined  // Clear base64 data since we have URL now
+      }
+    } else {
+      // Development: Store base64 directly in config (no R2 available)
+      thumbnailUrl = thumbnailData  // Return the base64 as the "URL"
+
+      updatedConfig = {
+        ...existingPage[0].config,
+        thumbnailData,  // Store base64 directly
+        thumbnailUrl: undefined  // Clear any existing CDN URL
+      }
+    }
+
+    await db
+      .update(analyticsPages)
+      .set({
+        config: updatedConfig,
+        updatedAt: new Date()
+      })
+      .where(
+        and(
+          eq(analyticsPages.id, id),
+          eq(analyticsPages.organisationId, organisationId)
+        )
+      )
+
+    return c.json({
+      thumbnailUrl,
+      message: r2 ? 'Thumbnail uploaded to R2 successfully' : 'Thumbnail saved (dev mode - stored as base64)'
+    })
+  } catch (error) {
+    console.error('Error saving thumbnail:', error)
+    return c.json({ error: 'Failed to save thumbnail' }, 500)
   }
 })
 

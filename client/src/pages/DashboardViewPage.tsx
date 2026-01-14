@@ -96,6 +96,28 @@ export default function DashboardViewPage() {
     }
   }, [])
 
+  // Handle thumbnail save (called on edit mode exit when dashboard has changed)
+  const handleSaveThumbnail = useCallback(async (thumbnailData: string): Promise<string | void> => {
+    if (!id) return
+
+    try {
+      const response = await fetch(`/api/analytics-pages/${id}/thumbnail`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ thumbnailData })
+      })
+
+      if (response.ok) {
+        const result = await response.json() as { thumbnailUrl: string }
+        return result.thumbnailUrl  // CDN URL from R2
+      }
+
+      console.error('Failed to save thumbnail:', response.statusText)
+    } catch (error) {
+      console.error('Error saving thumbnail:', error)
+    }
+  }, [id])
+
   // Handle metadata editing
   const handleEditMetadata = useCallback(async (data: { name: string; description?: string }) => {
     if (!page || !id) return
@@ -252,6 +274,7 @@ export default function DashboardViewPage() {
         editable={true}
         onConfigChange={handleConfigChange}
         onSave={handleSave}
+        onSaveThumbnail={handleSaveThumbnail}
         onDirtyStateChange={handleDirtyStateChange}
         loadingComponent={<DrizzleCubeLoader />}
       />

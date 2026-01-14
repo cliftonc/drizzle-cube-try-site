@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
-import { DashboardEditModal } from 'drizzle-cube/client'
+import { DashboardEditModal, useCubeFeatures, DashboardThumbnailPlaceholder } from 'drizzle-cube/client'
 import {
   useAnalyticsPages,
   useCreateExamplePage,
@@ -15,6 +15,8 @@ export default function DashboardListPage() {
   const deletePage = useDeleteAnalyticsPage()
   const createPage = useCreateAnalyticsPage()
   const [isNewModalOpen, setIsNewModalOpen] = useState(false)
+  const { features } = useCubeFeatures()
+  const thumbnailEnabled = features.thumbnail?.enabled ?? false
 
   const handleCreateExample = async () => {
     if (pages.length >= 10) {
@@ -166,8 +168,24 @@ export default function DashboardListPage() {
           {pages.map((page) => (
             <div
               key={page.id}
-              className="relative group bg-dc-surface rounded-lg shadow-xs hover:shadow-md transition-shadow touch-manipulation border border-transparent dark:border-dc-border"
+              className="relative group bg-dc-surface rounded-lg shadow-xs hover:shadow-md transition-shadow touch-manipulation border border-transparent dark:border-dc-border overflow-hidden"
             >
+              {/* Thumbnail preview (if enabled) */}
+              {thumbnailEnabled && (
+                <Link to={`/dashboards/${page.id}`} className="block">
+                  <div className="relative aspect-video bg-dc-bg-secondary p-2 rounded-t-lg">
+                    {page.config.thumbnailUrl || page.config.thumbnailData ? (
+                      <img
+                        src={page.config.thumbnailUrl || page.config.thumbnailData}
+                        alt={`${page.name} preview`}
+                        className="w-full h-full object-cover object-top rounded-md"
+                      />
+                    ) : (
+                      <DashboardThumbnailPlaceholder className="w-full h-full" />
+                    )}
+                  </div>
+                </Link>
+              )}
               <div className="p-4 sm:p-6">
                 <div className="flex items-start justify-between mb-3">
                   <h3 className="text-base sm:text-lg font-medium text-dc-text pr-2 leading-tight">

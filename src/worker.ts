@@ -65,10 +65,12 @@ interface CloudflareEnv {
   GEMINI_API_KEY?: string
   CACHE?: KVNamespace  // KV binding for query result caching
   HYPERDRIVE?: Hyperdrive  // Hyperdrive binding for PostgreSQL connection pooling
+  THUMBNAILS?: R2Bucket  // R2 binding for dashboard thumbnail storage
 }
 
 interface Variables {
   db: DrizzleDatabase
+  r2?: R2Bucket
 }
 
 // Security context extractor - same as main app
@@ -200,9 +202,10 @@ app.get('/api', (c) => {
   })
 })
 
-// Mount analytics pages API with database access
+// Mount analytics pages API with database and R2 access
 app.use('/api/analytics-pages/*', async (c, next) => {
   c.set('db', c.get('db'))
+  c.set('r2', c.env.THUMBNAILS)
   await next()
 })
 app.route('/api/analytics-pages', analyticsApp)
