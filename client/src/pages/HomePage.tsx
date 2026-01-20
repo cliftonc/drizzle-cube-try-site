@@ -475,6 +475,31 @@ app.route('/', cubeApp) // Done!`}
               </div>
             </a>
             <a
+              href="https://try.icelight.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group bg-dc-card-bg hover:bg-dc-card-bg-hover border border-dc-card-border hover:border-dc-primary rounded-xl px-6 py-5 transition-all duration-200 shadow-2xs hover:shadow-md"
+            >
+              <div className="flex items-center gap-4">
+                <img
+                  src="/icelight-logo.png"
+                  alt="Icelight logo"
+                  className="w-12 h-12 object-contain"
+                />
+                <div>
+                  <h3 className="text-lg font-bold text-dc-text group-hover:text-dc-primary transition-colors">
+                    Icelight
+                  </h3>
+                  <p className="text-sm text-dc-text-muted">
+                    Analytics Events to Apache Iceberg on Cloudflare
+                  </p>
+                  <p className="text-xs text-dc-primary mt-1 group-hover:underline">
+                    try.icelight.dev
+                  </p>
+                </div>
+              </div>
+            </a>
+            <a
               href="https://github.com/cliftonc/drizzle-cube/discussions/categories/show-and-tell"
               target="_blank"
               rel="noopener noreferrer"
