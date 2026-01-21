@@ -234,6 +234,45 @@ app.get('/api/user-info', async (c) => {
   }
 })
 
+// GitHub stars endpoint with KV caching
+app.get('/api/github-stars', async (c) => {
+  const cacheKey = 'github:stars:cliftonc/drizzle-cube'
+  const cacheKV = c.env.CACHE
+
+  // Check cache first
+  if (cacheKV) {
+    const cached = await cacheKV.get(cacheKey)
+    if (cached) {
+      return c.json({ stars: parseInt(cached, 10), cached: true })
+    }
+  }
+
+  try {
+    // Fetch from GitHub API
+    const res = await fetch('https://api.github.com/repos/cliftonc/drizzle-cube', {
+      headers: { 'User-Agent': 'drizzle-cube-try-site' }
+    })
+
+    if (!res.ok) {
+      console.error(`GitHub API error: ${res.status}`)
+      return c.json({ stars: null, error: 'GitHub API unavailable' }, 502)
+    }
+
+    const data = await res.json() as { stargazers_count?: number }
+    const stars = data.stargazers_count ?? 0
+
+    // Cache for 1 hour
+    if (cacheKV) {
+      await cacheKV.put(cacheKey, stars.toString(), { expirationTtl: 3600 })
+    }
+
+    return c.json({ stars, cached: false })
+  } catch (error) {
+    console.error('GitHub stars fetch error:', error)
+    return c.json({ stars: null, error: 'Failed to fetch stars' }, 500)
+  }
+})
+
 // Serve static assets and handle SPA routing
 app.get('*', async (c) => {
   // Use the ASSETS binding to serve static files with SPA fallback

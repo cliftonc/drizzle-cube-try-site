@@ -247,6 +247,39 @@ app.use('/api/ai/*', async (c, next) => {
 })
 app.route('/api/ai', aiApp)
 
+// GitHub stars endpoint with in-memory caching (for local dev)
+let githubStarsCache: { stars: number; timestamp: number } | null = null
+const CACHE_TTL_MS = 3600000 // 1 hour
+
+app.get('/api/github-stars', async (c) => {
+  // Check cache
+  if (githubStarsCache && Date.now() - githubStarsCache.timestamp < CACHE_TTL_MS) {
+    return c.json({ stars: githubStarsCache.stars, cached: true })
+  }
+
+  try {
+    const res = await fetch('https://api.github.com/repos/cliftonc/drizzle-cube', {
+      headers: { 'User-Agent': 'drizzle-cube-try-site' }
+    })
+
+    if (!res.ok) {
+      console.error(`GitHub API error: ${res.status}`)
+      return c.json({ stars: null, error: 'GitHub API unavailable' }, 502)
+    }
+
+    const data = await res.json() as { stargazers_count?: number }
+    const stars = data.stargazers_count ?? 0
+
+    // Cache the result
+    githubStarsCache = { stars, timestamp: Date.now() }
+
+    return c.json({ stars, cached: false })
+  } catch (error) {
+    console.error('GitHub stars fetch error:', error)
+    return c.json({ stars: null, error: 'Failed to fetch stars' }, 500)
+  }
+})
+
 // Example protected endpoint showing how to use the same security context
 app.get('/api/user-info', async (c) => {
   try {
