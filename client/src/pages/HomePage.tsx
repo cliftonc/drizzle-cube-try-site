@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import {
-  ChartBarIcon,
-  MagnifyingGlassIcon,
   BookOpenIcon,
-  CodeBracketIcon,
-  SparklesIcon
+  CheckIcon
 } from '@heroicons/react/24/outline'
 import PageHead from '../components/PageHead'
+import GitHubStarsButton from '../components/GitHubStarsButton'
+import { getTheme, watchThemeChanges, type Theme } from '../theme/utils'
 
 // Dynamically load Prism.js only on HomePage
 function loadPrism(): Promise<void> {
@@ -53,6 +52,8 @@ function loadPrism(): Promise<void> {
 }
 
 export default function HomePage() {
+  const [theme, setTheme] = useState<Theme>('light')
+
   // Load and apply Prism.js syntax highlighting
   useEffect(() => {
     loadPrism().then(() => {
@@ -64,6 +65,12 @@ export default function HomePage() {
         }
       }, 0)
     })
+  }, [])
+
+  // Watch for theme changes
+  useEffect(() => {
+    setTheme(getTheme())
+    return watchThemeChanges(setTheme)
   }, [])
 
   return (
@@ -87,8 +94,9 @@ export default function HomePage() {
       `}</style>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        {/* Hero Section */}
         <div className="text-center mb-12 sm:mb-16">
-          <div className="flex items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+          <div className="flex items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8">
             <img
               src="/drizzle-cube.png"
               alt="Drizzle Cube logo"
@@ -98,91 +106,128 @@ export default function HomePage() {
               Drizzle Cube
             </h1>
           </div>
-          <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-            <p className="text-lg sm:text-xl lg:text-2xl text-dc-text-secondary font-medium">
-              Embeddable Analytics Solution for Platform Builders
-            </p>
-            {/* MIT Licensed badge */}
+
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-dc-text-secondary mb-6">
+            Add self-service analytics to your platform <span className="text-dc-primary">in hours, not months</span>
+          </h2>
+
+          <p className="text-base sm:text-lg text-dc-text-muted max-w-2xl mx-auto leading-relaxed mb-8">
+            Give your users powerful dashboards and insights using your existing Drizzle schema.
+            Zero new infrastructure. Multi-tenant by default.
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+            <Link
+              to="/dashboards"
+              className="w-full sm:w-auto px-8 py-3 bg-dc-primary hover:bg-dc-primary-hover text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+            >
+              View Live Dashboards
+            </Link>
+            <Link
+              to="/analysis-builder"
+              className="w-full sm:w-auto px-8 py-3 border-2 border-dc-primary text-dc-primary hover:bg-dc-primary/10 font-semibold rounded-lg transition-all duration-200"
+            >
+              Try Analysis Builder
+            </Link>
+          </div>
+
+          {/* Secondary links row */}
+          <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
+            <GitHubStarsButton />
+            <span className="text-dc-border">|</span>
             <a
               href="https://github.com/cliftonc/drizzle-cube/blob/main/LICENSE"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-dc-surface border border-dc-border text-dc-text-muted hover:text-dc-text hover:border-dc-border-secondary px-2 py-1 sm:px-3 sm:py-1.5 rounded-md shadow-sm shrink-0 transition-colors"
+              className="text-dc-text-muted hover:text-dc-text transition-colors"
             >
-              <div className="text-[6px] sm:text-[8px] uppercase tracking-wider opacity-75">Open Source</div>
-              <div className="text-xs sm:text-sm font-semibold tracking-tight">MIT Licensed</div>
+              MIT Licensed
+            </a>
+            <span className="text-dc-border">|</span>
+            <a
+              href="https://www.drizzle-cube.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center text-dc-text-muted hover:text-dc-text transition-colors"
+            >
+              <BookOpenIcon className="w-4 h-4 mr-1" />
+              Docs
             </a>
           </div>
-          <p className="text-base sm:text-lg text-dc-text-muted max-w-3xl mx-auto leading-relaxed px-2">
-            Deliver scalable, type-safe dashboarding capabilities to your platform users.
-            Embed rich analytics directly into your existing application with zero infrastructure overhead.
-          </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16">
-          <Link
-            to="/dashboards"
-            className="group bg-dc-card-bg hover:bg-dc-card-bg-hover border border-dc-card-border hover:border-dc-card-border-hover rounded-xl p-4 sm:p-6 transition-all duration-200 shadow-2xs hover:shadow-md touch-manipulation relative"
-          >
-            <div className="absolute -top-2 -right-2 bg-dc-ai-gradient text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center space-x-1 shadow-md z-10">
-              <SparklesIcon className="w-3 h-3" />
-              <span>AI Enabled</span>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 bg-dc-primary/10 group-hover:bg-dc-primary/15 rounded-lg flex items-center justify-center mb-3 sm:mb-4 transition-colors">
-                <ChartBarIcon className="w-6 h-6 text-dc-primary group-hover:text-dc-primary" />
+        {/* Dashboard Showcase Section */}
+        <div className="mb-12 sm:mb-16 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-0 items-stretch">
+            {/* Screenshot */}
+            <div className="order-2 lg:order-1 flex items-center justify-end">
+              <div className="rounded-lg overflow-hidden shadow-xl border border-dc-border relative z-10">
+                <img
+                  src={theme === 'light' ? '/dashboard_light.png' : '/dashboard_dark.png'}
+                  alt="Dashboard screenshot"
+                  className="w-full h-auto"
+                />
               </div>
-              <h3 className="text-base sm:text-lg font-semibold text-dc-text mb-1 sm:mb-2">Dashboards</h3>
-              <p className="text-sm text-dc-text-muted">View analytics and insights</p>
             </div>
-          </Link>
 
-          <Link
-            to="/analysis-builder"
-            className="group bg-dc-card-bg hover:bg-dc-card-bg-hover border border-dc-card-border hover:border-dc-card-border-hover rounded-xl p-4 sm:p-6 transition-all duration-200 shadow-2xs hover:shadow-md touch-manipulation relative"
-          >
-            <div className="absolute -top-2 -right-2 bg-dc-ai-gradient text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center space-x-1 shadow-md z-10">
-              <SparklesIcon className="w-3 h-3" />
-              <span>AI Enabled</span>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 bg-dc-success-bg group-hover:bg-dc-success/20 rounded-lg flex items-center justify-center mb-3 sm:mb-4 transition-colors">
-                <MagnifyingGlassIcon className="w-6 h-6 text-dc-success group-hover:text-dc-success" />
+            {/* Features with background */}
+            <div className="order-1 lg:order-2 relative">
+              {/* Background that extends behind the image on desktop */}
+              <div className="absolute inset-0 bg-dc-surface-secondary rounded-2xl lg:rounded-r-none lg:-left-24" />
+              <div className="relative z-10 p-6 sm:p-8">
+                <h3 className="text-xl sm:text-2xl font-bold text-dc-text mb-6">
+                  Full-featured analytics built in
+                </h3>
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-start">
+                    <CheckIcon className="w-5 h-5 text-dc-success mr-3 mt-0.5 shrink-0" />
+                    <span className="text-dc-text-secondary">
+                      <strong className="text-dc-text">Rich visualizations</strong> - Bar, line, area, pie, scatter charts, KPI cards, and data tables
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckIcon className="w-5 h-5 text-dc-success mr-3 mt-0.5 shrink-0" />
+                    <span className="text-dc-text-secondary">
+                      <strong className="text-dc-text">Multiple analysis modes</strong> - Query builder, funnel analysis, and flow analysis
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckIcon className="w-5 h-5 text-dc-success mr-3 mt-0.5 shrink-0" />
+                    <span className="text-dc-text-secondary">
+                      <strong className="text-dc-text">Fully themeable</strong> - Try the theme switcher in the navbar to see it in action
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckIcon className="w-5 h-5 text-dc-success mr-3 mt-0.5 shrink-0" />
+                    <span className="text-dc-text-secondary">
+                      <strong className="text-dc-text">AI-powered analysis</strong> - Natural language queries for your users
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckIcon className="w-5 h-5 text-dc-success mr-3 mt-0.5 shrink-0" />
+                    <span className="text-dc-text-secondary">
+                      <strong className="text-dc-text">Multi-tenant security</strong> - Row-level isolation built into every query
+                    </span>
+                  </li>
+                </ul>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link
+                    to="/dashboards"
+                    className="text-center px-6 py-2.5 bg-dc-primary hover:bg-dc-primary-hover text-white font-medium rounded-lg transition-colors"
+                  >
+                    Explore Dashboards
+                  </Link>
+                  <Link
+                    to="/analysis-builder"
+                    className="text-center px-6 py-2.5 border border-dc-border hover:border-dc-primary text-dc-text hover:text-dc-primary font-medium rounded-lg transition-colors"
+                  >
+                    Try Analysis Builder
+                  </Link>
+                </div>
               </div>
-              <h3 className="text-base sm:text-lg font-semibold text-dc-text mb-1 sm:mb-2">Analysis Builder</h3>
-              <p className="text-sm text-dc-text-muted">Build custom queries</p>
             </div>
-          </Link>
-
-          <a
-            href="https://www.drizzle-cube.dev"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group bg-dc-card-bg hover:bg-dc-card-bg-hover border border-dc-card-border hover:border-dc-card-border-hover rounded-xl p-4 sm:p-6 transition-all duration-200 shadow-2xs hover:shadow-md touch-manipulation"
-          >
-            <div className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 bg-dc-info-bg group-hover:bg-dc-info/15 rounded-lg flex items-center justify-center mb-3 sm:mb-4 transition-colors">
-                <BookOpenIcon className="w-6 h-6 text-dc-info group-hover:text-dc-info" />
-              </div>
-              <h3 className="text-base sm:text-lg font-semibold text-dc-text mb-1 sm:mb-2">Documentation</h3>
-              <p className="text-sm text-dc-text-muted">Learn how to use Drizzle Cube</p>
-            </div>
-          </a>
-
-          <a
-            href="https://github.com/cliftonc/drizzle-cube"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group bg-dc-surface hover:bg-dc-surface-hover border border-dc-border hover:border-dc-border-secondary rounded-xl p-4 sm:p-6 transition-all duration-200 shadow-2xs hover:shadow-md touch-manipulation"
-          >
-            <div className="flex flex-col items-center text-center">
-              <div className="w-12 h-12 bg-dc-muted-bg group-hover:bg-dc-muted/20 rounded-lg flex items-center justify-center mb-3 sm:mb-4 transition-colors">
-                <CodeBracketIcon className="w-6 h-6 text-dc-text-muted group-hover:text-dc-text" />
-              </div>
-              <h3 className="text-base sm:text-lg font-semibold text-dc-text mb-1 sm:mb-2">GitHub</h3>
-              <p className="text-sm text-dc-text-muted">View source code</p>
-            </div>
-          </a>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">

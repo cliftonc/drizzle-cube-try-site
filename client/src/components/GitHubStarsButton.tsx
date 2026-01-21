@@ -26,7 +26,7 @@ export default function GitHubStarsButton({ className = '', mobile = false }: Gi
 
   useEffect(() => {
     fetch('/api/github-stars')
-      .then(res => res.json())
+      .then(res => res.json() as Promise<{ stars: number | null }>)
       .then(data => {
         if (data.stars !== null) {
           setStars(data.stars)

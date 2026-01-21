@@ -127,18 +127,6 @@ export default function Layout({ children }: LayoutProps) {
             {/* Desktop external links */}
             <div className="hidden md:flex md:items-center md:space-x-4">
               <a
-                href="https://www.producthunt.com/products/drizzle-cube?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-drizzle&#0045;cube"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:opacity-80 transition-opacity"
-              >
-                <img
-                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1010277&theme=light&t=1756439665876"
-                  alt="Drizzle Cube - Embeddable analytics for your SaaS - Open Source & MIT | Product Hunt"
-                  className="h-8"
-                />
-              </a>
-              <a
                 href="https://www.drizzle-cube.dev"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -235,20 +223,6 @@ export default function Layout({ children }: LayoutProps) {
 
               {/* Mobile external links */}
               <div className="border-t border-dc-border pt-4 pb-3">
-                <div className="px-3 pb-2">
-                  <a
-                    href="https://www.producthunt.com/products/drizzle-cube?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-drizzle&#0045;cube"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block hover:opacity-80 transition-opacity"
-                  >
-                    <img
-                      src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1010277&theme=light&t=1756439665876"
-                      alt="Drizzle Cube - Embeddable analytics for your SaaS - Open Source & MIT | Product Hunt"
-                      className="h-10"
-                    />
-                  </a>
-                </div>
                 <div className="space-y-1">
                   <a
                     href="https://www.drizzle-cube.dev"
