@@ -2,7 +2,10 @@ import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import {
   BookOpenIcon,
-  CheckIcon
+  CheckIcon,
+  SparklesIcon,
+  LinkIcon,
+  BoltIcon
 } from '@heroicons/react/24/outline'
 import PageHead from '../components/PageHead'
 import GitHubStarsButton from '../components/GitHubStarsButton'
@@ -51,8 +54,11 @@ function loadPrism(): Promise<void> {
   })
 }
 
+type AITool = 'claude-desktop' | 'claude-web' | 'chatgpt' | 'n8n'
+
 export default function HomePage() {
   const [theme, setTheme] = useState<Theme>('light')
+  const [activeAITool, setActiveAITool] = useState<AITool>('claude-desktop')
 
   // Load and apply Prism.js syntax highlighting
   useEffect(() => {
@@ -66,6 +72,19 @@ export default function HomePage() {
       }, 0)
     })
   }, [])
+
+  // Re-apply Prism highlighting when AI tool tab changes
+  useEffect(() => {
+    setTimeout(() => {
+      try {
+        if ((window as any).Prism) {
+          ;(window as any).Prism.highlightAll()
+        }
+      } catch (error) {
+        // Silently fail if Prism encounters an error
+      }
+    }, 0)
+  }, [activeAITool])
 
   // Watch for theme changes
   useEffect(() => {
@@ -108,12 +127,12 @@ export default function HomePage() {
           </div>
 
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-dc-text-secondary mb-6">
-            Add self-service analytics to your platform <span className="text-dc-primary">in hours, not months</span>
+            Add self-service analytics and agentic workflow data access to your platform <span className="text-dc-primary">in hours, not months</span>
           </h2>
 
           <p className="text-base sm:text-lg text-dc-text-muted max-w-2xl mx-auto leading-relaxed mb-8">
             Give your users powerful dashboards and insights using your existing Drizzle schema.
-            Zero new infrastructure. Multi-tenant by default.
+            Zero new infrastructure. Multi-tenant by default. <span className="text-dc-text font-medium">AI-ready out of the box.</span>
           </p>
 
           {/* CTA Buttons */}
@@ -130,6 +149,13 @@ export default function HomePage() {
             >
               Try Analysis Builder
             </Link>
+            <a
+              href="#ai-ready"
+              className="w-full sm:w-auto px-8 py-3 bg-dc-accent hover:bg-dc-accent-hover text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+            >
+              <SparklesIcon className="w-5 h-5" />
+              Enable AI Agents
+            </a>
           </div>
 
           {/* Secondary links row */}
@@ -232,26 +258,30 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
           <div className="bg-dc-surface rounded-lg shadow-md p-4 sm:p-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-dc-text mb-3 sm:mb-4">Why Embed Analytics?</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-dc-text mb-3 sm:mb-4">Why Add a Semantic Layer?</h2>
             <p className="text-dc-text-muted mb-3 sm:mb-4 text-sm sm:text-base leading-relaxed">
-              Turn your platform into a data-driven powerhouse. Embed sophisticated analytics directly into your application to increase user engagement, reduce churn, and drive revenue growth.
+              A semantic layer decouples your analytics from raw database schemas. Define business metrics once, then access them via dashboards, APIs, or AI agents—all with consistent definitions and built-in security.
             </p>
             <ul className="text-sm text-dc-text-muted space-y-2">
               <li className="flex items-start">
                 <span className="text-dc-success mr-2 mt-0.5 shrink-0">✓</span>
-                <span><strong>Zero infrastructure setup</strong> - Uses your existing database</span>
+                <span><strong>Natural language ready</strong> - AI agents query your data using business terms</span>
               </li>
               <li className="flex items-start">
                 <span className="text-dc-success mr-2 mt-0.5 shrink-0">✓</span>
-                <span><strong>Seamless integration</strong> - Embed in any React application</span>
+                <span><strong>Single source of truth</strong> - Define metrics once, use everywhere</span>
               </li>
               <li className="flex items-start">
                 <span className="text-dc-success mr-2 mt-0.5 shrink-0">✓</span>
-                <span><strong>Multi-tenant by design</strong> - Secure data isolation built-in</span>
+                <span><strong>Decoupled from schema</strong> - Change your database without breaking analytics</span>
               </li>
               <li className="flex items-start">
                 <span className="text-dc-success mr-2 mt-0.5 shrink-0">✓</span>
-                <span><strong>Developer-friendly</strong> - Type-safe with Drizzle ORM</span>
+                <span><strong>Multi-tenant security</strong> - Row-level isolation enforced at the semantic layer</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-dc-success mr-2 mt-0.5 shrink-0">✓</span>
+                <span><strong>AI workflow integration</strong> - Connect Claude, ChatGPT, or custom agents directly</span>
               </li>
             </ul>
           </div>
@@ -418,7 +448,7 @@ app.route('/', cubeApp) // Done!`}
                 </h4>
                 <div className="border border-dc-border rounded-lg text-xs bg-dc-surface-secondary overflow-x-auto">
                   <pre className="language-json text-dc-text-secondary p-3 bg-dc-surface-secondary min-w-0"><code className="language-json">
-{`GET https://your.application.com/cubejs-api/v1/load?query=
+{`GET https://try.drizzle-cube.dev/cubejs-api/v1/load?query=
 
 {
   "measures": [
@@ -460,6 +490,261 @@ app.route('/', cubeApp) // Done!`}
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* AI-Ready Data Layer Section */}
+        <div id="ai-ready" className="mt-12 sm:mt-16 mb-12 sm:mb-16 scroll-mt-8">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 dark:from-purple-500/20 dark:to-pink-500/20 border border-purple-200 dark:border-purple-800 rounded-full px-4 py-2 mb-4">
+              <SparklesIcon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+              <span className="text-sm font-medium text-purple-700 dark:text-purple-300">AI-Ready Data Layer</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-dc-text mb-3">
+              Enable AI Agents in Your Customer's Workflow
+            </h2>
+            <p className="text-dc-text-secondary max-w-2xl mx-auto">
+              Your customers can connect Claude, ChatGPT, or any AI agent directly to your application's analytics.
+              Natural language queries against your semantic layer—secure, multi-tenant, and ready out of the box.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {/* MCP Endpoints Card */}
+            <div className="bg-dc-surface border border-dc-border rounded-xl p-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                  <LinkIcon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-dc-text">Built-in MCP Endpoints</h3>
+              </div>
+              <p className="text-sm text-dc-text-secondary mb-4">
+                Three endpoints enable AI agents to discover, query, and validate against your data:
+              </p>
+              <div className="space-y-3">
+                <div className="bg-dc-bg rounded-lg p-3 border border-dc-border">
+                  <code className="text-sm font-mono text-purple-600 dark:text-purple-400">POST /mcp/discover</code>
+                  <p className="text-xs text-dc-text-muted mt-1">AI agents find relevant data cubes based on user intent</p>
+                </div>
+                <div className="bg-dc-bg rounded-lg p-3 border border-dc-border">
+                  <code className="text-sm font-mono text-green-600 dark:text-green-400">POST /mcp/suggest</code>
+                  <p className="text-xs text-dc-text-muted mt-1">Natural language translated to structured analytics queries</p>
+                </div>
+                <div className="bg-dc-bg rounded-lg p-3 border border-dc-border">
+                  <code className="text-sm font-mono text-blue-600 dark:text-blue-400">POST /mcp/validate</code>
+                  <p className="text-xs text-dc-text-muted mt-1">Query validation with automatic error correction suggestions</p>
+                </div>
+              </div>
+            </div>
+
+            {/* How It Works Card */}
+            <div className="bg-dc-surface border border-dc-border rounded-xl p-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                  <BoltIcon className="w-5 h-5 text-green-600 dark:text-green-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-dc-text">How AI Integration Works</h3>
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-xs font-bold text-purple-600 dark:text-purple-400">1</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-dc-text">Semantic Metadata</p>
+                    <p className="text-xs text-dc-text-muted">Your cubes include descriptions, synonyms, and example questions that help AI understand your data model</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-xs font-bold text-purple-600 dark:text-purple-400">2</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-dc-text">Natural Language Understanding</p>
+                    <p className="text-xs text-dc-text-muted">AI agents translate user questions like "Show me sales by region" into structured queries</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-xs font-bold text-purple-600 dark:text-purple-400">3</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-dc-text">Secure Multi-Tenant Execution</p>
+                    <p className="text-xs text-dc-text-muted">Every query runs through your security context—customers only see their own data</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Connect AI Tools - Tabbed Interface */}
+          <div className="bg-dc-surface border border-dc-border rounded-xl p-6 shadow-md">
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-dc-text mb-2">Connect AI Tools to Your App</h3>
+              <p className="text-sm text-dc-text-secondary">Your customers can connect their favorite AI tools directly to your application's analytics</p>
+            </div>
+
+            {/* Tab Buttons */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              <button
+                onClick={() => setActiveAITool('claude-desktop')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                  activeAITool === 'claude-desktop'
+                    ? 'bg-dc-primary text-white shadow-md'
+                    : 'bg-dc-surface-secondary text-dc-text-secondary hover:bg-dc-surface-hover border border-dc-border'
+                }`}
+              >
+                {/* Claude Icon */}
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/>
+                </svg>
+                Claude Desktop
+              </button>
+              <button
+                onClick={() => setActiveAITool('claude-web')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                  activeAITool === 'claude-web'
+                    ? 'bg-dc-primary text-white shadow-md'
+                    : 'bg-dc-surface-secondary text-dc-text-secondary hover:bg-dc-surface-hover border border-dc-border'
+                }`}
+              >
+                {/* Claude Icon */}
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/>
+                </svg>
+                Claude.ai
+              </button>
+              <button
+                onClick={() => setActiveAITool('chatgpt')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                  activeAITool === 'chatgpt'
+                    ? 'bg-dc-primary text-white shadow-md'
+                    : 'bg-dc-surface-secondary text-dc-text-secondary hover:bg-dc-surface-hover border border-dc-border'
+                }`}
+              >
+                {/* OpenAI/ChatGPT Icon */}
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0l-4.83-2.786A4.504 4.504 0 0 1 2.34 7.872zm16.597 3.855l-5.833-3.387L15.119 7.2a.076.076 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.105v-5.678a.79.79 0 0 0-.407-.667zm2.01-3.023l-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.83-2.787a4.5 4.5 0 0 1 6.68 4.66zm-12.64 4.135l-2.02-1.164a.08.08 0 0 1-.038-.057V6.075a4.5 4.5 0 0 1 7.375-3.453l-.142.08L8.704 5.46a.795.795 0 0 0-.393.681zm1.097-2.365l2.602-1.5 2.607 1.5v2.999l-2.597 1.5-2.607-1.5z"/>
+                </svg>
+                ChatGPT
+              </button>
+              <button
+                onClick={() => setActiveAITool('n8n')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                  activeAITool === 'n8n'
+                    ? 'bg-dc-primary text-white shadow-md'
+                    : 'bg-dc-surface-secondary text-dc-text-secondary hover:bg-dc-surface-hover border border-dc-border'
+                }`}
+              >
+                {/* n8n Icon */}
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M21.4737 5.6842c-1.1772 0-2.1663.8051-2.4468 1.8947h-2.8955c-1.235 0-2.289.893-2.492 2.111l-.1038.623a1.263 1.263 0 0 1-1.246 1.0555H11.289c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947s-2.1663.8051-2.4467 1.8947H4.973c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947C1.1311 9.4737 0 10.6047 0 12s1.131 2.5263 2.5263 2.5263c1.1772 0 2.1663-.8051 2.4468-1.8947h1.4223c.2804 1.0896 1.2696 1.8947 2.4467 1.8947 1.1772 0 2.1663-.8051 2.4468-1.8947h1.0008a1.263 1.263 0 0 1 1.2459 1.0555l.1038.623c.203 1.218 1.257 2.111 2.492 2.111h.3692c.2804 1.0895 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263c-1.1772 0-2.1664.805-2.4468 1.8947h-.3692a1.263 1.263 0 0 1-1.246-1.0555l-.1037-.623A2.52 2.52 0 0 0 13.9607 12a2.52 2.52 0 0 0 .821-1.4794l.1038-.623a1.263 1.263 0 0 1 1.2459-1.0555h2.8955c.2805 1.0896 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263m0 1.2632a1.263 1.263 0 0 1 1.2631 1.2631 1.263 1.263 0 0 1-1.2631 1.2632 1.263 1.263 0 0 1-1.2632-1.2632 1.263 1.263 0 0 1 1.2632-1.2631M2.5263 10.7368A1.263 1.263 0 0 1 3.7895 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 1.2632 12a1.263 1.263 0 0 1 1.2631-1.2632m6.3158 0A1.263 1.263 0 0 1 10.1053 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 7.579 12a1.263 1.263 0 0 1 1.2632-1.2632m10.1053 3.7895a1.263 1.263 0 0 1 1.2631 1.2632 1.263 1.263 0 0 1-1.2631 1.2631 1.263 1.263 0 0 1-1.2632-1.2631 1.263 1.263 0 0 1 1.2632-1.2632"/>
+                </svg>
+                n8n
+              </button>
+            </div>
+
+            {/* Tab Content */}
+            <div className="bg-dc-surface-secondary rounded-lg border border-dc-border overflow-hidden">
+              {/* Claude Desktop */}
+              {activeAITool === 'claude-desktop' && (
+                <div className="p-4">
+                  <p className="text-sm text-dc-text-secondary mb-3">
+                    Add this to your Claude Desktop <code className="text-dc-primary bg-dc-primary/10 px-1.5 py-0.5 rounded font-mono text-xs">claude_desktop_config.json</code>:
+                  </p>
+                  <div className="bg-dc-surface rounded-lg p-4 border border-dc-border overflow-x-auto">
+                    <pre className="text-sm font-mono text-dc-text-secondary whitespace-pre"><code className="language-json">{`{
+  "mcpServers": {
+    "your-app-analytics": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-remote", "https://try.drizzle-cube.dev/mcp"]
+    }
+  }
+}`}</code></pre>
+                  </div>
+                </div>
+              )}
+
+              {/* Claude.ai Web */}
+              {activeAITool === 'claude-web' && (
+                <div className="p-4">
+                  <p className="text-sm text-dc-text-secondary mb-3">
+                    Connect via MCP in Claude.ai Projects using the remote MCP server:
+                  </p>
+                  <div className="bg-dc-surface rounded-lg p-4 border border-dc-border overflow-x-auto">
+                    <pre className="text-sm font-mono text-dc-text-secondary whitespace-pre"><code>{`Server URL: https://try.drizzle-cube.dev/mcp
+
+Available tools:
+• discover - Find relevant data cubes
+• suggest  - Generate queries from natural language
+• validate - Check and fix query errors`}</code></pre>
+                  </div>
+                  <p className="text-xs text-dc-text-muted mt-3">
+                    See <a href="https://docs.anthropic.com/en/docs/build-with-claude/mcp" target="_blank" rel="noopener noreferrer" className="text-dc-primary hover:underline">Anthropic's MCP documentation</a> for setup instructions.
+                  </p>
+                </div>
+              )}
+
+              {/* ChatGPT */}
+              {activeAITool === 'chatgpt' && (
+                <div className="p-4">
+                  <p className="text-sm text-dc-text-secondary mb-3">
+                    Create a Custom GPT with Actions pointing to your MCP endpoints:
+                  </p>
+                  <div className="bg-dc-surface rounded-lg p-4 border border-dc-border overflow-x-auto">
+                    <pre className="text-sm font-mono text-dc-text-secondary whitespace-pre"><code className="language-yaml">{`openapi: 3.0.0
+info:
+  title: Your App Analytics API
+  version: 1.0.0
+servers:
+  - url: https://try.drizzle-cube.dev
+paths:
+  /mcp/discover:
+    post:
+      operationId: discoverCubes
+      summary: Find relevant data cubes
+  /mcp/suggest:
+    post:
+      operationId: suggestQuery
+      summary: Generate query from natural language
+  /cubejs-api/v1/load:
+    post:
+      operationId: executeQuery
+      summary: Execute analytics query`}</code></pre>
+                  </div>
+                </div>
+              )}
+
+              {/* n8n */}
+              {activeAITool === 'n8n' && (
+                <div className="p-4">
+                  <p className="text-sm text-dc-text-secondary mb-3">
+                    Use HTTP Request nodes to integrate with your AI workflows:
+                  </p>
+                  <div className="bg-dc-surface rounded-lg p-4 border border-dc-border overflow-x-auto">
+                    <pre className="text-sm font-mono text-dc-text-secondary whitespace-pre"><code className="language-json">{`// n8n HTTP Request Node Configuration
+{
+  "method": "POST",
+  "url": "https://try.drizzle-cube.dev/mcp/suggest",
+  "headers": {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer {{ $credentials.apiKey }}"
+  },
+  "body": {
+    "naturalLanguage": "{{ $json.userQuestion }}"
+  }
+}`}</code></pre>
+                  </div>
+                  <p className="text-xs text-dc-text-muted mt-3">
+                    Chain with an AI node to let users ask questions in natural language, then execute the suggested query.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <p className="text-sm text-dc-text-muted mt-4">
+              <strong className="text-dc-text">The result:</strong> Your customers ask their AI "What were our top products last month?" and get answers directly from your application's data—no extra infrastructure, no separate BI tool, just AI-powered analytics embedded in their workflow.
+            </p>
           </div>
         </div>
 
