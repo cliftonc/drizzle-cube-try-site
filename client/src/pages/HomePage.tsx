@@ -510,29 +510,29 @@ app.route('/', cubeApp) // Done!`}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            {/* MCP Endpoints Card */}
+            {/* MCP Tools Card */}
             <div className="bg-dc-surface border border-dc-border rounded-xl p-6">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
                   <LinkIcon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-dc-text">Built-in MCP Endpoints</h3>
+                <h3 className="text-lg font-semibold text-dc-text">Built-in MCP Tools</h3>
               </div>
               <p className="text-sm text-dc-text-secondary mb-4">
-                Three endpoints enable AI agents to discover, query, and validate against your data:
+                The MCP server exposes tools that let AI agents query your semantic layer:
               </p>
               <div className="space-y-3">
                 <div className="bg-dc-bg rounded-lg p-3 border border-dc-border">
-                  <code className="text-sm font-mono text-purple-600 dark:text-purple-400">POST /mcp/discover</code>
-                  <p className="text-xs text-dc-text-muted mt-1">AI agents find relevant data cubes based on user intent</p>
+                  <code className="text-sm font-mono text-purple-600 dark:text-purple-400">drizzle_cube_discover</code>
+                  <p className="text-xs text-dc-text-muted mt-1">Find relevant cubes based on topic or intent with relevance scores</p>
                 </div>
                 <div className="bg-dc-bg rounded-lg p-3 border border-dc-border">
-                  <code className="text-sm font-mono text-green-600 dark:text-green-400">POST /mcp/suggest</code>
-                  <p className="text-xs text-dc-text-muted mt-1">Natural language translated to structured analytics queries</p>
+                  <code className="text-sm font-mono text-green-600 dark:text-green-400">drizzle_cube_validate</code>
+                  <p className="text-xs text-dc-text-muted mt-1">Validate queries and get auto-corrections for any issues</p>
                 </div>
                 <div className="bg-dc-bg rounded-lg p-3 border border-dc-border">
-                  <code className="text-sm font-mono text-blue-600 dark:text-blue-400">POST /mcp/validate</code>
-                  <p className="text-xs text-dc-text-muted mt-1">Query validation with automatic error correction suggestions</p>
+                  <code className="text-sm font-mono text-blue-600 dark:text-blue-400">drizzle_cube_load</code>
+                  <p className="text-xs text-dc-text-muted mt-1">Execute validated queries and return results</p>
                 </div>
               </div>
             </div>
@@ -551,8 +551,8 @@ app.route('/', cubeApp) // Done!`}
                     <span className="text-xs font-bold text-purple-600 dark:text-purple-400">1</span>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-dc-text">Semantic Metadata</p>
-                    <p className="text-xs text-dc-text-muted">Your cubes include descriptions, synonyms, and example questions that help AI understand your data model</p>
+                    <p className="text-sm font-medium text-dc-text">Rich Semantic Metadata</p>
+                    <p className="text-xs text-dc-text-muted">AI agents fetch cube metadata with descriptions, relationships, and measure/dimension definitions</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
@@ -560,8 +560,8 @@ app.route('/', cubeApp) // Done!`}
                     <span className="text-xs font-bold text-purple-600 dark:text-purple-400">2</span>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-dc-text">Natural Language Understanding</p>
-                    <p className="text-xs text-dc-text-muted">AI agents translate user questions like "Show me sales by region" into structured queries</p>
+                    <p className="text-sm font-medium text-dc-text">Cross-Cube Query Building</p>
+                    <p className="text-xs text-dc-text-muted">AI builds queries that span multiple cubes—joins are handled automatically by the semantic layer</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
@@ -577,15 +577,18 @@ app.route('/', cubeApp) // Done!`}
             </div>
           </div>
 
-          {/* Connect AI Tools - Tabbed Interface */}
+          {/* Connect AI Tools - Tabbed Interface with Screenshot */}
           <div className="bg-dc-surface border border-dc-border rounded-xl p-6 shadow-md">
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold text-dc-text mb-2">Connect AI Tools to Your App</h3>
-              <p className="text-sm text-dc-text-secondary">Your customers can connect their favorite AI tools directly to your application's analytics</p>
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Left side - Tabs and content */}
+              <div>
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-dc-text mb-2">Connect AI Tools to Your App</h3>
+                  <p className="text-sm text-dc-text-secondary">Your customers can connect their favorite AI tools directly to your application's analytics</p>
+                </div>
 
-            {/* Tab Buttons */}
-            <div className="flex flex-wrap gap-2 mb-6">
+                {/* Tab Buttons */}
+                <div className="flex flex-wrap gap-2 mb-6">
               <button
                 onClick={() => setActiveAITool('claude-desktop')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
@@ -669,18 +672,18 @@ app.route('/', cubeApp) // Done!`}
               {activeAITool === 'claude-web' && (
                 <div className="p-4">
                   <p className="text-sm text-dc-text-secondary mb-3">
-                    Connect via MCP in Claude.ai Projects using the remote MCP server:
+                    Add as a Connector in Claude.ai to enable analytics tools:
                   </p>
                   <div className="bg-dc-surface rounded-lg p-4 border border-dc-border overflow-x-auto">
                     <pre className="text-sm font-mono text-dc-text-secondary whitespace-pre"><code>{`Server URL: https://try.drizzle-cube.dev/mcp
 
 Available tools:
-• discover - Find relevant data cubes
-• suggest  - Generate queries from natural language
-• validate - Check and fix query errors`}</code></pre>
+• drizzle_cube_discover - Find relevant cubes by topic/intent
+• drizzle_cube_validate - Validate queries with auto-corrections
+• drizzle_cube_load     - Execute queries and return results`}</code></pre>
                   </div>
                   <p className="text-xs text-dc-text-muted mt-3">
-                    See <a href="https://docs.anthropic.com/en/docs/build-with-claude/mcp" target="_blank" rel="noopener noreferrer" className="text-dc-primary hover:underline">Anthropic's MCP documentation</a> for setup instructions.
+                    Go to Settings → Connectors → Add Connector to connect the MCP server.
                   </p>
                 </div>
               )}
@@ -689,29 +692,19 @@ Available tools:
               {activeAITool === 'chatgpt' && (
                 <div className="p-4">
                   <p className="text-sm text-dc-text-secondary mb-3">
-                    Create a Custom GPT with Actions pointing to your MCP endpoints:
+                    Enable Developer Mode to add MCP connectors in ChatGPT:
                   </p>
                   <div className="bg-dc-surface rounded-lg p-4 border border-dc-border overflow-x-auto">
-                    <pre className="text-sm font-mono text-dc-text-secondary whitespace-pre"><code className="language-yaml">{`openapi: 3.0.0
-info:
-  title: Your App Analytics API
-  version: 1.0.0
-servers:
-  - url: https://try.drizzle-cube.dev
-paths:
-  /mcp/discover:
-    post:
-      operationId: discoverCubes
-      summary: Find relevant data cubes
-  /mcp/suggest:
-    post:
-      operationId: suggestQuery
-      summary: Generate query from natural language
-  /cubejs-api/v1/load:
-    post:
-      operationId: executeQuery
-      summary: Execute analytics query`}</code></pre>
+                    <pre className="text-sm font-mono text-dc-text-secondary whitespace-pre"><code>{`Server URL: https://try.drizzle-cube.dev/mcp
+
+Available tools:
+• drizzle_cube_discover - Find relevant cubes by topic/intent
+• drizzle_cube_validate - Validate queries with auto-corrections
+• drizzle_cube_load     - Execute queries and return results`}</code></pre>
                   </div>
+                  <p className="text-xs text-dc-text-muted mt-3">
+                    Go to Settings → Connectors → Advanced → Developer Mode to add the MCP server.
+                  </p>
                 </div>
               )}
 
@@ -719,27 +712,37 @@ paths:
               {activeAITool === 'n8n' && (
                 <div className="p-4">
                   <p className="text-sm text-dc-text-secondary mb-3">
-                    Use HTTP Request nodes to integrate with your AI workflows:
+                    Use the n8n MCP Client node to connect to the Drizzle Cube MCP server:
                   </p>
                   <div className="bg-dc-surface rounded-lg p-4 border border-dc-border overflow-x-auto">
-                    <pre className="text-sm font-mono text-dc-text-secondary whitespace-pre"><code className="language-json">{`// n8n HTTP Request Node Configuration
-{
-  "method": "POST",
-  "url": "https://try.drizzle-cube.dev/mcp/suggest",
-  "headers": {
-    "Content-Type": "application/json",
-    "Authorization": "Bearer {{ $credentials.apiKey }}"
-  },
-  "body": {
-    "naturalLanguage": "{{ $json.userQuestion }}"
-  }
-}`}</code></pre>
+                    <pre className="text-sm font-mono text-dc-text-secondary whitespace-pre"><code>{`MCP Server URL: https://try.drizzle-cube.dev/mcp
+
+Available tools in your workflow:
+• drizzle_cube_discover - Find relevant cubes
+• drizzle_cube_validate - Validate queries
+• drizzle_cube_load     - Execute queries
+
+Workflow: AI Agent → MCP Client → Your Analytics`}</code></pre>
                   </div>
                   <p className="text-xs text-dc-text-muted mt-3">
-                    Chain with an AI node to let users ask questions in natural language, then execute the suggested query.
+                    See <a href="https://docs.n8n.io/integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.mcpclienttool/" target="_blank" rel="noopener noreferrer" className="text-dc-primary hover:underline">n8n MCP Client documentation</a> for setup instructions.
                   </p>
                 </div>
               )}
+            </div>
+
+              </div>
+
+              {/* Right side - Screenshot */}
+              <div className="hidden md:flex items-center justify-center">
+                <div className="rounded-lg overflow-hidden shadow-lg border border-dc-border max-w-md">
+                  <img
+                    src="/claude_mcp.png"
+                    alt="Claude using Drizzle Cube MCP tools to analyze employee pull requests"
+                    className="w-full h-auto"
+                  />
+                </div>
+              </div>
             </div>
 
             <p className="text-sm text-dc-text-muted mt-4">
