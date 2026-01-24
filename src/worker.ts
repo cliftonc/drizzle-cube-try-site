@@ -183,6 +183,7 @@ cubeApiApp.use('*', async (c) => {
 
 // Mount the cube API routes
 app.route('/cubejs-api', cubeApiApp)
+app.route('/mcp', cubeApiApp)
 
 
 // API info endpoint
