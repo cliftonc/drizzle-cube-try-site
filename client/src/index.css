@@ -80,3 +80,70 @@ code {
     padding: 0.75rem;
   }
 }
+
+/* Print mode styles */
+.print-mode {
+  background: white !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.print-mode body {
+  background: white !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Print and PDF export styles */
+@media print {
+  /* Page setup - explicit dimensions matching Cloudflare pdfOptions */
+  @page {
+    size: 1832px 1100px;  /* Match Cloudflare pdfOptions to prevent right-side cutoff */
+    margin: 0;            /* Handle margins in content or pdfOptions */
+  }
+
+  /* Force white background for print */
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Override overflow:hidden which clips content */
+  .dashboard-grid-container,
+  .react-grid-layout {
+    overflow: visible !important;
+  }
+
+  /* Rows mode uses normal flow, so break-inside works */
+  [data-portlet-id] {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    -webkit-column-break-inside: avoid !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Hide elements that shouldn't appear in print */
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Print mode class - applied when ?print=true */
+.print-mode {
+  /* Override overflow:hidden which clips content */
+  .dashboard-grid-container,
+  .react-grid-layout {
+    overflow: visible !important;
+  }
+
+  /* Rows mode uses normal flow, so break-inside works */
+  [data-portlet-id] {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    -webkit-column-break-inside: avoid !important;
+    overflow: visible !important;
+  }
+}

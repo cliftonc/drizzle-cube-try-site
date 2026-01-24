@@ -12,3 +12,11 @@ NODE_ENV="development"
 
 MAX_GEMINI_CALLS=5
 GEMINI_API_KEY=AI....
+
+# PDF Export Configuration (required for Export PDF feature)
+# Get your account ID from: Cloudflare Dashboard > Account > Account ID
+CLOUDFLARE_ACCOUNT_ID="your-cloudflare-account-id"
+# Create an API token with Browser Rendering permissions
+CF_BROWSER_RENDERING_TOKEN="your-cloudflare-api-token"
+# Public URL of the deployed site (local dev won't work with Browser Rendering)
+PUBLIC_URL="https://your-site.pages.dev"

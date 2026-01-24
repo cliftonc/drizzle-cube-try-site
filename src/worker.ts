@@ -66,11 +66,18 @@ interface CloudflareEnv {
   CACHE?: KVNamespace  // KV binding for query result caching
   HYPERDRIVE?: Hyperdrive  // Hyperdrive binding for PostgreSQL connection pooling
   THUMBNAILS?: R2Bucket  // R2 binding for dashboard thumbnail storage
+  // PDF export configuration
+  CLOUDFLARE_ACCOUNT_ID?: string  // Cloudflare account ID for Browser Rendering API
+  CF_BROWSER_RENDERING_TOKEN?: string   // Cloudflare API token with Browser Rendering permissions
+  PUBLIC_URL?: string     // Public URL of deployed site (e.g., https://drizzle-cube.pages.dev)
 }
 
 interface Variables {
   db: DrizzleDatabase
   r2?: R2Bucket
+  cfAccountId?: string
+  cfApiToken?: string
+  publicUrl?: string
 }
 
 // Security context extractor - same as main app
@@ -202,10 +209,14 @@ app.get('/api', (c) => {
   })
 })
 
-// Mount analytics pages API with database and R2 access
+// Mount analytics pages API with database, R2, and PDF export configuration
 app.use('/api/analytics-pages/*', async (c, next) => {
   c.set('db', c.get('db'))
   c.set('r2', c.env.THUMBNAILS)
+  // PDF export configuration
+  c.set('cfAccountId', c.env.CLOUDFLARE_ACCOUNT_ID)
+  c.set('cfApiToken', c.env.CF_BROWSER_RENDERING_TOKEN)
+  c.set('publicUrl', c.env.PUBLIC_URL)
   await next()
 })
 app.route('/api/analytics-pages', analyticsApp)

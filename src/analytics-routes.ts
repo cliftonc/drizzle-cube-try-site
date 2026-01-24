@@ -13,6 +13,9 @@ interface Variables {
   db: DrizzleDatabase
   organisationId: number
   r2?: R2Bucket
+  cfAccountId?: string
+  cfApiToken?: string
+  publicUrl?: string
 }
 
 const analyticsApp = new Hono<{ Variables: Variables }>()
@@ -398,7 +401,7 @@ analyticsApp.delete('/:id', async (c) => {
   try {
     const deletedPage = await db
       .update(analyticsPages)
-      .set({ 
+      .set({
         isActive: false,
         updatedAt: new Date()
       })
@@ -418,6 +421,105 @@ analyticsApp.delete('/:id', async (c) => {
   } catch (error) {
     console.error('Error deleting analytics page:', error)
     return c.json({ error: 'Failed to delete analytics page' }, 500)
+  }
+})
+
+// Export dashboard to PDF using Cloudflare Browser Rendering API
+analyticsApp.post('/:id/export-pdf', async (c) => {
+  const db = c.get('db')
+  const organisationId = c.get('organisationId')
+  const cfAccountId = c.get('cfAccountId')
+  const cfApiToken = c.get('cfApiToken')
+  const publicUrl = c.get('publicUrl')
+  const id = parseInt(c.req.param('id'))
+
+  if (isNaN(id)) {
+    return c.json({ error: 'Invalid page ID' }, 400)
+  }
+
+  // Check for required environment variables
+  if (!cfAccountId || !cfApiToken || !publicUrl) {
+    console.error('PDF export requires CLOUDFLARE_ACCOUNT_ID, CF_BROWSER_RENDERING_TOKEN, and PUBLIC_URL environment variables')
+    return c.json({
+      error: 'PDF export is not configured. Missing required environment variables.'
+    }, 500)
+  }
+
+  try {
+    // Verify page exists
+    const page = await db
+      .select()
+      .from(analyticsPages)
+      .where(
+        and(
+          eq(analyticsPages.id, id),
+          eq(analyticsPages.organisationId, organisationId),
+          eq(analyticsPages.isActive, true)
+        )
+      )
+      .limit(1)
+
+    if (page.length === 0) {
+      return c.json({ error: 'Analytics page not found' }, 404)
+    }
+
+    const pageName = page[0].name
+
+    // Construct print URL
+    const printUrl = `${publicUrl}/dashboards/${id}?print=true`
+
+    // Call Cloudflare Browser Rendering API
+    // Use a wide viewport to match desktop dashboard layout (1600px for comfortable margin)
+    const response = await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/browser-rendering/pdf`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${cfApiToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          url: printUrl,
+          viewport: {
+            width: 1800,
+            height: 8000  // Very tall viewport so all portlets are "in view" for IntersectionObserver
+          },
+          pdfOptions: {
+            preferCSSPageSize: true,  // Let CSS @page control dimensions (fixes right-side cutoff)
+            width: '1832px',  // 1800 + 32px for padding (px-4 = 16px each side) - fallback
+            height: '1100px', // fallback
+            printBackground: true,
+            margin: { top: '0px', bottom: '0px', left: '0px', right: '0px' }
+          },
+          gotoOptions: {
+            waitUntil: 'networkidle0',
+            timeout: 30000
+          }
+        })
+      }
+    )
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('Cloudflare Browser Rendering API error:', response.status, errorText)
+      return c.json({
+        error: 'PDF generation failed',
+        details: response.status === 403 ? 'Invalid API token or insufficient permissions' : 'Browser Rendering API error'
+      }, 500)
+    }
+
+    const pdfBuffer = await response.arrayBuffer()
+
+    // Return PDF with download headers
+    return new Response(pdfBuffer, {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${pageName.replace(/[^a-zA-Z0-9\s-]/g, '')}-report.pdf"`
+      }
+    })
+  } catch (error) {
+    console.error('Error exporting PDF:', error)
+    return c.json({ error: 'Failed to export PDF' }, 500)
   }
 })
 

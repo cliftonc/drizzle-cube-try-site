@@ -19,6 +19,9 @@ import aiApp from './src/ai-routes'
 
 interface Variables {
   db: DrizzleDatabase
+  cfAccountId?: string
+  cfApiToken?: string
+  publicUrl?: string
 }
 
 // Environment detection - handle both Node.js and Cloudflare Workers
@@ -233,9 +236,13 @@ const cubeApp = createCubeApp({
 // Mount cube routes under the main app
 app.route('/', cubeApp)
 
-// Mount analytics pages API with database access
+// Mount analytics pages API with database and PDF export configuration
 app.use('/api/analytics-pages/*', async (c, next) => {
   c.set('db', db as DrizzleDatabase)
+  // PDF export configuration (from .env for Node.js)
+  c.set('cfAccountId', getEnvVar('CLOUDFLARE_ACCOUNT_ID'))
+  c.set('cfApiToken', getEnvVar('CF_BROWSER_RENDERING_TOKEN'))
+  c.set('publicUrl', getEnvVar('PUBLIC_URL'))
   await next()
 })
 app.route('/api/analytics-pages', analyticsApp)

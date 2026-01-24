@@ -68,11 +68,26 @@ export default function Layout({ children }: LayoutProps) {
     return true
   })
 
+  // Detect print mode from URL parameter
+  const searchParams = new URLSearchParams(location.search)
+  const isPrintMode = searchParams.get('print') === 'true'
+
   const isActive = (path: string) => {
     if (path === '/') {
       return location.pathname === '/'
     }
     return location.pathname.startsWith(path)
+  }
+
+  // In print mode, render minimal layout without nav and no width constraints
+  if (isPrintMode) {
+    return (
+      <div className="min-h-screen bg-white print-mode">
+        <main className="w-full px-4">
+          {children}
+        </main>
+      </div>
+    )
   }
 
   return (

@@ -1,9 +1,9 @@
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useLocation } from 'react-router-dom'
 import { useCallback, useState, useEffect, useRef } from 'react'
 import { AnalyticsDashboard, DashboardEditModal } from 'drizzle-cube/client'
 import { useAnalyticsPage, useUpdateAnalyticsPage, useResetAnalyticsPage } from '../hooks/useAnalyticsPages'
 import type { DashboardConfig } from '../types'
-import { ArrowPathIcon, PencilIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
+import { ArrowPathIcon, PencilIcon, EllipsisHorizontalIcon, DocumentArrowDownIcon, PrinterIcon } from '@heroicons/react/24/outline'
 import PageHead from '../components/PageHead'
 
 // Custom loading indicator using the drizzle-cube logo
@@ -20,6 +20,7 @@ const DrizzleCubeLoader = () => (
 
 export default function DashboardViewPage() {
   const { id } = useParams<{ id: string }>()
+  const location = useLocation()
   const { data: page, isLoading, error } = useAnalyticsPage(id!)
   const updatePage = useUpdateAnalyticsPage()
   const resetPage = useResetAnalyticsPage()
@@ -28,6 +29,11 @@ export default function DashboardViewPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [showOptionsMenu, setShowOptionsMenu] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
+
+  // Detect print mode from URL parameter
+  const searchParams = new URLSearchParams(location.search)
+  const isPrintMode = searchParams.get('print') === 'true'
 
   // Track if this is the initial load to prevent overwriting local edits
   const hasInitializedRef = useRef(false)
@@ -42,13 +48,17 @@ export default function DashboardViewPage() {
       const isPageChange = lastPageIdRef.current !== null && lastPageIdRef.current !== id
 
       if (isInitialLoad || isPageChange) {
-        setConfig(page.config)
+        // In print mode, set eagerLoad: true and use rows layout for proper page breaks
+        const configToSet = isPrintMode
+          ? { ...page.config, eagerLoad: true, layoutMode: 'rows' as const }
+          : page.config
+        setConfig(configToSet)
         setLastSaved(new Date(page.updatedAt))
         hasInitializedRef.current = true
         lastPageIdRef.current = id ?? null
       }
     }
-  }, [page, id])
+  }, [page, id, isPrintMode])
 
   // Close options menu when clicking outside
   useEffect(() => {
@@ -64,6 +74,22 @@ export default function DashboardViewPage() {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [showOptionsMenu])
+
+  // Force light theme in print mode
+  useEffect(() => {
+    if (isPrintMode) {
+      const originalTheme = document.documentElement.getAttribute('data-theme')
+      document.documentElement.setAttribute('data-theme', 'light')
+      document.body.classList.add('print-mode')
+
+      return () => {
+        if (originalTheme) {
+          document.documentElement.setAttribute('data-theme', originalTheme)
+        }
+        document.body.classList.remove('print-mode')
+      }
+    }
+  }, [isPrintMode])
 
   // Handle config changes (for local state)
   const handleConfigChange = useCallback((newConfig: DashboardConfig) => {
@@ -149,6 +175,40 @@ export default function DashboardViewPage() {
     }
   }, [id, resetPage])
 
+  // Handle PDF export
+  const handleExportPDF = useCallback(async () => {
+    if (!page || !id) return
+
+    setIsExporting(true)
+    try {
+      const response = await fetch(`/api/analytics-pages/${id}/export-pdf`, {
+        method: 'POST'
+      })
+
+      if (!response.ok) {
+        throw new Error('Export failed')
+      }
+
+      const blob = await response.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${page.name}-report.pdf`
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('PDF export failed:', error)
+      // TODO: Show error toast
+    } finally {
+      setIsExporting(false)
+    }
+  }, [page, id])
+
+  // Handle print - open print view in new tab
+  const handlePrint = useCallback(() => {
+    window.open(`${window.location.pathname}?print=true`, '_blank')
+  }, [])
+
   if (isLoading) {
     return (
       <div className="text-center py-8">
@@ -176,102 +236,147 @@ export default function DashboardViewPage() {
   }
 
   return (
-    <div>
+    <div className={isPrintMode ? 'print-mode' : ''}>
       <PageHead
         title={`${page.name} - Drizzle Cube`}
         description={page.description || 'View analytics dashboard'}
       />
-      <div className="mb-6">
-        <div>
-          <nav className="flex" aria-label="Breadcrumb">
-            <ol className="flex items-center space-x-4">
-              <li>
-                <Link to="/dashboards" className="text-dc-text-disabled hover:text-dc-text-muted text-sm">
-                  Dashboards
-                </Link>
-              </li>
-              <li>
-                <svg
-                  className="shrink-0 h-5 w-5 text-dc-border-secondary"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  aria-hidden="true"
+
+      {/* Print mode: Simple title with branding */}
+      {isPrintMode && (
+        <div className="mb-6 px-4 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold text-dc-text">{page.name}</h1>
+          <span className="text-sm text-dc-text-muted">Powered by Drizzle Cube</span>
+        </div>
+      )}
+
+      {/* Normal mode: Full header with breadcrumb, options, and demo box */}
+      {!isPrintMode && (
+        <div className="mb-6">
+          <div>
+            <nav className="flex" aria-label="Breadcrumb">
+              <ol className="flex items-center space-x-4">
+                <li>
+                  <Link to="/dashboards" className="text-dc-text-disabled hover:text-dc-text-muted text-sm">
+                    Dashboards
+                  </Link>
+                </li>
+                <li>
+                  <svg
+                    className="shrink-0 h-5 w-5 text-dc-border-secondary"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    aria-hidden="true"
+                  >
+                    <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+                  </svg>
+                </li>
+                <li>
+                  <span className="text-dc-text-muted text-sm truncate">{page.name}</span>
+                </li>
+              </ol>
+            </nav>
+
+            <div className="mt-2 flex items-start justify-between gap-4">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-xl sm:text-2xl font-semibold text-dc-text">{page.name}</h1>
+                {page.description && (
+                  <p className="mt-1 text-sm text-dc-text-muted leading-relaxed">{page.description}</p>
+                )}
+              </div>
+
+              {/* Print and Export buttons */}
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <button
+                  onClick={handlePrint}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md border border-dc-border bg-dc-surface text-dc-text hover:bg-dc-surface-hover"
+                  title="Open print view"
                 >
-                  <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
-                </svg>
-              </li>
-              <li>
-                <span className="text-dc-text-muted text-sm truncate">{page.name}</span>
-              </li>
-            </ol>
-          </nav>
+                  <PrinterIcon className="w-4 h-4" />
+                  Print
+                </button>
+                <button
+                  onClick={handleExportPDF}
+                  disabled={isExporting}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md bg-dc-primary text-dc-primary-content hover:bg-dc-primary-hover disabled:opacity-50"
+                  title="Export dashboard to PDF"
+                >
+                  {isExporting ? (
+                    <>
+                      <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <DocumentArrowDownIcon className="w-4 h-4" />
+                      Export PDF
+                    </>
+                  )}
+                </button>
+              </div>
 
-          <div className="mt-2 flex items-start justify-between gap-4">
-            <div className="flex-1 min-w-0">
-              <h1 className="text-xl sm:text-2xl font-semibold text-dc-text">{page.name}</h1>
-              {page.description && (
-                <p className="mt-1 text-sm text-dc-text-muted leading-relaxed">{page.description}</p>
-              )}
-            </div>
+              {/* Options menu */}
+              <div className="relative flex-shrink-0" data-options-menu>
+                <button
+                  onClick={() => setShowOptionsMenu(!showOptionsMenu)}
+                  className="p-2 border border-dc-border-secondary bg-dc-surface text-dc-text-muted hover:bg-dc-surface-hover focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 rounded-md"
+                  title="More options"
+                >
+                  <EllipsisHorizontalIcon className="w-5 h-5" />
+                </button>
 
-            {/* Options menu */}
-            <div className="relative flex-shrink-0" data-options-menu>
-              <button
-                onClick={() => setShowOptionsMenu(!showOptionsMenu)}
-                className="p-2 border border-dc-border-secondary bg-dc-surface text-dc-text-muted hover:bg-dc-surface-hover focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 rounded-md"
-                title="More options"
-              >
-                <EllipsisHorizontalIcon className="w-5 h-5" />
-              </button>
-
-              {showOptionsMenu && (
-                <div className="absolute right-0 top-full mt-1 w-48 bg-dc-surface border border-dc-border rounded-md shadow-lg z-50">
-                  <div className="py-1">
-                    <button
-                      onClick={() => {
-                        setIsEditModalOpen(true)
-                        setShowOptionsMenu(false)
-                      }}
-                      className="flex items-center gap-3 w-full px-4 py-2 text-sm text-dc-text-muted hover:bg-dc-surface-hover"
-                    >
-                      <PencilIcon className="w-4 h-4" />
-                      Edit Dashboard
-                    </button>
-                    <button
-                      onClick={() => {
-                        setShowResetConfirm(true)
-                        setShowOptionsMenu(false)
-                      }}
-                      className="flex items-center gap-3 w-full px-4 py-2 text-sm text-dc-text-muted hover:bg-dc-surface-hover"
-                    >
-                      <ArrowPathIcon className="w-4 h-4" />
-                      Reset Dashboard
-                    </button>
+                {showOptionsMenu && (
+                  <div className="absolute right-0 top-full mt-1 w-48 bg-dc-surface border border-dc-border rounded-md shadow-lg z-50">
+                    <div className="py-1">
+                      <button
+                        onClick={() => {
+                          setIsEditModalOpen(true)
+                          setShowOptionsMenu(false)
+                        }}
+                        className="flex items-center gap-3 w-full px-4 py-2 text-sm text-dc-text-muted hover:bg-dc-surface-hover"
+                      >
+                        <PencilIcon className="w-4 h-4" />
+                        Edit Dashboard
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowResetConfirm(true)
+                          setShowOptionsMenu(false)
+                        }}
+                        className="flex items-center gap-3 w-full px-4 py-2 text-sm text-dc-text-muted hover:bg-dc-surface-hover"
+                      >
+                        <ArrowPathIcon className="w-4 h-4" />
+                        Reset Dashboard
+                      </button>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
 
-          <div className="mt-4 px-4 py-3 bg-dc-info-bg border border-dc-info-border rounded-lg shadow-md">
-            <div className="flex items-start">
-              <span className="text-2xl mr-3">💡</span>
-              <div>
-                <p className="text-sm font-semibold text-dc-text">
-                  Demo Note
-                </p>
-                <p className="text-sm text-dc-text-secondary mt-1">
-                  This dashboard uses the <a href="https://www.drizzle-cube.dev/client/dashboards/" target="_blank" rel="noopener noreferrer" className="underline hover:text-dc-info"><code className="px-1 py-0.5 bg-dc-info-bg rounded text-xs font-mono">AnalyticsDashboard</code></a> component from drizzle-cube/client. It includes drag-and-drop, auto-save, and real-time updates. These dashboards are limited to 20 portlets, in your implementation this limit does not need to apply.
-                </p>
+            <div className="mt-4 px-4 py-3 bg-dc-info-bg border border-dc-info-border rounded-lg shadow-md">
+              <div className="flex items-start">
+                <span className="text-2xl mr-3">💡</span>
+                <div>
+                  <p className="text-sm font-semibold text-dc-text">
+                    Demo Note
+                  </p>
+                  <p className="text-sm text-dc-text-secondary mt-1">
+                    This dashboard uses the <a href="https://www.drizzle-cube.dev/client/dashboards/" target="_blank" rel="noopener noreferrer" className="underline hover:text-dc-info"><code className="px-1 py-0.5 bg-dc-info-bg rounded text-xs font-mono">AnalyticsDashboard</code></a> component from drizzle-cube/client. It includes drag-and-drop, auto-save, and real-time updates. These dashboards are limited to 20 portlets, in your implementation this limit does not need to apply.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       <AnalyticsDashboard
         config={config}
-        editable={true}
+        editable={!isPrintMode}
         onConfigChange={handleConfigChange}
         onSave={handleSave}
         onSaveThumbnail={handleSaveThumbnail}
