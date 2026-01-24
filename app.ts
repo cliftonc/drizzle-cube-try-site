@@ -307,10 +307,13 @@ app.get('/api/user-info', async (c) => {
 // Error handling
 app.onError((err, c) => {
   console.error('Application error:', err)
-  
+
+  // Use safe check for process.env to support edge runtimes (Cloudflare Workers, etc.)
+  const isDevelopment = typeof process !== 'undefined' && process.env?.NODE_ENV === 'development'
+
   return c.json({
     error: 'Internal server error',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
+    message: isDevelopment ? err.message : 'Something went wrong'
   }, 500)
 })
 
