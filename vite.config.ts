@@ -16,6 +16,10 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3459',
         changeOrigin: true
+      },
+      '/mcp': {
+        target: 'http://localhost:3459',
+        changeOrigin: true
       }
     }
   },
