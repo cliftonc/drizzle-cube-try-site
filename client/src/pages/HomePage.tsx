@@ -127,7 +127,7 @@ export default function HomePage() {
           </div>
 
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-dc-text-secondary mb-6">
-            Add self-service analytics and agentic workflow data access to your platform <span className="text-dc-primary">in hours, not months</span>
+            <span className="text-dc-success">Self-service analytics.</span> <span className="text-dc-info">AI agentic data access.</span><br />Add both to your platform in hours, not months. MIT Licensed.
           </h2>
 
           <p className="text-base sm:text-lg text-dc-text-muted max-w-2xl mx-auto leading-relaxed mb-8">
