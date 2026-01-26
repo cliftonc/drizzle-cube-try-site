@@ -3,7 +3,6 @@
 @import 'drizzle-cube/client/styles.css';
 /* Import theme variables for three-theme system (light, dark, neon) */
 @import './theme/variables.css';
-@source "../../node_modules/drizzle-cube/dist/client";
 
 @config "../tailwind.config.js";
 
