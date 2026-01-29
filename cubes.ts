@@ -69,6 +69,14 @@ employeesCube = defineCube('Employees', {
     }
   },
 
+  hierarchies: {
+    location: {
+      name: 'location',
+      title: 'Geographic Location',
+      levels: ['country', 'region', 'city']
+    }
+  },
+
   dimensions: {
     id: {
       name: 'id',
@@ -145,7 +153,8 @@ employeesCube = defineCube('Employees', {
       name: 'count',
       title: 'Total Employees',
       type: 'countDistinct',
-      sql: employees.id
+      sql: employees.id,
+      drillMembers: ['Employees.name', 'Employees.email', 'Employees.isActive', 'Departments.name']
     },
     activeCount: {
       name: 'activeCount',
@@ -154,20 +163,23 @@ employeesCube = defineCube('Employees', {
       sql: employees.id,
       filters: [
         () => eq(employees.active, true)
-      ]
+      ],
+      drillMembers: ['Employees.name', 'Employees.email', 'Departments.name']
     },
     totalSalary: {
       name: 'totalSalary',
       title: 'Total Salary',
       type: 'sum',
-      sql: employees.salary
+      sql: employees.salary,
+      drillMembers: ['Employees.name', 'Departments.name', 'Employees.city']
     },
     avgSalary: {
       name: 'avgSalary',
       title: 'Average Salary',
       type: 'avg',
       sql: employees.salary,
-      format: 'currency'
+      format: 'currency',
+      drillMembers: ['Employees.name', 'Departments.name', 'Employees.city']
     },
     // Statistical measures
     medianSalary: {
@@ -252,19 +264,22 @@ departmentsCube = defineCube('Departments', {
       name: 'count',
       title: 'Department Count',
       type: 'countDistinct',
-      sql: departments.id
+      sql: departments.id,
+      drillMembers: ['Departments.name']
     },
     totalBudget: {
       name: 'totalBudget',
       title: 'Total Budget',
       type: 'sum',
-      sql: departments.budget
+      sql: departments.budget,
+      drillMembers: ['Departments.name']
     },
     avgBudget: {
       name: 'avgBudget',
       title: 'Average Budget',
       type: 'avg',
-      sql: departments.budget
+      sql: departments.budget,
+      drillMembers: ['Departments.name']
     }
   }
 }) as Cube
@@ -298,7 +313,15 @@ productivityCube = defineCube('Productivity', {
       ]
     }
   },
-  
+
+  hierarchies: {
+    happinessHierarchy: {
+      name: 'happinessHierarchy',
+      title: 'Happiness Breakdown',
+      levels: ['happinessLevel', 'happinessIndex']
+    }
+  },
+
   dimensions: {
     id: {
       name: 'id',
@@ -306,7 +329,7 @@ productivityCube = defineCube('Productivity', {
       type: 'number',
       sql: productivity.id,
       primaryKey: true
-    },   
+    },
     date: {
       name: 'date',
       title: 'Date',
@@ -376,13 +399,15 @@ productivityCube = defineCube('Productivity', {
       name: 'count',
       title: 'Total Records',
       type: 'count',
-      sql: productivity.id
+      sql: productivity.id,
+      drillMembers: ['Productivity.date', 'Employees.name', 'Departments.name']
     },
     recordCount: {
       name: 'recordCount',
       title: 'Record Count',
       type: 'count',
-      sql: productivity.id
+      sql: productivity.id,
+      drillMembers: ['Productivity.date', 'Employees.name', 'Departments.name']
     },
     workingDaysCount: {
       name: 'workingDaysCount',
@@ -391,7 +416,8 @@ productivityCube = defineCube('Productivity', {
       sql: productivity.id,
       filters: [
         () => eq(productivity.daysOff, false)
-      ]
+      ],
+      drillMembers: ['Productivity.date', 'Employees.name', 'Productivity.isDayOff']
     },
     daysOffCount: {
       name: 'daysOffCount',
@@ -400,31 +426,36 @@ productivityCube = defineCube('Productivity', {
       sql: productivity.id,
       filters: [
         () => eq(productivity.daysOff, true)
-      ]
+      ],
+      drillMembers: ['Productivity.date', 'Employees.name', 'Productivity.isDayOff']
     },
     avgLinesOfCode: {
       name: 'avgLinesOfCode',
       title: 'Average Lines of Code',
       type: 'avg',
-      sql: productivity.linesOfCode
+      sql: productivity.linesOfCode,
+      drillMembers: ['Productivity.date', 'Employees.name', 'Productivity.linesOfCode', 'Departments.name']
     },
     totalLinesOfCode: {
       name: 'totalLinesOfCode',
       title: 'Total Lines of Code',
       type: 'sum',
-      sql: productivity.linesOfCode
+      sql: productivity.linesOfCode,
+      drillMembers: ['Productivity.date', 'Employees.name', 'Productivity.linesOfCode', 'Departments.name']
     },
     totalPullRequests: {
       name: 'totalPullRequests',
       title: 'Total Pull Requests',
       type: 'sum',
-      sql: productivity.pullRequests
+      sql: productivity.pullRequests,
+      drillMembers: ['Productivity.date', 'Employees.name', 'Productivity.pullRequests', 'Departments.name']
     },
     avgPullRequests: {
       name: 'avgPullRequests',
       title: 'Average Pull Requests',
       type: 'avg',
-      sql: productivity.pullRequests
+      sql: productivity.pullRequests,
+      drillMembers: ['Productivity.date', 'Employees.name', 'Productivity.pullRequests', 'Departments.name']
     },
     totalDeployments: {
       name: 'totalDeployments',
@@ -442,7 +473,8 @@ productivityCube = defineCube('Productivity', {
       name: 'avgHappinessIndex',
       title: 'Average Happiness',
       type: 'avg',
-      sql: productivity.happinessIndex
+      sql: productivity.happinessIndex,
+      drillMembers: ['Productivity.date', 'Employees.name', 'Productivity.happinessIndex', 'Productivity.happinessLevel']
     },
     productivityScore: {
       name: 'productivityScore',
@@ -866,19 +898,22 @@ prEventsCube = defineCube('PREvents', {
       name: 'count',
       title: 'Event Count',
       type: 'count',
-      sql: prEvents.id
+      sql: prEvents.id,
+      drillMembers: ['PREvents.prNumber', 'PREvents.eventType', 'PREvents.timestamp', 'Employees.name']
     },
     uniquePRs: {
       name: 'uniquePRs',
       title: 'Unique PRs',
       type: 'countDistinct',
-      sql: prEvents.prNumber
+      sql: prEvents.prNumber,
+      drillMembers: ['PREvents.prNumber', 'PREvents.eventType', 'PREvents.timestamp']
     },
     uniqueActors: {
       name: 'uniqueActors',
       title: 'Unique Actors',
       type: 'countDistinct',
-      sql: prEvents.employeeId
+      sql: prEvents.employeeId,
+      drillMembers: ['Employees.name', 'PREvents.prNumber', 'PREvents.eventType']
     }
   },
 
@@ -959,7 +994,8 @@ teamsCube = defineCube('Teams', {
       name: 'count',
       title: 'Total Teams',
       type: 'countDistinct',
-      sql: teams.id
+      sql: teams.id,
+      drillMembers: ['Teams.name', 'Teams.description', 'Departments.name']
     }
   }
 }) as Cube
@@ -990,6 +1026,14 @@ employeeTeamsCube = defineCube('EmployeeTeams', {
       on: [
         { source: employeeTeams.teamId, target: teams.id }
       ]
+    }
+  },
+
+  hierarchies: {
+    roleHierarchy: {
+      name: 'roleHierarchy',
+      title: 'Team Role',
+      levels: ['role']
     }
   },
 
@@ -1032,19 +1076,22 @@ employeeTeamsCube = defineCube('EmployeeTeams', {
       name: 'count',
       title: 'Total Memberships',
       type: 'count',
-      sql: employeeTeams.id
+      sql: employeeTeams.id,
+      drillMembers: ['Employees.name', 'Teams.name', 'EmployeeTeams.role', 'EmployeeTeams.joinedAt']
     },
     uniqueEmployees: {
       name: 'uniqueEmployees',
       title: 'Unique Employees',
       type: 'countDistinct',
-      sql: employeeTeams.employeeId
+      sql: employeeTeams.employeeId,
+      drillMembers: ['Employees.name', 'Teams.name', 'EmployeeTeams.role']
     },
     uniqueTeams: {
       name: 'uniqueTeams',
       title: 'Unique Teams',
       type: 'countDistinct',
-      sql: employeeTeams.teamId
+      sql: employeeTeams.teamId,
+      drillMembers: ['Teams.name', 'Employees.name', 'EmployeeTeams.role']
     },
     leadCount: {
       name: 'leadCount',
@@ -1053,7 +1100,8 @@ employeeTeamsCube = defineCube('EmployeeTeams', {
       sql: employeeTeams.id,
       filters: [
         () => eq(employeeTeams.role, 'lead')
-      ]
+      ],
+      drillMembers: ['Employees.name', 'Teams.name', 'EmployeeTeams.joinedAt']
     }
   }
 }) as Cube

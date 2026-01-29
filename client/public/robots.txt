@@ -1,0 +1,13 @@
+# Drizzle Cube Demo Site
+# https://try.drizzle-cube.dev
+
+User-agent: *
+Allow: /
+
+# Disallow API and internal routes
+Disallow: /api/
+Disallow: /_/
+
+# Related sites
+# Documentation: https://www.drizzle-cube.dev
+# Documentation sitemap: https://www.drizzle-cube.dev/sitemap-index.xml
