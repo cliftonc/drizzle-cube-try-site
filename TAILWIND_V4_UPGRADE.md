@@ -89,7 +89,7 @@ Added `--noCheck` flag to bypass TypeScript type conflicts caused by dual drizzl
 - **Before fix:** ~66KB CSS file, missing drizzle-cube classes
 - **After fix:** ~72KB CSS file, all drizzle-cube classes included
 - **Build time:** No significant performance impact
-- **Visual styling:** Query builder and other drizzle-cube components now display correctly
+- **Visual styling:** Analysis builder and other drizzle-cube components now display correctly
 
 ## Important Notes for Future Reference
 
@@ -108,7 +108,7 @@ To verify the upgrade was successful:
 1. Run `npm run build:client` - should complete without CSS warnings
 2. Check that CSS file size increased (indicates more classes were generated)
 3. Test the application, particularly pages using drizzle-cube components
-4. Verify that complex components like QueryBuilder display with proper styling
+4. Verify that complex components like AnalysisBuilder display with proper styling
 
 ## Rollback Plan
 

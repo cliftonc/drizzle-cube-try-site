@@ -349,7 +349,7 @@ The Hono example includes an AI Assistant that can generate queries from natural
 
 ### Usage
 
-1. **Open the Query Builder** - Navigate to the Query Builder tab
+1. **Open the Analysis Builder** - Navigate to the Analysis Builder tab
 2. **Click the sparkles icon** (✨) - Opens the AI Assistant modal
 3. **Enter your API key** - If not set via environment variable
 4. **Describe your query** - Use natural language like:

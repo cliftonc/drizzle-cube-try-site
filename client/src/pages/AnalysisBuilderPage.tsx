@@ -3,7 +3,7 @@
  *
  * Demonstrates the AnalysisBuilder component with:
  * - Results panel on the left (chart + table)
- * - Query builder panel on the right
+ * - Analysis builder panel on the right
  * - Search-based field selection via modal
  * - Metrics (measures), Breakdown (dimensions), Filters sections
  */
@@ -17,7 +17,7 @@ export default function AnalysisBuilderPage() {
       <div className="shrink-0 border-b border-dc-border px-4 sm:px-6 py-4">
         <h1 className="text-xl sm:text-2xl font-bold text-dc-text">Analysis Builder</h1>
         <p className="mt-1 text-sm text-dc-text-secondary leading-relaxed">
-          A modern query builder with search-based field selection. Build analytics queries with
+          A modern analysis builder with search-based field selection. Build analytics queries with
           Metrics (measures), Breakdowns (dimensions), and Filters. Results appear instantly as you build.
         </p>
         <div className="mt-4 px-4 py-3 bg-dc-info-bg border border-dc-info-border rounded-lg shadow-md">
@@ -39,7 +39,7 @@ export default function AnalysisBuilderPage() {
                     AnalysisBuilder
                   </code>
                 </a>{' '}
-                component - a query builder inspired by modern analytics tools like Mixpanel and Amplitude.
+                component - an analysis builder inspired by modern analytics tools like Mixpanel and Amplitude.
               </p>
             </div>
           </div>

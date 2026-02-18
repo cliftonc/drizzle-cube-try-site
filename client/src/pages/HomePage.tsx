@@ -215,7 +215,7 @@ export default function HomePage() {
                   <li className="flex items-start">
                     <CheckIcon className="w-5 h-5 text-dc-success mr-3 mt-0.5 shrink-0" />
                     <span className="text-dc-text-secondary">
-                      <strong className="text-dc-text">Multiple analysis modes</strong> - Query builder, funnel analysis, and flow analysis
+                      <strong className="text-dc-text">Multiple analysis modes</strong> - Analysis builder, funnel analysis, and flow analysis
                     </span>
                   </li>
                   <li className="flex items-start">
