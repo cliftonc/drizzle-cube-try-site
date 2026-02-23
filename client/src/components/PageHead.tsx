@@ -8,7 +8,7 @@ interface PageHeadProps {
 
 const SITE_URL = 'https://try.drizzle-cube.dev'
 const DEFAULT_TITLE = 'Drizzle Cube - Embeddable Analytics'
-const DEFAULT_DESCRIPTION = "Experience Drizzle Cube's powerful analytics dashboard with type-safe queries, real-time data visualization, and Cube.js compatibility."
+const DEFAULT_DESCRIPTION = "Experience Drizzle Cube's powerful analytics dashboard with type-safe queries, interactive data visualization, and Cube.js compatibility."
 
 export default function PageHead({ title, description }: PageHeadProps) {
   const location = useLocation()

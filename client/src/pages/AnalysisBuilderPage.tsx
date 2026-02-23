@@ -30,7 +30,7 @@ export default function AnalysisBuilderPage() {
               <p className="text-sm text-dc-text-secondary mt-1">
                 This page demonstrates the{' '}
                 <a
-                  href="https://github.com/cliftonc/drizzle-cube/blob/main/src/client/components/AnalysisBuilder/index.tsx"
+                  href="https://www.drizzle-cube.dev/client/analysis-builder/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline hover:text-dc-primary"

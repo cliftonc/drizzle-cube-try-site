@@ -277,15 +277,15 @@ export default function DashboardViewPage() {
               </ol>
             </nav>
 
-            <div className="mt-2 flex items-start justify-between gap-4">
-              <div className="flex-1 min-w-0">
+            <div className="mt-2 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+              <div className="min-w-0">
                 <h1 className="text-xl sm:text-2xl font-semibold text-dc-text">{page.name}</h1>
                 {page.description && (
                   <p className="mt-1 text-sm text-dc-text-muted leading-relaxed">{page.description}</p>
                 )}
               </div>
 
-              {/* Print and Export buttons */}
+              {/* Print, Export, and Options buttons */}
               <div className="flex items-center gap-2 flex-shrink-0">
                 <button
                   onClick={handlePrint}
@@ -316,44 +316,44 @@ export default function DashboardViewPage() {
                     </>
                   )}
                 </button>
-              </div>
 
-              {/* Options menu */}
-              <div className="relative flex-shrink-0" data-options-menu>
-                <button
-                  onClick={() => setShowOptionsMenu(!showOptionsMenu)}
-                  className="p-2 border border-dc-border-secondary bg-dc-surface text-dc-text-muted hover:bg-dc-surface-hover focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 rounded-md"
-                  title="More options"
-                >
-                  <EllipsisHorizontalIcon className="w-5 h-5" />
-                </button>
+                {/* Options menu */}
+                <div className="relative" data-options-menu>
+                  <button
+                    onClick={() => setShowOptionsMenu(!showOptionsMenu)}
+                    className="p-2 border border-dc-border-secondary bg-dc-surface text-dc-text-muted hover:bg-dc-surface-hover focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 rounded-md"
+                    title="More options"
+                  >
+                    <EllipsisHorizontalIcon className="w-5 h-5" />
+                  </button>
 
-                {showOptionsMenu && (
-                  <div className="absolute right-0 top-full mt-1 w-48 bg-dc-surface border border-dc-border rounded-md shadow-lg z-50">
-                    <div className="py-1">
-                      <button
-                        onClick={() => {
-                          setIsEditModalOpen(true)
-                          setShowOptionsMenu(false)
-                        }}
-                        className="flex items-center gap-3 w-full px-4 py-2 text-sm text-dc-text-muted hover:bg-dc-surface-hover"
-                      >
-                        <PencilIcon className="w-4 h-4" />
-                        Edit Dashboard
-                      </button>
-                      <button
-                        onClick={() => {
-                          setShowResetConfirm(true)
-                          setShowOptionsMenu(false)
-                        }}
-                        className="flex items-center gap-3 w-full px-4 py-2 text-sm text-dc-text-muted hover:bg-dc-surface-hover"
-                      >
-                        <ArrowPathIcon className="w-4 h-4" />
-                        Reset Dashboard
-                      </button>
+                  {showOptionsMenu && (
+                    <div className="absolute right-0 top-full mt-1 w-48 bg-dc-surface border border-dc-border rounded-md shadow-lg z-50">
+                      <div className="py-1">
+                        <button
+                          onClick={() => {
+                            setIsEditModalOpen(true)
+                            setShowOptionsMenu(false)
+                          }}
+                          className="flex items-center gap-3 w-full px-4 py-2 text-sm text-dc-text-muted hover:bg-dc-surface-hover"
+                        >
+                          <PencilIcon className="w-4 h-4" />
+                          Edit Dashboard
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowResetConfirm(true)
+                            setShowOptionsMenu(false)
+                          }}
+                          className="flex items-center gap-3 w-full px-4 py-2 text-sm text-dc-text-muted hover:bg-dc-surface-hover"
+                        >
+                          <ArrowPathIcon className="w-4 h-4" />
+                          Reset Dashboard
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
 
@@ -365,7 +365,7 @@ export default function DashboardViewPage() {
                     Demo Note
                   </p>
                   <p className="text-sm text-dc-text-secondary mt-1">
-                    This dashboard uses the <a href="https://www.drizzle-cube.dev/client/dashboards/" target="_blank" rel="noopener noreferrer" className="underline hover:text-dc-info"><code className="px-1 py-0.5 bg-dc-info-bg rounded text-xs font-mono">AnalyticsDashboard</code></a> component from drizzle-cube/client. It includes drag-and-drop, auto-save, and real-time updates. These dashboards are limited to 20 portlets, in your implementation this limit does not need to apply.
+                    This dashboard uses the <a href="https://www.drizzle-cube.dev/client/dashboards/" target="_blank" rel="noopener noreferrer" className="underline hover:text-dc-info"><code className="px-1 py-0.5 bg-dc-info-bg rounded text-xs font-mono">AnalyticsDashboard</code></a> component from drizzle-cube/client. It includes drag-and-drop, auto-save, and automatic refresh. These dashboards are limited to 20 portlets, in your implementation this limit does not need to apply.
                   </p>
                 </div>
               </div>
