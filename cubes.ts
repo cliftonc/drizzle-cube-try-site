@@ -301,8 +301,17 @@ productivityCube = defineCube('Productivity', {
     Employees: {
       targetCube: () => employeesCube,
       relationship: 'belongsTo',
+      preferredFor: ['Teams'],
       on: [
         { source: productivity.employeeId, target: employees.id }
+      ]
+    },
+    EmployeeTeams: {
+      targetCube: () => employeeTeamsCube,
+      relationship: 'hasMany',
+      preferredFor: ['Teams'],
+      on: [
+        { source: productivity.employeeId, target: employeeTeams.employeeId }
       ]
     },
     Departments: {
@@ -949,6 +958,7 @@ teamsCube = defineCube('Teams', {
     EmployeeTeams: {
       targetCube: () => employeeTeamsCube,
       relationship: 'hasMany',
+      preferredFor: ['Productivity'],
       on: [
         { source: teams.id, target: employeeTeams.teamId }
       ]
@@ -1016,6 +1026,7 @@ employeeTeamsCube = defineCube('EmployeeTeams', {
     Employees: {
       targetCube: () => employeesCube,
       relationship: 'belongsTo',
+      preferredFor: ['Productivity'],
       on: [
         { source: employeeTeams.employeeId, target: employees.id }
       ]
@@ -1023,6 +1034,7 @@ employeeTeamsCube = defineCube('EmployeeTeams', {
     Teams: {
       targetCube: () => teamsCube,
       relationship: 'belongsTo',
+      preferredFor: ['Productivity'],
       on: [
         { source: employeeTeams.teamId, target: teams.id }
       ]
