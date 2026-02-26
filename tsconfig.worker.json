@@ -25,6 +25,7 @@
   "include": [
     "src/worker.ts",
     "src/analytics-routes.ts",
+    "src/notebooks-routes.ts",
     "src/seed-utils.ts",
     "src/dashboard-config.ts",
     "schema.ts",

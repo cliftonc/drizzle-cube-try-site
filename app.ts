@@ -15,6 +15,7 @@ import type { SecurityContext, DrizzleDatabase } from 'drizzle-cube/server'
 import { schema } from './schema'
 import { allCubes } from './cubes'
 import analyticsApp from './src/analytics-routes'
+import notebooksApp from './src/notebooks-routes'
 import aiApp from './src/ai-routes'
 
 interface Variables {
@@ -116,7 +117,7 @@ app.use('*', logger())
 app.use('*', cors({
   origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:5173'], // Add your frontend URLs
   allowMethods: ['GET', 'POST', 'OPTIONS'],
-  allowHeaders: ['Content-Type', 'Authorization'],
+  allowHeaders: ['Content-Type', 'Authorization', 'X-Agent-Api-Key'],
   credentials: true
 }))
 
@@ -138,6 +139,9 @@ app.get('/', (c) => {
       'GET /api/analytics-pages': 'List all dashboards',
       'POST /api/analytics-pages': 'Create new dashboard',
       'POST /api/analytics-pages/create-example': 'Create example dashboard',
+      'GET /api/notebooks': 'List all notebooks',
+      'POST /api/notebooks': 'Create new notebook',
+      'POST /cubejs-api/v1/agent/chat': 'Agentic notebook chat (SSE)',
       'POST /api/ai/generate': 'Generate content with Gemini AI (proxy)',
       'POST /api/ai/explain/analyze': 'Analyze EXPLAIN plan with AI recommendations',
       'GET /api/ai/health': 'AI service health check'
@@ -180,6 +184,9 @@ app.get('/api/docs', (c) => {
       'POST /cubejs-api/v1/sql': 'Generate SQL without execution',
       'GET /cubejs-api/v1/sql': 'Generate SQL via query string',
       'POST /cubejs-api/v1/explain': 'Get query execution plan (EXPLAIN ANALYZE)',
+      'POST /cubejs-api/v1/agent/chat': 'Agentic notebook chat (requires X-Agent-Api-Key)',
+      'GET /api/notebooks': 'List notebooks',
+      'POST /api/notebooks': 'Create notebook',
       'POST /api/ai/explain/analyze': 'Analyze EXPLAIN plan with AI recommendations'
     },
     cubes: metadata.map(cube => ({
@@ -228,8 +235,14 @@ const cubeApp = createCubeApp({
   cors: {
     origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:5173'],
     allowMethods: ['GET', 'POST', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization'],
+    allowHeaders: ['Content-Type', 'Authorization', 'X-Agent-Api-Key'],
     credentials: true
+  },
+  // Public site mode: users provide their own Anthropic API keys.
+  agent: {
+    allowClientApiKey: true,
+    model: 'claude-sonnet-4-6',
+    maxTurns: 25
   }
 })
 
@@ -246,6 +259,13 @@ app.use('/api/analytics-pages/*', async (c, next) => {
   await next()
 })
 app.route('/api/analytics-pages', analyticsApp)
+
+// Mount notebooks API with database access
+app.use('/api/notebooks/*', async (c, next) => {
+  c.set('db', db as DrizzleDatabase)
+  await next()
+})
+app.route('/api/notebooks', notebooksApp)
 
 // Mount AI proxy routes with database access
 app.use('/api/ai/*', async (c, next) => {

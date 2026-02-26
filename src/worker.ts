@@ -16,6 +16,7 @@ import { CloudflareKVProvider } from './cache/cloudflare-kv-provider'
 import { schema } from '../schema.js'
 import { allCubes } from '../cubes.js'
 import analyticsApp from './analytics-routes'
+import notebooksApp from './notebooks-routes'
 import aiApp from './ai-routes'
 import { executeSeed } from './seed-utils.js'
 
@@ -113,7 +114,7 @@ app.use('*', logger())
 app.use('*', cors({
   origin: ['http://localhost:3000', 'http://localhost:5173'],
   allowMethods: ['GET', 'POST', 'OPTIONS'],
-  allowHeaders: ['Content-Type', 'Authorization'],
+  allowHeaders: ['Content-Type', 'Authorization', 'X-Agent-Api-Key'],
   credentials: true
 }))
 
@@ -160,8 +161,14 @@ const createCubeApiApp = (db: DrizzleDatabase, cacheKV?: KVNamespace) => {
     cors: {
       origin: ['http://localhost:3000', 'http://localhost:5173'],
       allowMethods: ['GET', 'POST', 'OPTIONS'],
-      allowHeaders: ['Content-Type', 'Authorization'],
+      allowHeaders: ['Content-Type', 'Authorization', 'X-Agent-Api-Key'],
       credentials: true
+    },
+    // Public site mode: users provide their own Anthropic API keys.
+    agent: {
+      allowClientApiKey: true,
+      model: 'claude-sonnet-4-6',
+      maxTurns: 25
     }
   })
 }
@@ -204,6 +211,9 @@ app.get('/api', (c) => {
       'GET /api/analytics-pages': 'List all dashboards',
       'POST /api/analytics-pages': 'Create new dashboard',
       'POST /api/analytics-pages/create-example': 'Create example dashboard',
+      'GET /api/notebooks': 'List all notebooks',
+      'POST /api/notebooks': 'Create new notebook',
+      'POST /cubejs-api/v1/agent/chat': 'Agentic notebook chat (SSE)',
       'POST /api/ai/generate': 'Generate content with Gemini AI (proxy)',
       'GET /api/ai/health': 'AI service health check'
     }
@@ -221,6 +231,13 @@ app.use('/api/analytics-pages/*', async (c, next) => {
   await next()
 })
 app.route('/api/analytics-pages', analyticsApp)
+
+// Mount notebooks API with database access
+app.use('/api/notebooks/*', async (c, next) => {
+  c.set('db', c.get('db'))
+  await next()
+})
+app.route('/api/notebooks', notebooksApp)
 
 // Mount AI proxy routes with database access
 app.use('/api/ai/*', async (c, next) => {

@@ -149,6 +149,13 @@ export default function HomePage() {
             >
               Try Analysis Builder
             </Link>
+            <Link
+              to="/notebooks"
+              className="w-full sm:w-auto px-8 py-3 bg-dc-info hover:bg-dc-info-hover text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+            >
+              <SparklesIcon className="w-5 h-5" />
+              Try Agentic Notebooks
+            </Link>
             <a
               href="#ai-ready"
               className="w-full sm:w-auto px-8 py-3 bg-dc-accent hover:bg-dc-accent-hover text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
@@ -233,6 +240,12 @@ export default function HomePage() {
                   <li className="flex items-start">
                     <CheckIcon className="w-5 h-5 text-dc-success mr-3 mt-0.5 shrink-0" />
                     <span className="text-dc-text-secondary">
+                      <strong className="text-dc-text">Agentic notebooks</strong> - Save conversational analysis, charts, and markdown in one place
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <CheckIcon className="w-5 h-5 text-dc-success mr-3 mt-0.5 shrink-0" />
+                    <span className="text-dc-text-secondary">
                       <strong className="text-dc-text">Multi-tenant security</strong> - Row-level isolation built into every query
                     </span>
                   </li>
@@ -249,6 +262,12 @@ export default function HomePage() {
                     className="text-center px-6 py-2.5 border border-dc-border hover:border-dc-primary text-dc-text hover:text-dc-primary font-medium rounded-lg transition-colors"
                   >
                     Try Analysis Builder
+                  </Link>
+                  <Link
+                    to="/notebooks"
+                    className="text-center px-6 py-2.5 border border-dc-border hover:border-dc-info text-dc-text hover:text-dc-info font-medium rounded-lg transition-colors"
+                  >
+                    Try Notebooks
                   </Link>
                 </div>
               </div>
