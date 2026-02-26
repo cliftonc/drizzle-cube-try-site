@@ -57,7 +57,7 @@ export function useCreateNotebook() {
       })
 
       if (!response.ok) {
-        const err = await response.json().catch(() => ({}))
+        const err = (await response.json().catch(() => ({}))) as { error?: string }
         throw new Error(err.error || 'Failed to create notebook')
       }
 

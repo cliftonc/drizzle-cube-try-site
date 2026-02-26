@@ -88,6 +88,9 @@ npm run db:generate
 # Run migrations to create tables
 npm run db:migrate
 
+# Run migrations using a specific env file (for production/staging credentials)
+npm run db:migrate -- --dotenv-file .dev.vars
+
 # Seed with sample data
 npm run db:seed
 ```

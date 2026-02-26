@@ -185,7 +185,7 @@ export default function NotebookViewPage() {
       <div className="p-3 bg-dc-surface border border-dc-border rounded-lg text-xs text-dc-text-secondary inline-flex items-start gap-2 shrink-0">
         <InformationCircleIcon className="w-4 h-4 mt-0.5 shrink-0 text-dc-info" />
         <span>
-          Prompt tips: ask for an initial overview, then drill down by segment or time period. The notebook will save blocks and chat history automatically.
+          This dataset contains employees, teams, time entries, and productivity metrics. Ask questions related to those topics (for example by team, employee, segment, or time period). The notebook saves blocks and chat history automatically.
         </span>
       </div>
 

@@ -121,16 +121,6 @@ export default function Layout({ children }: LayoutProps) {
                   Home
                 </Link>
                 <Link
-                  to="/dashboards"
-                  className={`inline-flex items-center px-1 pt-1 text-sm font-medium border-b-2 transition-colors ${
-                    isActive('/dashboards')
-                      ? 'border-dc-primary text-dc-text'
-                      : 'border-transparent text-dc-text-muted hover:text-dc-text-secondary hover:border-dc-border'
-                  }`}
-                >
-                  Dashboards
-                </Link>
-                <Link
                   to="/analysis-builder"
                   className={`inline-flex items-center px-1 pt-1 text-sm font-medium border-b-2 transition-colors ${
                     isActive('/analysis-builder')
@@ -139,6 +129,16 @@ export default function Layout({ children }: LayoutProps) {
                   }`}
                 >
                   Analysis Builder
+                </Link>
+                <Link
+                  to="/dashboards"
+                  className={`inline-flex items-center px-1 pt-1 text-sm font-medium border-b-2 transition-colors ${
+                    isActive('/dashboards')
+                      ? 'border-dc-primary text-dc-text'
+                      : 'border-transparent text-dc-text-muted hover:text-dc-text-secondary hover:border-dc-border'
+                  }`}
+                >
+                  Dashboards
                 </Link>
                 <Link
                   to="/notebooks"
@@ -228,17 +228,6 @@ export default function Layout({ children }: LayoutProps) {
                 Home
               </Link>
               <Link
-                to="/dashboards"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                  isActive('/dashboards')
-                    ? 'text-dc-primary bg-dc-primary/10 border-l-4 border-dc-primary'
-                    : 'text-dc-text-muted hover:text-dc-text hover:bg-dc-surface-hover'
-                }`}
-              >
-                Dashboards
-              </Link>
-              <Link
                 to="/analysis-builder"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
@@ -248,6 +237,17 @@ export default function Layout({ children }: LayoutProps) {
                 }`}
               >
                 Analysis Builder
+              </Link>
+              <Link
+                to="/dashboards"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                  isActive('/dashboards')
+                    ? 'text-dc-primary bg-dc-primary/10 border-l-4 border-dc-primary'
+                    : 'text-dc-text-muted hover:text-dc-text hover:bg-dc-surface-hover'
+                }`}
+              >
+                Dashboards
               </Link>
               <Link
                 to="/notebooks"

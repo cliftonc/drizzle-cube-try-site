@@ -138,27 +138,27 @@ export default function HomePage() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
             <Link
-              to="/dashboards"
-              className="w-full sm:w-auto px-8 py-3 bg-dc-primary hover:bg-dc-primary-hover text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
-            >
-              View Live Dashboards
-            </Link>
-            <Link
               to="/analysis-builder"
-              className="w-full sm:w-auto px-8 py-3 border-2 border-dc-primary text-dc-primary hover:bg-dc-primary/10 font-semibold rounded-lg transition-all duration-200"
+              className="w-full sm:w-auto px-8 py-3 border-2 border-dc-accent text-dc-accent hover:bg-dc-accent-bg font-semibold rounded-lg transition-all duration-200"
             >
               Try Analysis Builder
             </Link>
             <Link
+              to="/dashboards"
+              className="w-full sm:w-auto px-8 py-3 bg-dc-primary hover:bg-dc-primary-hover text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+            >
+              Try Dashboards
+            </Link>
+            <Link
               to="/notebooks"
-              className="w-full sm:w-auto px-8 py-3 bg-dc-info hover:bg-dc-info-hover text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-3 bg-dc-success text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:opacity-90 transition-all duration-200 flex items-center justify-center gap-2"
             >
               <SparklesIcon className="w-5 h-5" />
               Try Agentic Notebooks
             </Link>
             <a
               href="#ai-ready"
-              className="w-full sm:w-auto px-8 py-3 bg-dc-accent hover:bg-dc-accent-hover text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-3 bg-dc-ai-gradient text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:opacity-90 transition-all duration-200 flex items-center justify-center gap-2"
             >
               <SparklesIcon className="w-5 h-5" />
               Enable AI Agents
@@ -252,20 +252,20 @@ export default function HomePage() {
                 </ul>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Link
-                    to="/dashboards"
-                    className="text-center px-6 py-2.5 bg-dc-primary hover:bg-dc-primary-hover text-white font-medium rounded-lg transition-colors"
-                  >
-                    Explore Dashboards
-                  </Link>
-                  <Link
                     to="/analysis-builder"
-                    className="text-center px-6 py-2.5 border border-dc-border hover:border-dc-primary text-dc-text hover:text-dc-primary font-medium rounded-lg transition-colors"
+                    className="text-center px-6 py-2.5 border border-dc-accent text-dc-accent hover:bg-dc-accent-bg font-medium rounded-lg transition-colors"
                   >
                     Try Analysis Builder
                   </Link>
                   <Link
+                    to="/dashboards"
+                    className="text-center px-6 py-2.5 bg-dc-primary hover:bg-dc-primary-hover text-white font-medium rounded-lg transition-colors"
+                  >
+                    Try Dashboards
+                  </Link>
+                  <Link
                     to="/notebooks"
-                    className="text-center px-6 py-2.5 border border-dc-border hover:border-dc-info text-dc-text hover:text-dc-info font-medium rounded-lg transition-colors"
+                    className="text-center px-6 py-2.5 bg-dc-success text-white font-medium rounded-lg hover:opacity-90 transition-colors"
                   >
                     Try Notebooks
                   </Link>

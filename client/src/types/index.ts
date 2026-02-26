@@ -5,11 +5,12 @@ export type {
   ChartAxisConfig,
   ChartDisplayConfig,
   DashboardConfig,
-  CubeQuery
+  CubeQuery,
+  NotebookConfig
 } from 'drizzle-cube/client'
 
-// Import DashboardConfig for use in interfaces
-import type { DashboardConfig } from 'drizzle-cube/client'
+// Import shared config types for use in interfaces
+import type { DashboardConfig, NotebookConfig } from 'drizzle-cube/client'
 
 // Additional types for the React app
 export interface AnalyticsPage {
@@ -38,25 +39,6 @@ export interface UpdateAnalyticsPageRequest {
   order?: number
 }
 // Notebook types
-export interface NotebookConfig {
-  blocks: Array<{
-    id: string
-    type: 'portlet' | 'markdown'
-    title?: string
-    content?: string
-    query?: string
-    chartType?: string
-    chartConfig?: Record<string, unknown>
-    displayConfig?: Record<string, unknown>
-  }>
-  messages: Array<{
-    id: string
-    role: 'user' | 'assistant'
-    content: string
-    toolCalls?: Array<{ name: string; status: string; result?: unknown }>
-    timestamp: number
-  }>
-}
 
 export interface Notebook {
   id: number
