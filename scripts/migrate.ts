@@ -47,13 +47,18 @@ function loadEnvironment(): void {
 
 loadEnvironment()
 
-const connectionString = process.env.DATABASE_URL
+function requireDatabaseUrl(): string {
+  const databaseUrl = process.env.DATABASE_URL
+  if (!databaseUrl) {
+    console.error('❌ DATABASE_URL is not set.')
+    console.error('   Provide it via shell env, .dev.vars/.env, or pass --dotenv-file <path>.')
+    process.exit(1)
+  }
 
-if (!connectionString) {
-  console.error('❌ DATABASE_URL is not set.')
-  console.error('   Provide it via shell env, .dev.vars/.env, or pass --dotenv-file <path>.')
-  process.exit(1)
+  return databaseUrl
 }
+
+const connectionString = requireDatabaseUrl()
 
 // Auto-detect Neon vs local PostgreSQL based on connection string
 function isNeonUrl(url: string): boolean {
