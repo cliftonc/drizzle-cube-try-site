@@ -225,18 +225,20 @@ export default function NotebooksListPage() {
                         </p>
                       )}
                     </div>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault()
-                        if (confirm('Delete this notebook?')) {
-                          deleteNotebook.mutate(notebook.id)
-                        }
-                      }}
-                      className="ml-2 p-1.5 rounded-md text-dc-text-muted hover:text-dc-error hover:bg-dc-danger-bg transition-colors opacity-0 group-hover:opacity-100"
-                      title="Delete notebook"
-                    >
-                      <TrashIcon className="w-4 h-4" />
-                    </button>
+                    {notebook.id !== 1 && (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault()
+                          if (confirm('Delete this notebook?')) {
+                            deleteNotebook.mutate(notebook.id)
+                          }
+                        }}
+                        className="ml-2 p-1.5 rounded-md text-dc-text-muted hover:text-dc-error hover:bg-dc-danger-bg transition-colors opacity-0 group-hover:opacity-100"
+                        title="Delete notebook"
+                      >
+                        <TrashIcon className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-4 mt-3 text-xs text-dc-text-muted">

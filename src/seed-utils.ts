@@ -5,8 +5,10 @@
  * Enhanced with 100 employees, 16 teams, and global office distribution
  */
 
-import { employees, departments, productivity, timeEntries, prEvents, teams, employeeTeams, analyticsPages, settings } from '../schema'
+import { employees, departments, productivity, timeEntries, prEvents, teams, employeeTeams, analyticsPages, notebooks, settings } from '../schema'
+import { eq, ne } from 'drizzle-orm'
 import { productivityDashboardConfig } from './dashboard-config'
+import sampleNotebookData from './notebook-seed-config.json'
 
 // Sample data
 const sampleDepartments = [
@@ -1088,6 +1090,30 @@ export async function executeSeed(db: any) {
       .returning()
 
     console.log(`✅ Inserted analytics page: ${insertedPage[0].name}`)
+
+    // Clean up all notebooks except the sample (id=1), then restore it
+    console.log('📓 Cleaning up user-created notebooks...')
+    await db.delete(notebooks).where(ne(notebooks.id, 1))
+
+    // Restore sample notebook (id=1) — update in-place to preserve the URL
+    console.log('📓 Restoring sample notebook...')
+    const updatedNotebook = await db
+      .update(notebooks)
+      .set({
+        name: sampleNotebookData.name,
+        description: sampleNotebookData.description,
+        config: sampleNotebookData.config,
+        isActive: true,
+        updatedAt: new Date()
+      })
+      .where(eq(notebooks.id, 1))
+      .returning()
+
+    if (updatedNotebook.length > 0) {
+      console.log(`✅ Restored sample notebook: ${updatedNotebook[0].name}`)
+    } else {
+      console.log('⚠️ Sample notebook (id=1) not found — skipping restore')
+    }
 
     // Insert initial settings
     console.log('⚙️ Inserting initial settings...')
