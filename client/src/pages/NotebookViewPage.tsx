@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useCallback, useState, useRef } from 'react'
 import { AgenticNotebook } from 'drizzle-cube/client'
 import type { NotebookConfig } from 'drizzle-cube/client'
@@ -10,14 +10,27 @@ import {
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline'
 import { useNotebook, useUpdateNotebook } from '../hooks/useNotebooks'
+import { useCreateAnalyticsPage } from '../hooks/useAnalyticsPages'
+
+// Custom loading indicator matching the branded spinner
+const DrizzleCubeLoader = () => (
+  <img
+    src="/drizzle-cube.png"
+    alt="Loading..."
+    className="h-full w-full animate-spin"
+    style={{ animationDuration: '1.5s' }}
+  />
+)
 
 const API_KEY_STORAGE_KEY = 'dc-notebook-api-key'
 const ANTHROPIC_API_KEY_GUIDE_URL = 'https://docs.anthropic.com/en/api/getting-started#access-the-api'
 
 export default function NotebookViewPage() {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
   const { data: notebook, isLoading, error } = useNotebook(id!)
   const updateNotebook = useUpdateNotebook()
+  const createDashboard = useCreateAnalyticsPage()
 
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle')
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
@@ -43,6 +56,19 @@ export default function NotebookViewPage() {
       setSaveStatus('idle')
     }
   }, [id, updateNotebook])
+
+  const handleDashboardSaved = useCallback(async (data: { title: string; description?: string; dashboardConfig: any }) => {
+    try {
+      const page = await createDashboard.mutateAsync({
+        name: data.title,
+        description: data.description,
+        config: data.dashboardConfig,
+      })
+      navigate(`/dashboards/${page.id}`)
+    } catch (err) {
+      console.error('Failed to create dashboard:', err)
+    }
+  }, [createDashboard, navigate])
 
   if (isLoading) {
     return (
@@ -194,6 +220,8 @@ export default function NotebookViewPage() {
           config={notebook.config as NotebookConfig | undefined}
           onSave={handleSave}
           agentApiKey={hasApiKey ? apiKey : undefined}
+          onDashboardSaved={handleDashboardSaved}
+          loadingComponent={<DrizzleCubeLoader />}
         />
       </div>
     </div>
