@@ -235,13 +235,12 @@ const cubeApp = createCubeApp({
   cors: {
     origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:5173'],
     allowMethods: ['GET', 'POST', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization', 'X-Agent-Api-Key'],
+    allowHeaders: ['Content-Type', 'Authorization', 'X-Agent-Api-Key', 'X-Agent-Provider', 'X-Agent-Model', 'X-Agent-Base-URL'],
     credentials: true
   },
-  // Public site mode: users provide their own Anthropic API keys.
+  // Public site mode: users provide their own API keys and choose their provider.
   agent: {
     allowClientApiKey: true,
-    model: 'claude-sonnet-4-6',
     maxTurns: 25
   }
 })
