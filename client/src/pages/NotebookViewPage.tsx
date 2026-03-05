@@ -103,19 +103,19 @@ export default function NotebookViewPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4" style={{ height: 'calc(100vh - 10rem)' }}>
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between shrink-0">
-        <div className="flex items-center gap-1 text-sm text-dc-text-muted">
-          <Link to="/notebooks" className="hover:text-dc-text transition-colors">
+    <div className="flex flex-col gap-2 md:gap-4" style={{ height: 'calc(100vh - 7rem)' }}>
+      <div className="flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-1 text-sm text-dc-text-muted min-w-0">
+          <Link to="/notebooks" className="hover:text-dc-text transition-colors shrink-0">
             Notebooks
           </Link>
-          <ChevronRightIcon className="w-4 h-4" />
-          <span className="text-dc-text font-medium truncate max-w-[260px]">
+          <ChevronRightIcon className="w-4 h-4 shrink-0" />
+          <span className="text-dc-text font-medium truncate">
             {notebook.name}
           </span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3 shrink-0 ml-2">
           {saveStatus === 'saving' && (
             <span className="text-xs text-dc-text-muted">Saving...</span>
           )}
@@ -138,11 +138,11 @@ export default function NotebookViewPage() {
               title="LLM provider settings"
             >
               <GearIcon className="w-3.5 h-3.5" />
-              {hasApiKey ? (provider || 'anthropic') : 'Configure LLM'}
+              <span className="hidden sm:inline">{hasApiKey ? (provider || 'anthropic') : 'Configure LLM'}</span>
             </button>
 
             {showSettings && (
-              <div className="absolute right-0 top-full mt-2 z-50 w-96 bg-dc-surface rounded-lg shadow-xl border border-dc-border p-4">
+              <div className="absolute right-0 top-full mt-2 z-50 w-[calc(100vw-2rem)] max-w-96 bg-dc-surface rounded-lg shadow-xl border border-dc-border p-4">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-sm font-medium text-dc-text">LLM Settings</h3>
                   <span className="text-[10px] text-dc-text-muted">Stored in localStorage</span>
@@ -243,38 +243,36 @@ export default function NotebookViewPage() {
       </div>
 
       {!hasApiKey && (
-        <div className="p-4 bg-dc-warning-bg border border-dc-warning rounded-lg shrink-0">
+        <div className="hidden md:block p-4 bg-dc-warning-bg border border-dc-warning rounded-lg shrink-0">
           <div className="flex items-start gap-3">
-            <ExclamationTriangleIcon className="w-5 h-5 text-dc-warning mt-0.5 shrink-0" />
-            <div>
+            <ExclamationTriangleIcon className="w-5 h-5 text-dc-warning shrink-0 mt-0.5" />
+            <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-dc-text mb-1">
                 Add your API key to start chatting
               </p>
               <p className="text-sm text-dc-text-secondary">
-                Notebook chat requires your own API key. Choose your provider (Anthropic, OpenAI, or Google) and paste your key.
-                It stays in your browser only and is passed through as headers for notebook agent requests.
+                Choose your provider (Anthropic, OpenAI, or Google) and paste your key.
+                It stays in your browser only.
               </p>
-              <div className="flex flex-wrap gap-3 mt-3">
-                <button
-                  onClick={() => setShowSettings(true)}
-                  className="px-3 py-1.5 text-xs font-medium rounded-lg bg-dc-primary text-white hover:opacity-90 transition-opacity"
-                >
-                  Configure LLM
-                </button>
-              </div>
             </div>
+            <button
+              onClick={() => setShowSettings(true)}
+              className="px-3 py-1.5 text-xs font-medium rounded-lg bg-dc-primary text-white hover:opacity-90 transition-opacity shrink-0"
+            >
+              Configure
+            </button>
           </div>
         </div>
       )}
 
-      <div className="p-3 bg-dc-surface border border-dc-border rounded-lg text-xs text-dc-text-secondary inline-flex items-start gap-2 shrink-0">
+      <div className="hidden md:inline-flex p-3 bg-dc-surface border border-dc-border rounded-lg text-xs text-dc-text-secondary items-start gap-2 shrink-0">
         <InformationCircleIcon className="w-4 h-4 mt-0.5 shrink-0 text-dc-info" />
         <span>
           This dataset contains employees, teams, time entries, and productivity metrics. Ask questions related to those topics (for example by team, employee, segment, or time period). The notebook saves blocks and chat history automatically.
         </span>
       </div>
 
-      <div className="flex-1 rounded-xl border border-dc-border overflow-hidden min-h-0">
+      <div className="flex-1 rounded-xl border border-dc-border overflow-hidden min-h-0" style={{ minHeight: '24rem' }}>
         <AgenticNotebook
           config={notebook.config as NotebookConfig | undefined}
           onSave={handleSave}
