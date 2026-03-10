@@ -5,7 +5,10 @@ import {
   CheckIcon,
   SparklesIcon,
   LinkIcon,
-  BoltIcon
+  BoltIcon,
+  MapIcon,
+  MagnifyingGlassIcon,
+  ChartBarIcon
 } from '@heroicons/react/24/outline'
 import PageHead from '../components/PageHead'
 import GitHubStarsButton from '../components/GitHubStarsButton'
@@ -136,32 +139,41 @@ export default function HomePage() {
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 mb-6 whitespace-nowrap">
             <Link
               to="/analysis-builder"
-              className="w-full sm:w-auto px-8 py-3 border-2 border-dc-accent text-dc-accent hover:bg-dc-accent-bg font-semibold rounded-lg transition-all duration-200"
+              className="w-full sm:w-auto px-8 py-3 border-2 border-dc-accent text-dc-accent hover:bg-dc-accent-bg font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
             >
-              Try Analysis Builder
+              <MagnifyingGlassIcon className="w-5 h-5" />
+              Analysis Builder
             </Link>
             <Link
               to="/dashboards"
-              className="w-full sm:w-auto px-8 py-3 bg-dc-primary hover:bg-dc-primary-hover text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
+              className="w-full sm:w-auto px-8 py-3 bg-dc-primary hover:bg-dc-primary-hover text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
             >
-              Try Dashboards
+              <ChartBarIcon className="w-5 h-5" />
+              Dashboards
             </Link>
             <Link
               to="/notebooks"
               className="w-full sm:w-auto px-8 py-3 bg-dc-success text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:opacity-90 transition-all duration-200 flex items-center justify-center gap-2"
             >
               <SparklesIcon className="w-5 h-5" />
-              Try Agentic Notebooks
+              Agentic Notebooks
+            </Link>
+            <Link
+              to="/schema"
+              className="w-full sm:w-auto px-8 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+            >
+              <MapIcon className="w-5 h-5" />
+              Explore Schema
             </Link>
             <a
               href="#ai-ready"
               className="w-full sm:w-auto px-8 py-3 bg-dc-ai-gradient text-white font-semibold rounded-lg shadow-md hover:shadow-lg hover:opacity-90 transition-all duration-200 flex items-center justify-center gap-2"
             >
               <SparklesIcon className="w-5 h-5" />
-              Enable AI Agents
+              AI Agents
             </a>
           </div>
 
@@ -267,19 +279,25 @@ export default function HomePage() {
                     to="/analysis-builder"
                     className="text-center px-6 py-2.5 border border-dc-accent text-dc-accent hover:bg-dc-accent-bg font-medium rounded-lg transition-colors"
                   >
-                    Try Analysis Builder
+                    Analysis Builder
                   </Link>
                   <Link
                     to="/dashboards"
                     className="text-center px-6 py-2.5 bg-dc-primary hover:bg-dc-primary-hover text-white font-medium rounded-lg transition-colors"
                   >
-                    Try Dashboards
+                    Dashboards
                   </Link>
                   <Link
                     to="/notebooks"
                     className="text-center px-6 py-2.5 bg-dc-success text-white font-medium rounded-lg hover:opacity-90 transition-colors"
                   >
-                    Try Notebooks
+                    Notebooks
+                  </Link>
+                  <Link
+                    to="/schema"
+                    className="text-center px-6 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-lg transition-colors"
+                  >
+                    Explore Schema
                   </Link>
                 </div>
               </div>
@@ -532,7 +550,7 @@ app.route('/', cubeApp) // Done!`}
               <span className="text-sm font-medium text-purple-700 dark:text-purple-300">AI-Ready Data Layer</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold text-dc-text mb-3">
-              Enable AI Agents in Your Customer's Workflow
+              AI Agents in Your Customer's Workflow
             </h2>
             <p className="text-dc-text-secondary max-w-2xl mx-auto">
               Your customers can connect Claude, ChatGPT, or any AI agent directly to your application's analytics.

@@ -8,6 +8,7 @@ import DashboardViewPage from './pages/DashboardViewPage'
 import AnalysisBuilderPage from './pages/AnalysisBuilderPage'
 import NotebooksListPage from './pages/NotebooksListPage'
 import NotebookViewPage from './pages/NotebookViewPage'
+import SchemaPage from './pages/SchemaPage'
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             <Route path="/analysis-builder" element={<AnalysisBuilderPage />} />
             <Route path="/notebooks" element={<NotebooksListPage />} />
             <Route path="/notebooks/:id" element={<NotebookViewPage />} />
+            <Route path="/schema" element={<SchemaPage />} />
           </Routes>
         </Layout>
       </CubeProvider>
