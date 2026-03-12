@@ -274,36 +274,38 @@ export default function HomePage() {
                     </span>
                   </li>
                 </ul>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Link
-                    to="/analysis-builder"
-                    className="text-center px-6 py-2.5 border border-dc-accent text-dc-accent hover:bg-dc-accent-bg font-medium rounded-lg transition-colors"
-                  >
-                    Analysis Builder
-                  </Link>
-                  <Link
-                    to="/dashboards"
-                    className="text-center px-6 py-2.5 bg-dc-primary hover:bg-dc-primary-hover text-white font-medium rounded-lg transition-colors"
-                  >
-                    Dashboards
-                  </Link>
-                  <Link
-                    to="/notebooks"
-                    className="text-center px-6 py-2.5 bg-dc-success text-white font-medium rounded-lg hover:opacity-90 transition-colors"
-                  >
-                    Notebooks
-                  </Link>
-                  <Link
-                    to="/schema"
-                    className="text-center px-6 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-lg transition-colors"
-                  >
-                    Explore Schema
-                  </Link>
-                </div>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Drizby callout */}
+        <a
+          href="https://www.drizby.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group relative block mb-8 sm:mb-12 overflow-hidden rounded-xl border border-dc-card-border hover:border-dc-primary transition-all duration-300 shadow-md hover:shadow-xl"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-indigo-500/10 group-hover:from-cyan-500/20 group-hover:via-blue-500/20 group-hover:to-indigo-500/20 transition-all duration-300" />
+          <div className="relative flex flex-col sm:flex-row items-center gap-4 sm:gap-6 px-6 sm:px-8 py-6 sm:py-7">
+            <img
+              src="/drizby-cloud-logo.png"
+              alt="Drizby logo"
+              className="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-300"
+            />
+            <div className="text-center sm:text-left flex-1">
+              <h3 className="text-lg sm:text-xl font-bold text-dc-text group-hover:text-dc-primary transition-colors">
+                Want a standalone analytics, dashboarding and agentic notebook platform — without embedding it in your own app?
+              </h3>
+              <p className="text-sm text-dc-text-muted mt-2">
+                Try <strong className="text-dc-text">Drizby</strong> — open source or cloud hosted. Otherwise, please continue reading ...
+              </p>
+            </div>
+            <span className="shrink-0 px-5 py-2.5 bg-dc-primary text-white font-semibold rounded-lg shadow-sm group-hover:shadow-md group-hover:bg-dc-primary-hover transition-all duration-200 text-sm">
+              www.drizby.com
+            </span>
+          </div>
+        </a>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
           <div className="bg-dc-surface rounded-lg shadow-md p-4 sm:p-6">
@@ -827,6 +829,31 @@ Workflow: AI Agent → MCP Client → Your Analytics`}</code></pre>
                   </p>
                   <p className="text-xs text-dc-primary mt-1 group-hover:underline">
                     www.fintune.app
+                  </p>
+                </div>
+              </div>
+            </a>
+            <a
+              href="https://www.drizby.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group bg-dc-card-bg hover:bg-dc-card-bg-hover border border-dc-card-border hover:border-dc-primary rounded-xl px-6 py-5 transition-all duration-200 shadow-2xs hover:shadow-md"
+            >
+              <div className="flex items-center gap-4">
+                <img
+                  src="/drizby-cloud-logo.png"
+                  alt="Drizby logo"
+                  className="w-12 h-12 object-contain"
+                />
+                <div>
+                  <h3 className="text-lg font-bold text-dc-text group-hover:text-dc-primary transition-colors">
+                    Drizby
+                  </h3>
+                  <p className="text-sm text-dc-text-muted">
+                    Self-service BI platform — open source or cloud hosted
+                  </p>
+                  <p className="text-xs text-dc-primary mt-1 group-hover:underline">
+                    www.drizby.com
                   </p>
                 </div>
               </div>
