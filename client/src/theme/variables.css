@@ -110,8 +110,8 @@
   --dc-iso-line: rgba(0, 0, 0, 0.07);
   --dc-iso-size: 40px;
   --dc-text-glow: rgba(248, 250, 251, 0.95);
-  --dc-iso-grid-url: url('/iso-grid.svg');
-  --dc-iso-opacity: 0.04;
+  --dc-iso-grid-url: url('/iso-grid-green.svg');
+  --dc-iso-opacity: 0.09;
 
   /* drizzle-cube compatibility aliases and layout tokens */
   --dc-bg: var(--dc-surface);
@@ -463,8 +463,8 @@ html.cyberpunk {
   /* Page Background */
   --dc-page-gradient: #fff176;
   --dc-text-glow: rgba(255, 241, 118, 0.95);
-  --dc-iso-grid-url: url('/iso-grid.svg');
-  --dc-iso-opacity: 0.04;
+  --dc-iso-grid-url: url('/iso-grid-green.svg');
+  --dc-iso-opacity: 0.06;
 
   /* drizzle-cube compatibility aliases */
   --dc-bg: var(--dc-surface);

@@ -60,7 +60,7 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex">
               <div className="shrink-0 flex items-center">
                 <Link to="/" className="flex items-center space-x-3 text-xl font-bold text-dc-text hover:text-dc-primary transition-colors">
-                  <DrizzleCubeIcon className="text-dc-primary" size={28} />
+                  <DrizzleCubeIcon size={28} animate />
                   <span>Drizzle Cube</span>
                 </Link>
               </div>
@@ -70,7 +70,7 @@ export default function Layout({ children }: LayoutProps) {
                   to="/"
                   className={`inline-flex items-center px-1 pt-1 text-sm font-medium border-b-2 transition-colors ${
                     isActive('/')
-                      ? 'border-dc-primary text-dc-text'
+                      ? 'border-emerald-600 text-dc-text'
                       : 'border-transparent text-dc-text-muted hover:text-dc-text-secondary hover:border-dc-border'
                   }`}
                 >
@@ -80,7 +80,7 @@ export default function Layout({ children }: LayoutProps) {
                   to="/analysis-builder"
                   className={`inline-flex items-center px-1 pt-1 text-sm font-medium border-b-2 transition-colors ${
                     isActive('/analysis-builder')
-                      ? 'border-dc-primary text-dc-text'
+                      ? 'border-emerald-600 text-dc-text'
                       : 'border-transparent text-dc-text-muted hover:text-dc-text-secondary hover:border-dc-border'
                   }`}
                 >
@@ -90,7 +90,7 @@ export default function Layout({ children }: LayoutProps) {
                   to="/dashboards"
                   className={`inline-flex items-center px-1 pt-1 text-sm font-medium border-b-2 transition-colors ${
                     isActive('/dashboards')
-                      ? 'border-dc-primary text-dc-text'
+                      ? 'border-emerald-600 text-dc-text'
                       : 'border-transparent text-dc-text-muted hover:text-dc-text-secondary hover:border-dc-border'
                   }`}
                 >
@@ -100,7 +100,7 @@ export default function Layout({ children }: LayoutProps) {
                   to="/notebooks"
                   className={`inline-flex items-center px-1 pt-1 text-sm font-medium border-b-2 transition-colors ${
                     isActive('/notebooks')
-                      ? 'border-dc-primary text-dc-text'
+                      ? 'border-emerald-600 text-dc-text'
                       : 'border-transparent text-dc-text-muted hover:text-dc-text-secondary hover:border-dc-border'
                   }`}
                 >
@@ -110,7 +110,7 @@ export default function Layout({ children }: LayoutProps) {
                   to="/schema"
                   className={`inline-flex items-center px-1 pt-1 text-sm font-medium border-b-2 transition-colors ${
                     isActive('/schema')
-                      ? 'border-dc-primary text-dc-text'
+                      ? 'border-emerald-600 text-dc-text'
                       : 'border-transparent text-dc-text-muted hover:text-dc-text-secondary hover:border-dc-border'
                   }`}
                 >
@@ -196,7 +196,7 @@ export default function Layout({ children }: LayoutProps) {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
                   isActive('/')
-                    ? 'text-dc-primary bg-dc-primary/10 border-l-4 border-dc-primary'
+                    ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 border-l-4 border-emerald-600'
                     : 'text-dc-text-muted hover:text-dc-text hover:bg-dc-surface-hover'
                 }`}
               >
@@ -207,7 +207,7 @@ export default function Layout({ children }: LayoutProps) {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
                   isActive('/analysis-builder')
-                    ? 'text-dc-primary bg-dc-primary/10 border-l-4 border-dc-primary'
+                    ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 border-l-4 border-emerald-600'
                     : 'text-dc-text-muted hover:text-dc-text hover:bg-dc-surface-hover'
                 }`}
               >
@@ -218,7 +218,7 @@ export default function Layout({ children }: LayoutProps) {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
                   isActive('/dashboards')
-                    ? 'text-dc-primary bg-dc-primary/10 border-l-4 border-dc-primary'
+                    ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 border-l-4 border-emerald-600'
                     : 'text-dc-text-muted hover:text-dc-text hover:bg-dc-surface-hover'
                 }`}
               >
@@ -229,7 +229,7 @@ export default function Layout({ children }: LayoutProps) {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
                   isActive('/notebooks')
-                    ? 'text-dc-primary bg-dc-primary/10 border-l-4 border-dc-primary'
+                    ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 border-l-4 border-emerald-600'
                     : 'text-dc-text-muted hover:text-dc-text hover:bg-dc-surface-hover'
                 }`}
               >
@@ -240,7 +240,7 @@ export default function Layout({ children }: LayoutProps) {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
                   isActive('/schema')
-                    ? 'text-dc-primary bg-dc-primary/10 border-l-4 border-dc-primary'
+                    ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 border-l-4 border-emerald-600'
                     : 'text-dc-text-muted hover:text-dc-text hover:bg-dc-surface-hover'
                 }`}
               >
