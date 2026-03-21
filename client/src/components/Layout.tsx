@@ -104,7 +104,7 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div className="min-h-screen bg-dc-page-gradient transition-colors">
-      <FloatingGitHubButton />
+      {/* FloatingGitHubButton removed -- view source links are in the footer */}
       <nav className="bg-dc-surface shadow-2xs border-b border-dc-border relative z-10 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
