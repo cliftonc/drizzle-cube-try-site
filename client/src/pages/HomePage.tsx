@@ -11,6 +11,7 @@ import {
   Square3Stack3DIcon,
   ChartBarIcon,
   MapIcon,
+  CubeIcon,
 } from '@heroicons/react/24/outline'
 import PageHead from '../components/PageHead'
 import GitHubStarsButton from '../components/GitHubStarsButton'
@@ -185,12 +186,34 @@ export default function HomePage() {
           EXPLORE STRIP -- 4 prominent entry points
           ================================================================ */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-8 pb-14 sm:pb-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        {/* Primary features — full width */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
           {[
             { to: firstDashboardPath, icon: ChartBarIcon, label: 'Dashboards', desc: 'Charts, KPIs, data tables', accent: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400', border: 'hover:border-emerald-400', wave: 'wave-1' },
-            { to: '/analysis-builder', icon: Square3Stack3DIcon, label: 'Analysis Builder', desc: 'Drag-and-drop queries', accent: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400', border: 'hover:border-blue-400', wave: 'wave-2' },
-            { to: '/notebooks', icon: SparklesIcon, label: 'Agentic Notebooks', desc: 'AI-powered analysis', accent: 'bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400', border: 'hover:border-amber-400', wave: 'wave-3' },
+            { to: '/notebooks', icon: SparklesIcon, label: 'Agentic Notebooks', desc: 'AI-powered analysis', accent: 'bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400', border: 'hover:border-amber-400', wave: 'wave-2' },
+          ].map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={`group flex items-center gap-3.5 px-4 py-4 bg-dc-surface border border-dc-border rounded-xl transition-all duration-200 active:scale-[0.98] animate-wave ${item.border} ${item.wave}`}
+            >
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${item.accent}`}>
+                <item.icon className="w-5 h-5" />
+              </div>
+              <div>
+                <span className="text-sm font-semibold text-dc-text block">{item.label}</span>
+                <span className="text-xs text-dc-text-muted">{item.desc}</span>
+              </div>
+              <ArrowRightIcon className="w-4 h-4 text-dc-text-disabled ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+            </Link>
+          ))}
+        </div>
+        {/* Secondary features */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {[
+            { to: '/analysis-builder', icon: Square3Stack3DIcon, label: 'Analysis Builder', desc: 'Drag-and-drop queries', accent: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400', border: 'hover:border-blue-400', wave: 'wave-3' },
             { to: '/schema', icon: MapIcon, label: 'Schema Explorer', desc: 'Visualize cube relationships', accent: 'bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400', border: 'hover:border-rose-400', wave: 'wave-4' },
+            { to: '/data-browser', icon: CubeIcon, label: 'Data Browser', desc: 'Browse raw cube data', accent: 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400', border: 'hover:border-purple-400', wave: 'wave-1' },
           ].map((item) => (
             <Link
               key={item.to}
