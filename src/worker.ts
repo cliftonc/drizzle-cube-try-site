@@ -302,6 +302,12 @@ app.get('/api/github-stars', async (c) => {
 })
 
 // Serve static assets and handle SPA routing
+// Explicitly 404 well-known OAuth paths — prevents the SPA catch-all from
+// serving index.html (200) which Claude interprets as valid OAuth metadata
+app.get('/.well-known/*', (c) => c.notFound())
+app.post('/register', (c) => c.notFound())
+app.post('/oauth/*', (c) => c.notFound())
+
 app.get('*', async (c) => {
   // Use the ASSETS binding to serve static files with SPA fallback
   return await c.env.ASSETS.fetch(c.req.raw)
