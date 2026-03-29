@@ -500,7 +500,7 @@ app.route('/', cubeApp) // Done!`}</CodeBlock>
               {[
                 { name: 'drizzle_cube_discover', desc: 'Find cubes by topic or intent' },
                 { name: 'drizzle_cube_validate', desc: 'Validate queries, get auto-corrections' },
-                { name: 'drizzle_cube_load', desc: 'Execute queries, return results' },
+                { name: 'drizzle_cube_load', desc: 'Execute queries with interactive charts (MCP App)' },
               ].map((tool) => (
                 <div key={tool.name} className="bg-dc-surface-secondary rounded-lg px-3 py-2.5 border border-dc-border">
                   <code className="text-xs font-mono text-dc-text">{tool.name}</code>
@@ -523,6 +523,7 @@ app.route('/', cubeApp) // Done!`}</CodeBlock>
                 { n: '1', t: 'Rich Semantic Metadata', d: 'Agents fetch cube definitions, descriptions, relationships' },
                 { n: '2', t: 'Cross-Cube Queries', d: 'AI builds queries spanning cubes -- joins handled automatically' },
                 { n: '3', t: 'Secure Execution', d: 'Every query runs through your security context' },
+                { n: '4', t: 'Interactive Charts (MCP App)', d: 'AI renders bar, line, pie, scatter and more directly in the conversation' },
               ].map((s) => (
                 <div key={s.n} className="flex items-start gap-2.5">
                   <div className="w-5 h-5 rounded-full bg-dc-surface-secondary border border-dc-border flex items-center justify-center shrink-0 mt-0.5">
@@ -614,10 +615,11 @@ app.route('/', cubeApp) // Done!`}</CodeBlock>
               </div>
             </div>
 
-            <div className="hidden md:flex items-center justify-center">
+            <div className="hidden md:flex flex-col items-center justify-center gap-3">
               <div className="rounded-lg overflow-hidden border border-dc-border max-w-sm" style={{ boxShadow: '0 8px 24px -6px rgba(0,0,0,0.1)' }}>
-                <img src="/claude_mcp.png" alt="Claude using Drizzle Cube MCP tools" className="w-full h-auto block" />
+                <img src="/chart-inline.png" alt="Interactive chart rendered inline in Claude via MCP App" className="w-full h-auto block" />
               </div>
+              <p className="text-[11px] text-dc-text-muted text-center max-w-xs">Interactive charts render directly in the conversation via the MCP Apps protocol</p>
             </div>
           </div>
         </div>
