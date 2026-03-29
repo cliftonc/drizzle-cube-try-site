@@ -186,8 +186,8 @@ export default function HomePage() {
           EXPLORE STRIP -- 4 prominent entry points
           ================================================================ */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-8 pb-14 sm:pb-20">
-        {/* Primary features — full width */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+        {/* Primary features */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
           {[
             { to: firstDashboardPath, icon: ChartBarIcon, label: 'Dashboards', desc: 'Charts, KPIs, data tables', accent: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400', border: 'hover:border-emerald-400', wave: 'wave-1' },
             { to: '/notebooks', icon: SparklesIcon, label: 'Agentic Notebooks', desc: 'AI-powered analysis', accent: 'bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400', border: 'hover:border-amber-400', wave: 'wave-2' },
@@ -207,6 +207,23 @@ export default function HomePage() {
               <ArrowRightIcon className="w-4 h-4 text-dc-text-disabled ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
             </Link>
           ))}
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText('https://try.drizzle-cube.dev/mcp')
+              const el = document.getElementById('mcp-copy-label')
+              if (el) { el.textContent = 'Copied!'; setTimeout(() => { el.textContent = 'Copy' }, 2000) }
+            }}
+            className="group flex items-center gap-3.5 px-4 py-4 bg-dc-surface border border-dc-border rounded-xl transition-all duration-200 active:scale-[0.98] animate-wave hover:border-cyan-400 wave-3 text-left"
+          >
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400">
+              <LinkIcon className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-sm font-semibold text-dc-text block">Connect via MCP</span>
+              <span className="text-xs text-dc-text-muted">Claude, ChatGPT, or any MCP client</span>
+            </div>
+            <span id="mcp-copy-label" className="shrink-0 ml-auto px-2.5 py-1 text-xs font-medium rounded-md bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 group-hover:bg-cyan-200 dark:group-hover:bg-cyan-800/40 transition-colors">Copy</span>
+          </button>
         </div>
         {/* Secondary features */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -231,6 +248,7 @@ export default function HomePage() {
             </Link>
           ))}
         </div>
+
       </section>
 
       {/* ================================================================
