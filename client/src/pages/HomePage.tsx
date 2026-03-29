@@ -543,9 +543,17 @@ app.route('/', cubeApp) // Done!`}</CodeBlock>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <h3 className="text-sm font-semibold text-dc-text mb-1">Connect AI Tools to Your App</h3>
-              <p className="text-xs text-dc-text-muted mb-4">Your customers connect their AI tools directly to your analytics</p>
+              <p className="text-xs text-dc-text-muted mb-4">Most AI tools just need the MCP server URL &mdash; connect in seconds</p>
 
-              <div className="flex flex-wrap gap-1.5 mb-4">
+              <div className="bg-dc-surface-secondary rounded-lg border border-dc-border p-3.5 mb-4">
+                <p className="text-xs text-dc-text-secondary mb-2">MCP Server URL:</p>
+                <div className="bg-dc-surface rounded-md p-3 border border-dc-border">
+                  <code className="text-sm font-mono text-dc-primary select-all">https://try.drizzle-cube.dev/mcp</code>
+                </div>
+                <p className="text-[11px] text-dc-text-muted mt-2.5">Paste this URL into Claude.ai, ChatGPT, Cursor, Windsurf, n8n, or any MCP-compatible tool.</p>
+              </div>
+
+              <div className="flex flex-wrap gap-1.5 mb-3">
                 {([
                   { id: 'claude-desktop' as const, label: 'Claude Desktop' },
                   { id: 'claude-web' as const, label: 'Claude.ai' },
@@ -587,34 +595,18 @@ app.route('/', cubeApp) // Done!`}</CodeBlock>
                 )}
                 {activeAITool === 'claude-web' && (
                   <div className="p-3.5">
-                    <p className="text-xs text-dc-text-secondary mb-2.5">Add as a Connector in Claude.ai:</p>
-                    <div className="bg-dc-surface rounded-md p-3 border border-dc-border overflow-x-auto">
-                      <pre className="text-xs font-mono text-dc-text-secondary whitespace-pre"><code>{`Server URL: https://try.drizzle-cube.dev/mcp
-
-Tools: drizzle_cube_discover, drizzle_cube_validate, drizzle_cube_load`}</code></pre>
-                    </div>
-                    <p className="text-[11px] text-dc-text-muted mt-2">Settings &rarr; Connectors &rarr; Add Connector</p>
+                    <p className="text-xs text-dc-text-secondary mb-2.5">Settings &rarr; Connectors &rarr; Add Connector, then paste the URL above.</p>
                   </div>
                 )}
                 {activeAITool === 'chatgpt' && (
                   <div className="p-3.5">
-                    <p className="text-xs text-dc-text-secondary mb-2.5">Enable Developer Mode in ChatGPT:</p>
-                    <div className="bg-dc-surface rounded-md p-3 border border-dc-border overflow-x-auto">
-                      <pre className="text-xs font-mono text-dc-text-secondary whitespace-pre"><code>{`Server URL: https://try.drizzle-cube.dev/mcp
-
-Tools: drizzle_cube_discover, drizzle_cube_validate, drizzle_cube_load`}</code></pre>
-                    </div>
-                    <p className="text-[11px] text-dc-text-muted mt-2">Settings &rarr; Connectors &rarr; Advanced &rarr; Developer Mode</p>
+                    <p className="text-xs text-dc-text-secondary mb-2.5">Settings &rarr; Connectors &rarr; Advanced &rarr; Developer Mode, then paste the URL above.</p>
                   </div>
                 )}
                 {activeAITool === 'n8n' && (
                   <div className="p-3.5">
-                    <p className="text-xs text-dc-text-secondary mb-2.5">Use the n8n MCP Client node:</p>
-                    <div className="bg-dc-surface rounded-md p-3 border border-dc-border overflow-x-auto">
-                      <pre className="text-xs font-mono text-dc-text-secondary whitespace-pre"><code>{`MCP Server: https://try.drizzle-cube.dev/mcp
-Workflow:   AI Agent -> MCP Client -> Your Analytics`}</code></pre>
-                    </div>
-                    <p className="text-[11px] text-dc-text-muted mt-2">
+                    <p className="text-xs text-dc-text-secondary mb-2.5">Use an AI Agent &rarr; MCP Client node with the URL above.</p>
+                    <p className="text-[11px] text-dc-text-muted mt-1">
                       See <a href="https://docs.n8n.io/integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.mcpclienttool/" target="_blank" rel="noopener noreferrer" className="text-dc-primary hover:underline">n8n MCP Client docs</a>
                     </p>
                   </div>

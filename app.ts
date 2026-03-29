@@ -232,6 +232,7 @@ const cubeApp = createCubeApp({
   schema,
   extractSecurityContext,
   engineType: 'postgres',
+  mcp: { enabled: true, app: true },
   cors: {
     origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:5173'],
     allowMethods: ['GET', 'POST', 'OPTIONS'],

@@ -157,6 +157,7 @@ const createCubeApiApp = (db: DrizzleDatabase, cacheKV?: KVNamespace) => {
     schema,
     extractSecurityContext: getSecurityContext,
     engineType: 'postgres',
+    mcp: { enabled: true, app: true },
     cache: cacheConfig,
     cors: {
       origin: ['http://localhost:3000', 'http://localhost:5173'],
