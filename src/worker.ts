@@ -193,6 +193,41 @@ cubeApiApp.use('*', async (c) => {
 app.route('/cubejs-api', cubeApiApp)
 app.route('/mcp', cubeApiApp)
 
+// OAuth well-known metadata (no-auth demo — prevents Claude UI errors)
+app.get('/.well-known/oauth-protected-resource', (c) => {
+  const base = `${c.req.url.startsWith('http://') ? 'http' : 'https'}://${c.req.header('host')}`
+  return c.json({
+    resource: base,
+    authorization_servers: [base],
+    scopes_supported: [],
+    bearer_methods_supported: ['header'],
+  })
+})
+
+app.get('/.well-known/oauth-protected-resource/mcp', (c) => {
+  const base = `${c.req.url.startsWith('http://') ? 'http' : 'https'}://${c.req.header('host')}`
+  return c.json({
+    resource: base,
+    authorization_servers: [base],
+    scopes_supported: [],
+    bearer_methods_supported: ['header'],
+  })
+})
+
+app.get('/.well-known/oauth-authorization-server', (c) => {
+  const base = `${c.req.url.startsWith('http://') ? 'http' : 'https'}://${c.req.header('host')}`
+  return c.json({
+    issuer: base,
+    authorization_endpoint: `${base}/oauth/authorize`,
+    token_endpoint: `${base}/oauth/token`,
+    registration_endpoint: `${base}/oauth/register`,
+    scopes_supported: [],
+    response_types_supported: ['code'],
+    grant_types_supported: ['authorization_code'],
+    token_endpoint_auth_methods_supported: ['none'],
+    code_challenge_methods_supported: ['S256'],
+  })
+})
 
 // API info endpoint
 app.get('/api', (c) => {
