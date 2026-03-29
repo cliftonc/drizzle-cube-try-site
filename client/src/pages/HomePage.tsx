@@ -518,7 +518,8 @@ app.route('/', cubeApp) // Done!`}</CodeBlock>
               {[
                 { name: 'drizzle_cube_discover', desc: 'Find cubes by topic or intent' },
                 { name: 'drizzle_cube_validate', desc: 'Validate queries, get auto-corrections' },
-                { name: 'drizzle_cube_load', desc: 'Execute queries with interactive charts (MCP App)' },
+                { name: 'drizzle_cube_load', desc: 'Execute queries and return data' },
+                { name: 'drizzle_cube_chart', desc: 'Execute queries with interactive chart visualization' },
               ].map((tool) => (
                 <div key={tool.name} className="bg-dc-surface-secondary rounded-lg px-3 py-2.5 border border-dc-border">
                   <code className="text-xs font-mono text-dc-text">{tool.name}</code>
