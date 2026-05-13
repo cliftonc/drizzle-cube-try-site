@@ -1,0 +1,17 @@
+# Drizzle Cube Try Site
+
+> Live demo of Drizzle Cube — an embeddable semantic layer for SaaS apps, built on Drizzle ORM.
+
+This is the interactive demo for [Drizzle Cube](https://github.com/cliftonc/drizzle-cube), an open-source embeddable analytics module. It lets developers add a semantic layer (cubes, measures, dimensions) to their own Drizzle-based apps and expose Cube.js-compatible APIs, dashboards, and AI-driven querying. On this site you can sign in with the demo account, browse example dashboards, run queries against pre-seeded employee/department data, and try the natural-language AI assistant.
+
+## Resources
+
+- [Drizzle Cube on GitHub](https://github.com/cliftonc/drizzle-cube): Source code, issues, and releases for the library
+- [Drizzle Cube documentation](https://www.drizzle-cube.dev): Full docs — guides, API reference, integration walkthroughs
+- [Author background](https://cliftonc.nl/blog/drizzle-cube-embeddable-semantic-layer.md): The blog post that introduces why Drizzle Cube was built
+- [Step-by-step Next.js guide](https://cliftonc.nl/blog/drizzle-cube-nextjs-step-by-step-guide.md): How to integrate Drizzle Cube into a Next.js app from scratch
+
+## API
+
+- [GET /api/docs](https://try.drizzle-cube.dev/api/docs): API documentation with available cubes, dimensions, measures, and example queries
+- [GET /cubejs-api/v1/meta](https://try.drizzle-cube.dev/cubejs-api/v1/meta): Cube.js-compatible metadata endpoint
