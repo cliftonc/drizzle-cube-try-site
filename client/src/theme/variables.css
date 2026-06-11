@@ -541,4 +541,7 @@ html.cyberpunk {
     position: relative;
     z-index: 1;
   }
+  .bg-dc-page-gradient > nav {
+    z-index: 10;
+  }
 }
