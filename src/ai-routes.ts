@@ -13,6 +13,8 @@ import { buildExplainAnalysisPrompt, formatCubeSchemaForExplain, formatExistingI
 import { settings, schema } from '../schema'
 import { allCubes } from '../cubes'
 
+declare const process: { env?: Record<string, string | undefined> } | undefined
+
 interface GeminiMessageRequest {
   contents: Array<{
     parts: Array<{
