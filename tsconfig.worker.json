@@ -16,10 +16,10 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["@cloudflare/workers-types"],
-    "baseUrl": ".",
     "paths": {
-      "drizzle-orm": ["../../node_modules/drizzle-orm"],
-      "drizzle-orm/*": ["../../node_modules/drizzle-orm/*"]
+      "*": ["./*"],
+      "drizzle-orm": ["./node_modules/drizzle-orm"],
+      "drizzle-orm/*": ["./node_modules/drizzle-orm/*"]
     }
   },
   "include": [
