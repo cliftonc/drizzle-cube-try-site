@@ -16,7 +16,9 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["node", "@cloudflare/workers-types"],
-    "baseUrl": "."    
+    "paths": {
+      "*": ["./*"]
+    }
   },
   "include": [
     "**/*.ts",
