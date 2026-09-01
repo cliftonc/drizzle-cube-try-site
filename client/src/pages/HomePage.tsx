@@ -659,6 +659,7 @@ app.route('/', cubeApp) // Done!`}</CodeBlock>
             { href: 'https://www.drizby.com', img: '/drizby-cloud-logo.png', name: 'Drizby', desc: 'Self-service BI' },
             { href: 'https://www.guidemode.dev', img: 'https://www.guidemode.dev/logo.svg', name: 'Guidemode', desc: 'Discovery x Delivery' },
             { href: 'https://try.icelight.dev', img: '/icelight-logo.png', name: 'Icelight', desc: 'Events to Iceberg' },
+            { href: 'https://rocketflare.dev', img: 'https://rocketflare.dev/favicon.svg', name: 'Rocketflare', desc: 'B2B SaaS starter kit' },
           ].map((p) => (
             <a key={p.name} href={p.href} target="_blank" rel="noopener noreferrer"
               className="group flex flex-col items-center gap-2.5 px-4 py-4 bg-dc-surface border border-dc-border rounded-xl hover:border-dc-primary transition-all duration-200 active:scale-[0.98] text-center"
