@@ -59,7 +59,7 @@
     "recharts": "^3.5.1"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250816.0",
+    "@cloudflare/workers-types": "^5.0.0",
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^20.0.0",
