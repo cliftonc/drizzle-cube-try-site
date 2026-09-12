@@ -145,6 +145,27 @@ function withGeometry(
 const ENGINEERING_ONLY = { member: 'Departments.name', operator: 'equals' as const, values: ['Engineering'] }
 const NOT_A_DAY_OFF = { member: 'Productivity.isDayOff', operator: 'equals' as const, values: [false] }
 
+/**
+ * The narrative block under the activity grid. Unlike every other markdown
+ * portlet here it carries a query, which makes its content a Knap template over
+ * the result rows rather than literal markdown.
+ *
+ * Field names are the snake_case aliases the template context derives from the
+ * query members: `Departments.name` becomes `departments_name`, and
+ * `Productivity.totalLinesOfCode` becomes `productivity_total_lines_of_code`.
+ * Knap reads `a.b` as nested access, so the raw cube-qualified keys would
+ * silently resolve to nothing here.
+ */
+const NARRATIVE_MARKDOWN = `## This paragraph is a query
+
+Every figure below is read from the warehouse when the dashboard loads — including the ones in this sentence.
+
+Across **{{ rowCount }}** departments we have logged **{{ rows | map:"productivity_total_lines_of_code" | sum | number_format }}** lines of code and **{{ rows | map:"productivity_total_pull_requests" | sum | number_format }}** pull requests. {{ first.departments_name }} leads on volume with {{ first.productivity_total_lines_of_code | number_format }}.
+
+{{ labelled | table }}
+
+**New: data-driven markdown.** Attach a query to a markdown portlet and its content becomes a [Knap](https://knap.md/) template over the result rows, with filters like \`sum\`, \`map\` and \`table\` to shape it. Change the date range above and this narrative rewrites itself.`
+
 const THANKS_MARKDOWN = `## Thanks for scrolling this far! 🎊
 
 Did you know that Drizzle Cube can actually do way more than just track how many lines of code you've written while questioning your life choices?
@@ -194,7 +215,11 @@ const rows: RowLayout[] = [
       // line clips (scrollHeight 17 into a 5px box). 3 units left ~60px of dead
       // space above and below the numbers.
       { id: 'row-kpis', h: 2.25, columns: [{ groupId: 'group-kpi-strip', w: 12 }] },
+
       { id: 'row-activity', h: 4, columns: [{ portletId: 'code-activity-grid', w: 12 }] },
+      // A markdown portlet with a query attached: its prose and table are
+      // rendered from the result rows, not typed out.
+      { id: 'row-narrative', h: 6, columns: [{ portletId: 'data-driven-narrative', w: 12 }] },
 
       { id: 'row-sec-trends', h: 1, columns: [{ portletId: 'section-trends', w: 12 }] },
       { id: 'row-trend-main', h: 5, columns: [{ portletId: 'moving-average-trend', w: 8 }, { portletId: 'utilization-gauge', w: 4 }] },
@@ -299,6 +324,25 @@ const portletDrafts: PortletDraft[] = [
       // ================================================================
       // Output over time
       // ================================================================
+      // Row 3 - a narrative written from the data rather than about it. The
+      // query is what turns `content` into a template; without one this would
+      // render as literal markdown, braces and all.
+      queryPortlet({
+        id: 'data-driven-narrative',
+        title: 'Data-Driven Markdown',
+        query: {
+          measures: ['Productivity.totalLinesOfCode', 'Productivity.totalPullRequests'],
+          dimensions: ['Departments.name'],
+          filters: [NOT_A_DAY_OFF],
+          order: { 'Productivity.totalLinesOfCode': 'desc' }
+        },
+        chartType: 'markdown',
+        displayConfig: {
+          content: NARRATIVE_MARKDOWN
+        },
+        filters: ['date-range']
+      }),
+
       sectionDivider(
         'section-trends',
         '## Output over time\nWeekly code output, cumulative totals and month-over-month change — all computed in SQL with window functions.'
