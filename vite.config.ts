@@ -1,8 +1,16 @@
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+const xyflowSystemShim = fileURLToPath(new URL('./client/src/vendor/xyflow-system-shim.js', import.meta.url))
+
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@xyflow/system': xyflowSystemShim
+    }
+  },
   root: './client',
   publicDir: './public',
   server: {
