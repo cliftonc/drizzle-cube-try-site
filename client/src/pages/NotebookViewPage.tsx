@@ -42,7 +42,7 @@ export default function NotebookViewPage() {
   const createDashboard = useCreateAnalyticsPage()
 
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle')
-  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
   const [apiKey, setApiKey] = useState(() => localStorage.getItem(API_KEY_STORAGE_KEY) || '')
   const [provider, setProvider] = useState(() => localStorage.getItem(PROVIDER_STORAGE_KEY) || '')
