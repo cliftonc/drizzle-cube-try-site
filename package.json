@@ -48,7 +48,7 @@
     "hono": "^4.0.0",
     "modern-screenshot": "^4.4.0",
     "openai": ">=4.0.0",
-    "postgres": "^3.4.0",
+    "postgres": "^4.0.0",
     "react-grid-layout": "^2.1.1",
     "react-helmet-async": "^3.0.0",
     "react-is": "^18.0.0 || ^19.0.0",
